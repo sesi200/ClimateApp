@@ -12,7 +12,6 @@ public class ClimateApp implements EntryPoint {
 	
 	private FlexTable tbl = new FlexTable();
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private MapVisualization map = new MapVisualization();
 
 	@Override
 	public void onModuleLoad() {
@@ -25,7 +24,6 @@ public class ClimateApp implements EntryPoint {
 		
 		mainPanel.add(tbl);
 		RootPanel.get("climateapp").add(mainPanel);
-		RootPanel.get("climateapp").add(map.getVisualization());
 		
 	}
 	
