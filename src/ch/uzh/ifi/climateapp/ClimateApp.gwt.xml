@@ -9,7 +9,13 @@
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
                                  
-  <inherits name=”com.google.gwt.visualization.Visualization”/>
+  <inherits name='com.google.gwt.visualization.Visualization'/>
+  
+  <!-- Maybe Useful Widgets
+  <inherits name='com.google.gwt.widgetideas.WidgetIdeas'/>
+  <inherits name='com.google.gwt.libideas.LibIdeas' />
+  <inherits name="com.googlecode.gwtTableToExcel.gwtTableToExcel" />
+  -->
   
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
