@@ -14,6 +14,8 @@ public class ClimateApp implements EntryPoint {
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private MapVisualization map = new MapVisualization();
 
+	
+
 	@Override
 	public void onModuleLoad() {
 		// TODO Auto-generated method stub
@@ -24,8 +26,9 @@ public class ClimateApp implements EntryPoint {
 		tbl.setText(2, 0, "hello");
 		
 		mainPanel.add(tbl);
+		mainPanel.add(map.getVisualization());
 		RootPanel.get("climateapp").add(mainPanel);
-		RootPanel.get("climateapp").add(map.getVisualization());
+
 		
 	}
 	
