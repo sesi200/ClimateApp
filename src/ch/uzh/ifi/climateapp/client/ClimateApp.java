@@ -35,7 +35,7 @@ public class ClimateApp implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		// TODO Auto-generated method stub
+		// TODO TestTable
 		tbl.setText(0, 0, "hello");
 		tbl.setText(0, 1, "hello");
 		tbl.setText(0, 2, "hello");
@@ -76,31 +76,8 @@ public class ClimateApp implements EntryPoint {
 		mainPanel.add(verticalPanel);
 		/*  -------- Start Map Visualization --------- */
 
-		/*
-		map = new MapVisualization();
-		mainPanel.add(map.getVisualization());
-		*/
-		/*
-		
-				dataTable = DataTable.create();
-				dataTable.addColumn(ColumnType.STRING, "City");
-				dataTable.addColumn(ColumnType.STRING, "Country");
-				dataTable.addColumn(ColumnType.NUMBER, "Temperature");
-				
-				options = GeoMap.Options.create();
-				options.setDataMode(GeoMap.DataMode.REGIONS);
-				options.setRegion("world");
-				options.setWidth(mapWidth);
-				options.setHeight(mapHeight);
-				geomap = new GeoMap(dataTable, options);
-				
-			
-			
-			
-		mainPanel.add(geomap);*/
 		RootPanel.get("climateapp").add(mainPanel);
-
-		
+	
 	}
 	
 }
