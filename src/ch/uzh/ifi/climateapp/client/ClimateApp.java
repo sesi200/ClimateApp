@@ -1,8 +1,11 @@
 package ch.uzh.ifi.climateapp.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.VisualizationUtils;
@@ -35,16 +38,7 @@ public class ClimateApp implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		// TODO TestTable
-		tbl.setText(0, 0, "hello");
-		tbl.setText(0, 1, "hello");
-		tbl.setText(0, 2, "hello");
-		tbl.setText(1, 0, "hello");
-		tbl.setText(2, 0, "hello");
-		
-		mainPanel.add(tbl);
-		
-		
+
 		
 		
 		/*  -------- Start Test Data for MAP --------- */
@@ -61,22 +55,66 @@ public class ClimateApp implements EntryPoint {
 		d4.setCountry("GB");
 		d4.setTemperature(14);
 		
-		data = new ClimateData[4];
-		data[0] = d1;
-		data[1] = d2;
-		data[2] = d3;
-		data[3] = d4;
+		
+		ClimateData [] dataOne = new ClimateData[4];
+		dataOne[0] = d1;
+		dataOne[1] = d2;
+		dataOne[2] = d3;
+		dataOne[3] = d4;
+		
+		ClimateData d5 = new ClimateData();
+		d5.setCountry("France");
+		d5.setTemperature(15);
+		ClimateData d6 = new ClimateData();
+		d6.setCountry("Spain");
+		d6.setTemperature(20);
+		ClimateData d7 = new ClimateData();
+		d7.setCountry("Greece");
+		d7.setTemperature(0);
+		ClimateData d8 = new ClimateData();
+		d8.setCountry("Poland");
+		d8.setTemperature(30);
+		
+		ClimateData [] dataTwo = new ClimateData[4];
+		dataTwo[0] = d5;
+		dataTwo[1] = d6;
+		dataTwo[2] = d7;
+		dataTwo[3] = d8;
+		
 		/*  -------- End Test Data for MAP --------- */
+		
+		
+		
+		
+		
+		
+		
 
 		/*  -------- Start Map Visualization --------- */
 		map = new MapVisualization();
-		map.replaceData(data);
+		map.replaceData(dataOne);
 		
 		map.getVisualization(verticalPanel);
-		mainPanel.add(verticalPanel);
+		//mainPanel.add(verticalPanel);
 		/*  -------- Start Map Visualization --------- */
 
+		
+		/* ----------- Adding Panels ------ */
 		RootPanel.get("climateapp").add(mainPanel);
+		
+		/*
+	    // Create a three-item tab panel, with the tab area 1.5em tall.
+	    TabLayoutPanel p = new TabLayoutPanel(1.5, Unit.EM);
+	    //p.add(verticalPanel);
+	    //p.add(verticalPanel);
+	    //p.add(verticalPanel);
+
+	    // Attach the LayoutPanel to the RootLayoutPanel. The latter will listen for
+	    // resize events on the window to ensure that its children are informed of
+	    // possible size changes.
+	    RootLayoutPanel rp = RootLayoutPanel.get();
+	    rp.add(p);
+	    */
 	
 	}
 	
