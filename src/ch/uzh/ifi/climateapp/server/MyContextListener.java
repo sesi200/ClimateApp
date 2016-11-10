@@ -26,6 +26,8 @@ public class MyContextListener implements ServletContextListener {
         CSVReader myCsvReader = CSVReader.getInstance();
         List<ClimateDataBean> climateData = new ArrayList<ClimateDataBean>();
     	
+        System.out.println("Starting to read the CSV file");
+        long before = System.currentTimeMillis();
     	try {
 			climateData = myCsvReader.readWithCsvBeanReader();
 		} catch (IOException e) {
@@ -34,6 +36,8 @@ public class MyContextListener implements ServletContextListener {
 		}
     	
     	climateData = Collections.unmodifiableList(climateData);
+    	long timeTaken = System.currentTimeMillis() - before;
+    	System.out.println("Loaded " + climateData.size() + " climate data entries in " + timeTaken + "ms.");
     	
     	sce.getServletContext().setAttribute("climateData", climateData);
   
