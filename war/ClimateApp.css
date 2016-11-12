@@ -1,34 +1,74 @@
-/** Add css rules here for your application. */
+body {
+	text-align: center;
+	font-family: verdana, sans-serif;
+}
 
-
-/** Example rules used by the template application (remove for your app) */
+/*application title*/
 h1 {
-  font-size: 2em;
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 20px;
+	text-align: center;
+}
+
+/* data source label */
+.checkBoxStyle {
+	margin: 30px 10px 5px 10px;
+	font-size: 12px;
+}
+
+/* data source label */
+.sourceLabel {
+	margin: 30px 10px 5px 10px;
+	/*font-family:verdana;*/
+	font-size: 12px;
+}
+
+/* filter label */
+.filterLabel {
+	font-weight: bold;
+	margin: 5px 5px 5px 5px;
+	/*font-family:verdana;*/
+	font-size: 14px;
+}
+
+.panelLabel {
+  background-color: #FFFFFF;
+  color: #969696;
+  	text-align: left;
+/*   font-family: arial; */
+  font-style: normal;
   font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+  font-size: 15px;
+  font-variant: small-caps;
+}
+/* filter label */
+.warningLabel {
+	font-weight: bold;
+	text-align: center;
+	color: red;
+	margin: 20px;
+	font-size: 2em;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+/* filter label */
+.titleLabel {
+	font-weight: bold;
+	margin: 50px;
+	text-align: center;
+	color: black;
+	font-size: 1.5em;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+
+/* padding of the elements inside the horizontal panel*/
+.paddedHorizontalPanel {
+	padding-left: 10px;
 }
 
-.dialogVPanel {
-  margin: 5px;
-}
+/* .paddedHorizontalPanel .gwt-CheckBox { */
+/* 	margin-left: 10px; */
+/* } */
 
-.serverResponseLabelError {
-  color: red;
-}
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
-}
