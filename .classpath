@@ -6,6 +6,6 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="gwt-visualization-1.1.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/super-csv-2.4.0.jar"/>
+	<classpathentry kind="lib" path="/Users/sesi/Desktop/Jcode/ClimateApp/war/WEB-INF/lib/super-csv-2.4.0.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

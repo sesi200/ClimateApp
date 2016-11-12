@@ -1,12 +1,16 @@
 package ch.uzh.ifi.climateapp.shared;
 
-public class Filter {
+import java.io.Serializable;
+
+public class Filter implements Serializable{
 
 	private int startYear;
 	private int endYear;
 	private double maxDeviation;
 	private String city;
 	private String country;
+	
+	public Filter() {}
 	
 	public int getStartYear() {
 		return startYear;

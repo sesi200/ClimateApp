@@ -2,32 +2,20 @@ package ch.uzh.ifi.climateapp.server;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.ParseDate;
 import org.supercsv.cellprocessor.ParseDouble;
-import org.supercsv.cellprocessor.ParseInt;
-import org.supercsv.cellprocessor.constraint.LMinMax;
 import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.StrRegEx;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
-import org.supercsv.io.CsvListReader;
-import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvBeanReader;
-import org.supercsv.io.ICsvListReader;
-import org.supercsv.io.ICsvMapReader;
 import org.supercsv.prefs.CsvPreference;
 
-import ch.uzh.ifi.climateapp.shared.ClimateDataBean;
+import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public class CSVReader {
 	private static CSVReader instance;
@@ -83,9 +71,9 @@ public class CSVReader {
 	 * @return list with ClimateDataBean objects
 	 * @throws IOException
 	 */
-	public List<ClimateDataBean> readWithCsvBeanReader() throws IOException {
+	public List<ClimateData> readWithCsvBeanReader() throws IOException {
 
-		List<ClimateDataBean> dataList = new ArrayList();
+		List<ClimateData> dataList = new ArrayList();
 
 		ICsvBeanReader beanReader = null;
 		try {
@@ -100,8 +88,8 @@ public class CSVReader {
 			final String[] header = beanReader.getHeader(true);
 			final CellProcessor[] processors = getProcessors();
 
-			ClimateDataBean climateData;
-			while ((climateData = beanReader.read(ClimateDataBean.class, header, processors)) != null) {
+			ClimateData climateData;
+			while ((climateData = beanReader.read(ClimateData.class, header, processors)) != null) {
 				dataList.add(climateData);
 
 				// prints the read lines into console for testing

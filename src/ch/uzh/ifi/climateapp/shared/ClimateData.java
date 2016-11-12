@@ -1,64 +1,126 @@
 package ch.uzh.ifi.climateapp.shared;
 
-public class ClimateData {
-	private int year;
-	private int month;
-	private float latitude;
-	private float longitude;
-	private String city;
-	private String country;
-	private float temperature;
-	private float deviation;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * The ClimateDataBean is a JavaBean object since the library which is used 
+ * to retrieve the data from .csv file reads the lines from csv into bean object.
+ * Which means that it has only fields, getters / setters for them and public default constructor.
+ * This class also complies with DTO standard.
+ * 
+ * The fields must be named as a header of the .csv file to be able 
+ * to use the CsvBeanReader from the super-csv-2.4.0 library
+ * 
+ * @author lada
+ *
+ */
+public class ClimateData implements Serializable {
 	
-	//getter and setter
-	public int getYear() {
-		return year;
+	private static final long serialVersionUID = 966748726465050125L;
+	
+	public ClimateData() {}
+	
+	private Date dt;
+	private double AverageTemperature;
+	private double AverageTemperatureUncertainty;
+	private String City;
+	private String Country;
+	private String Longitude;
+	private String Latitude;
+	/**
+	 * @return the dt
+	 */
+	public Date getDt() {
+		return dt;
 	}
-	public void setYear(int year) {
-		this.year = year;
+	/**
+	 * @param dt the date to set
+	 */
+	public void setDt(Date dt) {
+		this.dt = dt;
 	}
-	public int getMonth() {
-		return month;
+	/**
+	 * @return the averageTemperature
+	 */
+	public double getAverageTemperature() {
+		return AverageTemperature;
 	}
-	public void setMonth(int month) {
-		this.month = month;
+	/**
+	 * @param averageTemperature the averageTemperature to set
+	 */
+	public void setAverageTemperature(double averageTemperature) {
+		AverageTemperature = averageTemperature;
 	}
-	public float getLatitude() {
-		return latitude;
+	/**
+	 * @return the averageTemperatureUncertainty
+	 */
+	public double getAverageTemperatureUncertainty() {
+		return AverageTemperatureUncertainty;
 	}
-	public void setLatitude(float latitude) {
-		this.latitude = latitude;
+	/**
+	 * @param averageTemperatureUncertainty the averageTemperatureUncertainty to set
+	 */
+	public void setAverageTemperatureUncertainty(double averageTemperatureUncertainty) {
+		AverageTemperatureUncertainty = averageTemperatureUncertainty;
 	}
-	public float getLongitude() {
-		return longitude;
-	}
-	public void setLongitude(float longitude) {
-		this.longitude = longitude;
-	}
+	/**
+	 * @return the city
+	 */
 	public String getCity() {
-		return city;
+		return City;
 	}
+	/**
+	 * @param city the city to set
+	 */
 	public void setCity(String city) {
-		this.city = city;
+		City = city;
 	}
+	/**
+	 * @return the country
+	 */
 	public String getCountry() {
-		return country;
+		return Country;
 	}
+	/**
+	 * @param country the country to set
+	 */
 	public void setCountry(String country) {
-		this.country = country;
+		Country = country;
 	}
-	public float getTemperature() {
-		return temperature;
+	/**
+	 * @return the longitude
+	 */
+	public String getLongitude() {
+		return Longitude;
 	}
-	public void setTemperature(float temperature) {
-		this.temperature = temperature;
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(String longitude) {
+		Longitude = longitude;
 	}
-	public float getDeviation() {
-		return deviation;
+	/**
+	 * @return the latitude
+	 */
+	public String getLatitude() {
+		return Latitude;
 	}
-	public void setDeviation(float deviation) {
-		this.deviation = deviation;
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(String latitude) {
+		Latitude = latitude;
 	}
-	
-	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ClimateDataBean [dt=" + dt + ", AverageTemperature=" + AverageTemperature
+				+ ", AverageTemperatureUncertainty=" + AverageTemperatureUncertainty + ", City=" + City + ", Country="
+				+ Country + ", Longitude=" + Longitude + ", Latitude=" + Latitude + "]";
+	}
+
 }
+

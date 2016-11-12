@@ -44,7 +44,7 @@ public class MapVisualization implements IVisualization{
 				dataTable.addRows(climateData.length);
 				for (int i = 0; i < climateData.length; i++){
 					dataTable.setValue(i, 0, climateData[i].getCountry());
-					dataTable.setValue(i, 1, climateData[i].getTemperature());
+					dataTable.setValue(i, 1, climateData[i].getAverageTemperature());
 					//dataTable.setValue(i, 2, "Chocolate" + climateData[i].getTemperature());
 				}
 				
@@ -71,7 +71,6 @@ public class MapVisualization implements IVisualization{
 
 	@Override
 	public void replaceData(ClimateData[] newData) {
-		// TODO Auto-generated method stub
 		this.climateData = newData;
 	}
 

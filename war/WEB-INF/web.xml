@@ -14,5 +14,16 @@
   <welcome-file-list>
     <welcome-file>ClimateApp.html</welcome-file>
   </welcome-file-list>
+  
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>dataFetcherServiceImpl</servlet-name>
+    <servlet-class>ch.uzh.ifi.climateapp.server.DataFetcherServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>dataFetcherServiceImpl</servlet-name>
+    <url-pattern>/climateapp/climateData</url-pattern>
+  </servlet-mapping>
 
 </web-app>

@@ -2,15 +2,13 @@ package ch.uzh.ifi.climateapp.client;
 
 import java.util.ArrayList;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import ch.uzh.ifi.climateapp.shared.ClimateData;
 import ch.uzh.ifi.climateapp.shared.Filter;
 
-public class DataFetcherServiceAsync implements DataFetcherService {
+public interface DataFetcherServiceAsync {
 
-	@Override
-	public ArrayList<ClimateData> getClimateData(Filter filter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	void getClimateData(Filter[] filter, AsyncCallback<ClimateData[]> callback);
 
 }

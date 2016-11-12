@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import ch.uzh.ifi.climateapp.shared.ClimateDataBean;
+import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public class MyContextListener implements ServletContextListener {
+	
+	private static ServletContext context;
 
     /** 
      * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
@@ -22,9 +25,10 @@ public class MyContextListener implements ServletContextListener {
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+    	context = sce.getServletContext();
     	System.out.println("Context loaded!");
         CSVReader myCsvReader = CSVReader.getInstance();
-        List<ClimateDataBean> climateData = new ArrayList<ClimateDataBean>();
+        List<ClimateData> climateData = new ArrayList<ClimateData>();
     	
         System.out.println("Starting to read the CSV file");
         long before = System.currentTimeMillis();
@@ -54,6 +58,10 @@ public class MyContextListener implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         // shutdown code here
+    }
+    
+    public static ServletContext getContext() {
+    	return context;
     }
 
 }
