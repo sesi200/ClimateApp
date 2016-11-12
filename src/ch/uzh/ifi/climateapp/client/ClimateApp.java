@@ -132,7 +132,7 @@ public class ClimateApp implements EntryPoint {
 		map.replaceData(dataOne);
 		
 		map.getVisualization(verticalPanel);
-		mainPanel.add(verticalPanel);
+		
 		/*  -------- End Map Visualization --------- */
 		
 	}
