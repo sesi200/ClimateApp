@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 public class Filter implements Serializable{
 
-	private int startYear;
-	private int endYear;
-	private double maxDeviation;
-	private String city;
-	private String country;
+	private int startYear = -1;
+	private int endYear = -1;
+	private double maxDeviation = -1;
+	private double minDeviation = -1;
+	private String city = null;
+	private String country = null;
 	
 	public Filter() {}
 	
@@ -29,6 +30,12 @@ public class Filter implements Serializable{
 	}
 	public void setMaxDeviation(double maxDeviation) {
 		this.maxDeviation = maxDeviation;
+	}
+	public void setMinDeviation(double minDeviation) {
+		this.minDeviation = minDeviation;
+	}
+	public double getMinDeviation() {
+		return minDeviation;
 	}
 	public String getCity() {
 		return city;

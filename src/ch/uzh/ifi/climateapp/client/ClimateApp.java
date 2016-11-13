@@ -8,6 +8,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -39,6 +41,11 @@ public class ClimateApp implements EntryPoint {
 	private DataFetcherServiceAsync dataFetcherService = GWT.create(DataFetcherService.class);
 	private ArrayList<Filter> filters = new ArrayList<Filter>();
 	
+	//needed class-wide textboxes to add filter values
+	TextBox uncertaintyFrom;
+	TextBox uncertaintyTo;
+	SuggestBox countryName;
+	SuggestBox cityName;
 	
 	private DataTable dataTable;
 	private GeoMap.Options options;
@@ -136,6 +143,7 @@ public class ClimateApp implements EntryPoint {
 		/*  -------- End Map Visualization --------- */
 		
 	}
+	
 	
 	private void buildUI(){
 
@@ -236,9 +244,13 @@ public class ClimateApp implements EntryPoint {
 		countryLabel.setWidth("100px");
 		countryLabel.setStyleName("filterLabel");
 
-		SuggestBox countryName= new SuggestBox();
+		countryName = new SuggestBox();
 		Button addCountryButton = new Button("Add");
-
+		addCountryButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event){
+				addCountryNameFilter();
+			}
+		});
 
 		// Assemble countryFilter panel
 		countryFilter.add(countryLabel);
@@ -252,9 +264,13 @@ public class ClimateApp implements EntryPoint {
 		cityLabel.setWidth("100px");
 		cityLabel.setStyleName("filterLabel");
 
-		SuggestBox cityName= new SuggestBox();
+		cityName = new SuggestBox();
 		Button addCityButton = new Button("Add");
-
+		addCityButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event){
+				addCityNameFilter();
+			}
+		});
 
 		// Assemble cityFilter panel
 		cityFilter.add(cityLabel);
@@ -262,7 +278,7 @@ public class ClimateApp implements EntryPoint {
 		cityFilter.add(addCityButton);
 
 
-		//Assemble location filter panel
+		//Assemble country filter panel
 		locationFilter.add(countryFilter);
 		locationFilter.add(cityFilter);
 
@@ -304,18 +320,23 @@ public class ClimateApp implements EntryPoint {
 		// Create uncertainty filter
 		VerticalPanel uncertaintyFilter = new VerticalPanel();
 
-		HorizontalPanel uncerataintyFromFilter = new HorizontalPanel();
+		HorizontalPanel uncertaintyFromFilter = new HorizontalPanel();
 
 		Label uncertaintyFromLabel = new Label("Uncertainty from:");
 		uncertaintyFromLabel.setStyleName("filterLabel");
 		uncertaintyFromLabel.setWidth("120px");
 
-		TextBox uncerataintyFrom = new TextBox();
+		uncertaintyFrom = new TextBox();
 		Button addUncertaintyFromButton = new Button("Add");
+		addUncertaintyFromButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event){
+				addUncertaintyFromFilter();
+			}
+		});
 
-		uncerataintyFromFilter.add(uncertaintyFromLabel);
-		uncerataintyFromFilter.add(uncerataintyFrom);
-		uncerataintyFromFilter.add(addUncertaintyFromButton);
+		uncertaintyFromFilter.add(uncertaintyFromLabel);
+		uncertaintyFromFilter.add(uncertaintyFrom);
+		uncertaintyFromFilter.add(addUncertaintyFromButton);
 
 		HorizontalPanel uncerataintyToFilter = new HorizontalPanel();
 
@@ -323,15 +344,21 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyToLabel.setStyleName("filterLabel");
 		uncertaintyToLabel.setWidth("120px");
 
-		TextBox uncerataintyTo = new TextBox();
+		uncertaintyTo = new TextBox();
 		Button addUncertaintyToButton = new Button("Add");
+		addUncertaintyToButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event){
+				addUncertaintyToFilter();
+			}
+		});
+		
 
 		uncerataintyToFilter.add(uncertaintyToLabel);
-		uncerataintyToFilter.add(uncerataintyTo);
+		uncerataintyToFilter.add(uncertaintyTo);
 		uncerataintyToFilter.add(addUncertaintyToButton);
 
 		// Assemble uncertainty filter panel
-		uncertaintyFilter.add(uncerataintyFromFilter);
+		uncertaintyFilter.add(uncertaintyFromFilter);
 		uncertaintyFilter.add(uncerataintyToFilter);
 
 
@@ -444,6 +471,52 @@ public class ClimateApp implements EntryPoint {
 		/*attach the main panel to the root panel*/
 		RootPanel.get().add(mainPanel);
 
+	}
+	
+	/**
+	 * adds a new Filter to filters with minDeviation set to value read from textbox
+	 * does not work when there are some non-alphanumeric symbols in the textbox
+	 */
+	private void addUncertaintyFromFilter() {
+		if (uncertaintyFrom.getText()!=null) {
+			Filter newFilter = new Filter();
+			newFilter.setMinDeviation(Double.parseDouble(uncertaintyFrom.getText()));
+			filters.add(newFilter);
+		}
+	}
+	
+	/**
+	 * adds a new Filter to filters with maxDeviation set to value read from textbox
+	 * does not work when there are some non-alphanumeric symbols in the textbox
+	 */
+	private void addUncertaintyToFilter() {
+		if (uncertaintyTo.getText()!=null) {
+			Filter newFilter = new Filter();
+			newFilter.setMaxDeviation(Double.parseDouble(uncertaintyTo.getText()));
+			filters.add(newFilter);
+		}
+	}
+	
+	/**
+	 * adds a new Filter to filters with country set to value read from textbox
+	 */
+	private void addCountryNameFilter() {
+		if (countryName.getText()!=null) {
+			Filter newFilter = new Filter();
+			newFilter.setCountry(countryName.getText());
+			filters.add(newFilter);
+		}
+	}
+	
+	/**
+	 * adds a new Filter to filters with city set to value read from textbox
+	 */
+	private void addCityNameFilter() {
+		if (cityName.getText()!=null) {
+			Filter newFilter = new Filter();
+			newFilter.setCity(cityName.getText());
+			filters.add(newFilter);
+		}
 	}
 	
 }
