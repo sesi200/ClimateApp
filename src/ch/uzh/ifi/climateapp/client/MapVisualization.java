@@ -1,5 +1,7 @@
 package ch.uzh.ifi.climateapp.client;
 
+import java.io.IOException;
+
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
@@ -32,10 +34,17 @@ public class MapVisualization implements IVisualization{
 	@Override
 	public Widget getVisualization(final VerticalPanel verticalPanel) {
 		Runnable onLoadCallback = new Runnable(){
-
+			
+			
+			/**
+			 * This method uses he gwt-visualization-1.1.2 libarary to visualize the climate data on to a map
+			 * 
+			 * @return visualized map widget
+			 */
 			@Override
 			public void run() {
 				
+				// Building 
 				dataTable = DataTable.create();
 				dataTable.addColumn(ColumnType.STRING, "Country");
 				dataTable.addColumn(ColumnType.NUMBER, "Temperature");
@@ -69,6 +78,13 @@ public class MapVisualization implements IVisualization{
 		return verticalPanel;
 	}
 
+	/**
+	 * Removes the current climate data from the map and adds the new to be visualized climate data to the
+	 * mapvisualization object. To get he new visualization the method getVisualization(VerticalPanel verticalPanel)
+	 * must be called
+	 * 
+	 * @return void
+	 */
 	@Override
 	public void replaceData(ClimateData[] newData) {
 		this.climateData = newData;
