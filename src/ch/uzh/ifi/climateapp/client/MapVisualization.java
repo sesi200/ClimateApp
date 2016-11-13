@@ -14,7 +14,7 @@ import ch.uzh.ifi.climateapp.shared.ClimateData;
 public class MapVisualization implements IVisualization{
 	
 	
-	private int mapWidth = 700;
+	private int mapWidth = 900;
 	private int mapHeight = 500;
 	
 	private DataTable dataTable;

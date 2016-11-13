@@ -14,10 +14,10 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
+//import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+//import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -169,8 +169,10 @@ public class ClimateApp implements EntryPoint {
 
 
 		HorizontalPanel viewMap = new HorizontalPanel();
-		Button exportPNG = new Button("Export as PNG");
 		viewMap.add(verticalPanel);
+		viewMap.setSpacing(30);
+		
+		Button exportPNG = new Button("Export as PNG");
 		viewMap.add(exportPNG);
 
 		mapViewLayout.add(viewMap);
@@ -274,7 +276,7 @@ public class ClimateApp implements EntryPoint {
 
 		Label temperatureFromLabel = new Label("Temperature from:");
 		temperatureFromLabel.setStyleName("filterLabel");
-		temperatureFromLabel.setWidth("150px");
+		temperatureFromLabel.setWidth("130px");
 
 		TextBox temperatureFrom = new TextBox();
 		Button addTemperatureFromButton = new Button("Add");
@@ -287,7 +289,7 @@ public class ClimateApp implements EntryPoint {
 
 		Label temperatureToLabel = new Label("Temperature to:");
 		temperatureToLabel.setStyleName("filterLabel");
-		temperatureToLabel.setWidth("150px");
+		temperatureToLabel.setWidth("130px");
 
 		TextBox temperatureTo = new TextBox();
 		Button addTemperatureToButton = new Button("Add");
@@ -383,9 +385,11 @@ public class ClimateApp implements EntryPoint {
 		dataFlexTable.setText(0, 4, "Precision");
 		dataFlexTable.setText(0, 5, "Longitude");
 		dataFlexTable.setText(0, 6, "Latitude");
-		dataFlexTable.setCellPadding(10);
+		
+		dataFlexTable.setCellPadding(30);
 
 		viewTable.add(dataFlexTable);
+		
 
 		Button exportCSV = new Button("Export as CSV");
 		exportCSV.setWidth("120px");
@@ -417,10 +421,6 @@ public class ClimateApp implements EntryPoint {
 		 * generate sample data to add to the table
 		 * 
 		 * */
-
-
-
-
 
 
 		/* add the source of data to the main panel*/
