@@ -34,11 +34,14 @@ import ch.uzh.ifi.climateapp.shared.Filter;
  */
 public class ClimateApp implements EntryPoint {
 	
+	private static final double STARTING_MAX_UNCERTAINTY = 0.3;
+	private static final double STARTING_MIN_UNCERTAINTY = 0.0;
+	
 	private VerticalPanel verticalMapPanel = new VerticalPanel();
 	private VerticalPanel verticalTablePanel = new VerticalPanel();
     private VerticalPanel mainPanel;
-	private MapVisualization map;
-	private TableVisualization table;
+	private MapVisualization map = new MapVisualization();
+	private TableVisualization table = new TableVisualization();
 	private DataFetcherServiceAsync dataFetcherService = GWT.create(DataFetcherService.class);
 	private ArrayList<Filter> filters = new ArrayList<Filter>();
 
@@ -59,35 +62,12 @@ public class ClimateApp implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		buildUI();
-		/* --------- Start RPC request example ---------- */
-		/*Filter f = new Filter();
-		f.setMaxDeviation(0.7);
+		
+		//populate table
+		Filter f = new Filter();
+		f.setMaxDeviation(STARTING_MAX_UNCERTAINTY);
 		filters.add(f);
-
-
-		if (dataFetcherService==null)
-			dataFetcherService = GWT.create(DataFetcherService.class);
-
-		//set up callback object
-		AsyncCallback<ClimateData[]> callback = new AsyncCallback<ClimateData[]>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onSuccess(ClimateData[] result) {
-				table.replaceData(result);
-				table.getVisualization(verticalTablePanel);
-			}
-
-		};
-		
-		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);*/
-		
-		/* --------- End RPC request test ---------- */
+		reloadTable();
         
         
 		/*  -------- Start Test Data for MAP --------- */
@@ -142,12 +122,9 @@ public class ClimateApp implements EntryPoint {
 
 		/*  -------- Start Map Visualization --------- */
 		map = new MapVisualization();
-		table = new TableVisualization();
 		map.replaceData(dataOne);
-		table.replaceData(dataOne);
 		
 		map.getVisualization(verticalMapPanel);
-		table.getVisualization(verticalTablePanel);
 		/*  -------- End Map Visualization --------- */
 
 	}
@@ -344,6 +321,7 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyFromLabel.setWidth("120px");
 
 		uncertaintyFrom = new TextBox();
+		uncertaintyFrom.setText(Double.toString(STARTING_MIN_UNCERTAINTY));
 		Button addUncertaintyFromButton = new Button("Add");
 		addUncertaintyFromButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event){
@@ -362,6 +340,7 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyToLabel.setWidth("120px");
 
 		uncertaintyTo = new TextBox();
+		uncertaintyTo.setValue(Double.toString(STARTING_MAX_UNCERTAINTY));
 		Button addUncertaintyToButton = new Button("Add");
 		addUncertaintyToButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event){
@@ -491,9 +470,17 @@ public class ClimateApp implements EntryPoint {
 	 */
 	private void addUncertaintyFromFilter() {
 		if (uncertaintyFrom.getText()!=null) {
-			Filter newFilter = new Filter();
-			newFilter.setMinDeviation(Double.parseDouble(uncertaintyFrom.getText()));
-			filters.add(newFilter);
+			Filter newFilter;
+			if (filters.size()==0) {
+				newFilter = new Filter();
+				newFilter.setMinDeviation(Double.parseDouble(uncertaintyFrom.getText()));
+				filters.add(newFilter);
+			} else {
+				newFilter = filters.get(0);
+				newFilter.setMinDeviation(Double.parseDouble(uncertaintyFrom.getText()));
+			}
+			
+			reloadTable();
 		}
 	}
 
@@ -503,9 +490,17 @@ public class ClimateApp implements EntryPoint {
 	 */
 	private void addUncertaintyToFilter() {
 		if (uncertaintyTo.getText()!=null) {
-			Filter newFilter = new Filter();
-			newFilter.setMaxDeviation(Double.parseDouble(uncertaintyTo.getText()));
-			filters.add(newFilter);
+			Filter newFilter;
+			if (filters.size()==0) {
+				newFilter = new Filter();
+				newFilter.setMaxDeviation(Double.parseDouble(uncertaintyTo.getText()));
+				filters.add(newFilter);
+			} else {
+				newFilter = filters.get(0);
+				newFilter.setMaxDeviation(Double.parseDouble(uncertaintyTo.getText()));
+			}
+			
+			reloadTable();
 		}
 	}
 
@@ -517,6 +512,7 @@ public class ClimateApp implements EntryPoint {
 			Filter newFilter = new Filter();
 			newFilter.setCountry(countryName.getText());
 			filters.add(newFilter);
+			reloadTable();
 		}
 	}
 
@@ -528,7 +524,32 @@ public class ClimateApp implements EntryPoint {
 			Filter newFilter = new Filter();
 			newFilter.setCity(cityName.getText());
 			filters.add(newFilter);
+			reloadTable();
 		}
+	}
+	
+	/**
+	 * reloads the table view with currently set filters
+	 */
+	private void reloadTable() {
+		if (dataFetcherService==null)
+			dataFetcherService = GWT.create(DataFetcherService.class);
+
+		//set up callback object
+		AsyncCallback<ClimateData[]> callback = new AsyncCallback<ClimateData[]>() {
+
+			@Override
+			public void onFailure(Throwable caught) {}
+
+			@Override
+			public void onSuccess(ClimateData[] result) {
+				table.replaceData(result);
+				table.getVisualization(verticalTablePanel);
+			}
+
+		};
+		
+		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);
 	}
 
 }

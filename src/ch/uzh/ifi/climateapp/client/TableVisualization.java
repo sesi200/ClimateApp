@@ -38,16 +38,23 @@ public class TableVisualization implements IVisualization {
 				dataTable.addColumn(ColumnType.STRING, "Country");
 				dataTable.addColumn(ColumnType.STRING, "City");
 				dataTable.addColumn(ColumnType.NUMBER, "Temperature");
+				dataTable.addColumn(ColumnType.NUMBER, "Temperature deviation");
+				dataTable.addColumn(ColumnType.DATE, "Date");
+				dataTable.addColumn(ColumnType.STRING, "Latitude");
+				dataTable.addColumn(ColumnType.STRING, "Longitude");
 				
 				dataTable.addRows(data.length);
 				for (int i = 0; i < data.length; i++){
 					dataTable.setValue(i, 0, data[i].getCountry());
 					dataTable.setValue(i, 2, data[i].getAverageTemperature());
 					dataTable.setValue(i, 1, data[i].getCity());
+					dataTable.setValue(i, 3, data[i].getAverageTemperatureUncertainty());
+					dataTable.setValue(i, 4, data[i].getDt());
+					dataTable.setValue(i, 5, data[i].getLatitude());
+					dataTable.setValue(i, 6, data[i].getLongitude());
 				}
 				options = Table.Options.create();
-				options.setHeight("400");
-				options.setWidth("900");
+				options.setPageSize(15);
 				
 				table = new Table(dataTable, options);
 				

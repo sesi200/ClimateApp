@@ -7,7 +7,7 @@ public class Filter implements Serializable{
 	private int startYear = -1;
 	private int endYear = -1;
 	private double maxDeviation = -1;
-	private double minDeviation = -1;
+	private double minDeviation = 0;
 	private String city = null;
 	private String country = null;
 	
