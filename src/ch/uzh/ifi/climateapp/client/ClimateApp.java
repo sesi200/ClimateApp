@@ -41,41 +41,40 @@ public class ClimateApp implements EntryPoint {
 	private TableVisualization table;
 	private DataFetcherServiceAsync dataFetcherService = GWT.create(DataFetcherService.class);
 	private ArrayList<Filter> filters = new ArrayList<Filter>();
-	
+
 	//needed class-wide textboxes to add filter values
 	TextBox uncertaintyFrom;
 	TextBox uncertaintyTo;
 	SuggestBox countryName;
 	SuggestBox cityName;
-	
+
 	private DataTable dataTable;
 	private GeoMap.Options options;
 	private GeoMap geomap;
 	private int mapWidth = 500;
 	private int mapHeight = 500;
 
-	
+
 
 	@Override
 	public void onModuleLoad() {
 		buildUI();
-		
 		/* --------- Start RPC request example ---------- */
 		/*Filter f = new Filter();
 		f.setMaxDeviation(0.7);
 		filters.add(f);
-		
-		
+
+
 		if (dataFetcherService==null)
 			dataFetcherService = GWT.create(DataFetcherService.class);
-		
+
 		//set up callback object
 		AsyncCallback<ClimateData[]> callback = new AsyncCallback<ClimateData[]>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -83,14 +82,14 @@ public class ClimateApp implements EntryPoint {
 				table.replaceData(result);
 				table.getVisualization(verticalTablePanel);
 			}
-			
+
 		};
 		
 		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);*/
 		
 		/* --------- End RPC request test ---------- */
-		
-		
+        
+        
 		/*  -------- Start Test Data for MAP --------- */
 		ClimateData d1 = new ClimateData();
 		d1.setCountry("US");
@@ -108,14 +107,14 @@ public class ClimateApp implements EntryPoint {
 		d4.setCountry("GB");
 		d4.setCity("Stonehenge");
 		d4.setAverageTemperature(14);
-		
-		
+
+
 		ClimateData [] dataOne = new ClimateData[4];
 		dataOne[0] = d1;
 		dataOne[1] = d2;
 		dataOne[2] = d3;
 		dataOne[3] = d4;
-		
+
 		ClimateData d5 = new ClimateData();
 		d5.setCountry("France");
 		d5.setAverageTemperature(15);
@@ -128,18 +127,18 @@ public class ClimateApp implements EntryPoint {
 		ClimateData d8 = new ClimateData();
 		d8.setCountry("Poland");
 		d8.setAverageTemperature(30);
-		
+
 		ClimateData [] dataTwo = new ClimateData[4];
 		dataTwo[0] = d5;
 		dataTwo[1] = d6;
 		dataTwo[2] = d7;
 		dataTwo[3] = d8;
-		
+
 		/*  -------- End Test Data for MAP --------- */
-		
-		
-		
-		
+
+
+
+
 
 		/*  -------- Start Map Visualization --------- */
 		map = new MapVisualization();
@@ -149,16 +148,15 @@ public class ClimateApp implements EntryPoint {
 		
 		map.getVisualization(verticalMapPanel);
 		table.getVisualization(verticalTablePanel);
-		
 		/*  -------- End Map Visualization --------- */
-		
+
 	}
-	
-	
+
+
 	private void buildUI(){
 
 		/*Create the main panel of the UI */
-        mainPanel = new VerticalPanel();
+		mainPanel = new VerticalPanel();
 		mainPanel.setWidth("100%");
 
 		//Create the tab panel which is contained in the main vertical panel
@@ -189,7 +187,7 @@ public class ClimateApp implements EntryPoint {
 		HorizontalPanel viewMap = new HorizontalPanel();
 		viewMap.add(verticalMapPanel);
 		viewMap.setSpacing(30);
-		
+
 		Button exportPNG = new Button("Export as PNG");
 		viewMap.add(exportPNG);
 
@@ -295,38 +293,38 @@ public class ClimateApp implements EntryPoint {
 		locationFilter.add(cityFilter);
 
 
-		// Create temperature filter
-		VerticalPanel temperatureFilter = new VerticalPanel();
+		// Create year range filter
+		VerticalPanel yearRangeFilter = new VerticalPanel();
 
-		HorizontalPanel temperatureFromFilter = new HorizontalPanel();
+		HorizontalPanel yearFromFilter = new HorizontalPanel();
 
-		Label temperatureFromLabel = new Label("Temperature from:");
-		temperatureFromLabel.setStyleName("filterLabel");
-		temperatureFromLabel.setWidth("130px");
+		Label yearFromLabel = new Label("Year from:");
+		yearFromLabel.setStyleName("filterLabel");
+		yearFromLabel.setWidth("100px");
 
-		TextBox temperatureFrom = new TextBox();
-		Button addTemperatureFromButton = new Button("Add");
+		TextBox yearFrom = new TextBox();
+		Button addYearFromButton = new Button("Add");
 
-		temperatureFromFilter.add(temperatureFromLabel);
-		temperatureFromFilter.add(temperatureFrom);
-		temperatureFromFilter.add(addTemperatureFromButton);
+		yearFromFilter.add(yearFromLabel);
+		yearFromFilter.add(yearFrom);
+		yearFromFilter.add(addYearFromButton);
 
-		HorizontalPanel temperatureToFilter = new HorizontalPanel();
+		HorizontalPanel yearToFilter = new HorizontalPanel();
 
-		Label temperatureToLabel = new Label("Temperature to:");
-		temperatureToLabel.setStyleName("filterLabel");
-		temperatureToLabel.setWidth("130px");
+		Label yearToLabel = new Label("Year to:");
+		yearToLabel.setStyleName("filterLabel");
+		yearToLabel.setWidth("100px");
 
-		TextBox temperatureTo = new TextBox();
-		Button addTemperatureToButton = new Button("Add");
+		TextBox yearTo = new TextBox();
+		Button addYearToButton = new Button("Add");
 
-		temperatureToFilter.add(temperatureToLabel);
-		temperatureToFilter.add(temperatureTo);
-		temperatureToFilter.add(addTemperatureToButton);
+		yearToFilter.add(yearToLabel);
+		yearToFilter.add(yearTo);
+		yearToFilter.add(addYearToButton);
 
-		// Assemble temperature filter panel
-		temperatureFilter.add(temperatureFromFilter);
-		temperatureFilter.add(temperatureToFilter);
+		// Assemble year range filter panel
+		yearRangeFilter.add(yearFromFilter);
+		yearRangeFilter.add(yearToFilter);
 
 
 		// Create uncertainty filter
@@ -363,7 +361,8 @@ public class ClimateApp implements EntryPoint {
 				addUncertaintyToFilter();
 			}
 		});
-		
+
+
 
 		uncerataintyToFilter.add(uncertaintyToLabel);
 		uncerataintyToFilter.add(uncertaintyTo);
@@ -373,11 +372,18 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyFilter.add(uncertaintyFromFilter);
 		uncertaintyFilter.add(uncerataintyToFilter);
 
-
+		//Creates the button that resets the filters
+		Button resetFilterButton = new Button("Reset filter");
+		
 		//Assemble filter panel
 		filterPanel.add(locationFilter);
-		filterPanel.add(temperatureFilter);
+		filterPanel.add(yearRangeFilter);
 		filterPanel.add(uncertaintyFilter);
+		filterPanel.add(resetFilterButton);
+
+
+
+
 
 		/* To do:
 
@@ -393,14 +399,20 @@ public class ClimateApp implements EntryPoint {
 		 * */
 
 
+
+
 		/*Create horizontal panel for the time line (time line widget with two sliders standing for start and end years)*/
 
-		HorizontalPanel timelineFilter = new HorizontalPanel();
-		timelineFilter.setWidth("100%");
+		//We do not need the range slider widget here as we implement the DatePicker boxes for the date filter.
 
-		Label timelineLabel = new Label("here appears the timeline filter from 1849 to 2013, say in sprint 2 ;)");
-		timelineLabel.setStyleName("warningLabel");
-		timelineFilter.add(timelineLabel);
+		// The year range slider is needed for the interactive map visualization
+
+		//		HorizontalPanel timelineFilter = new HorizontalPanel();
+		//		timelineFilter.setWidth("100%");
+		//
+		//		Label timelineLabel = new Label("here appears the timeline filter from 1849 to 2013, say in sprint 2 ;)");
+		//		timelineLabel.setStyleName("warningLabel");
+		//		timelineFilter.add(timelineLabel);
 
 
 		/*Create horizontal panel to place the flex table into it*/
@@ -425,8 +437,26 @@ public class ClimateApp implements EntryPoint {
 		
 		dataFlexTable.setCellPadding(30);
 
-		viewTable.add(dataFlexTable);
-		
+		Label comingNextLabel = new Label("here comes the table visualization (customizable in sprint1 ?)");
+		comingNextLabel.setStyleName("warningLabel");
+		viewTable.add(comingNextLabel);
+		viewTable.setSpacing(30);
+
+
+		//		FlexTable dataFlexTable = new FlexTable();
+		//
+		//		dataFlexTable.setText(0, 0, "Country");
+		//		dataFlexTable.setText(0, 1, "City");
+		//		dataFlexTable.setText(0, 2, "Date");
+		//		dataFlexTable.setText(0, 3, "Temperature");
+		//		dataFlexTable.setText(0, 4, "Precision");
+		//		dataFlexTable.setText(0, 5, "Longitude");
+		//		dataFlexTable.setText(0, 6, "Latitude");
+		//		
+		//		dataFlexTable.setCellPadding(30);
+		//
+		//		viewTable.add(dataFlexTable);
+
 
 		Button exportCSV = new Button("Export as CSV");
 		exportCSV.setWidth("120px");
@@ -435,16 +465,15 @@ public class ClimateApp implements EntryPoint {
 		viewTable.add(verticalTablePanel);
 
 		/*Assemble the whole table view panel */
-		
+
 		Label customizeLabel = new Label("Customize table ");
 		customizeLabel.setStyleName("panelLabel");
 		tableViewLayout.add(customizeLabel);
 		tableViewLayout.add(customizePanel);
-		
+
 		Label filterLabel = new Label("Filter data ");
 		filterLabel.setStyleName("panelLabel");
 		tableViewLayout.add(filterLabel);
-		tableViewLayout.add(filterPanel);
 		
 		Label sliderLabel = new Label("Set the range of years");
 		sliderLabel.setStyleName("panelLabel");
@@ -470,10 +499,18 @@ public class ClimateApp implements EntryPoint {
 		Anchor sourceAnchor = new Anchor("http://www.berkeleyearth.org", "http://www.berkeleyearth.org");
 		sourceAnchor.setStyleName("sourceLabel");
 
+		//Create label to show the last update of the data source
+		Label updateSourceLabel = new Label("Last data update: 01.08.2013"); //do we have to to mention last date of measurement or last upload of the csv file?
+		updateSourceLabel.setStyleName("sourceLabel");
+
 		//Create vertical panel to show the data source and the link one over another and add the label and the anchor to it 
 		VerticalPanel sourcePanel = new VerticalPanel();
 		sourcePanel.add(dataSourceLabel);
 		sourcePanel.add(sourceAnchor);
+		sourcePanel.add(updateSourceLabel);
+
+
+
 
 		//Add source panel to the main panel
 		mainPanel.add(sourcePanel);
@@ -482,7 +519,7 @@ public class ClimateApp implements EntryPoint {
 		RootPanel.get().add(mainPanel);
 
 	}
-	
+
 	/**
 	 * adds a new Filter to filters with minDeviation set to value read from textbox
 	 * does not work when there are some non-alphanumeric symbols in the textbox
@@ -494,7 +531,7 @@ public class ClimateApp implements EntryPoint {
 			filters.add(newFilter);
 		}
 	}
-	
+
 	/**
 	 * adds a new Filter to filters with maxDeviation set to value read from textbox
 	 * does not work when there are some non-alphanumeric symbols in the textbox
@@ -506,7 +543,7 @@ public class ClimateApp implements EntryPoint {
 			filters.add(newFilter);
 		}
 	}
-	
+
 	/**
 	 * adds a new Filter to filters with country set to value read from textbox
 	 */
@@ -517,7 +554,7 @@ public class ClimateApp implements EntryPoint {
 			filters.add(newFilter);
 		}
 	}
-	
+
 	/**
 	 * adds a new Filter to filters with city set to value read from textbox
 	 */
@@ -528,5 +565,5 @@ public class ClimateApp implements EntryPoint {
 			filters.add(newFilter);
 		}
 	}
-	
+
 }
