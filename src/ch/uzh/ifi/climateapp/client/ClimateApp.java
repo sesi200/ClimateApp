@@ -132,7 +132,10 @@ public class ClimateApp implements EntryPoint {
 
 	private void buildUI(){
 
-		/*Create the main panel of the UI */
+		/**
+		 * Create the main panel of the UI 
+		 * 
+		 * */
 		mainPanel = new VerticalPanel();
 		mainPanel.setWidth("100%");
 
@@ -155,9 +158,12 @@ public class ClimateApp implements EntryPoint {
 		 * 
 		 *  */
 		
-		Label mapTimelineLabel = new Label("here appears the timeline filter from 1849 to 2013, say in sprint 2 ;)");
+		Label mapTimelineLabel = new Label("Here a timeline widget (slider) will be added in the sprint 2");
 		mapTimelineLabel.setStyleName("warningLabel");
 		mapViewLayout.add(mapTimelineLabel);
+		
+		// TODO here the slider widget should be added
+		// mapViewLayout.add(sliderWidget);
 
 		Label mapLabel = new Label("Climate Data Map");
 		mapLabel.setStyleName("titleLabel");
@@ -165,7 +171,7 @@ public class ClimateApp implements EntryPoint {
 
 
 		HorizontalPanel viewMap = new HorizontalPanel();
-		viewMap.add(verticalMapPanel);
+		viewMap.add(verticalMapPanel); //after Sprint 2 there will be a label with selected year underneath the panel, as we will add several map views from the year filter
 		viewMap.setSpacing(30);
 
 		Button exportPNG = new Button("Export as PNG");
