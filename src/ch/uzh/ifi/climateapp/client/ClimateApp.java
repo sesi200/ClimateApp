@@ -174,7 +174,10 @@ public class ClimateApp implements EntryPoint {
 		//use the first tab as default 
 		tabPanel.selectTab(0);
 
-		/* Creating the map view panel  */
+		/** Creating the map view panel 
+		 * 
+		 *  */
+		
 		Label mapTimelineLabel = new Label("here appears the timeline filter from 1849 to 2013, say in sprint 2 ;)");
 		mapTimelineLabel.setStyleName("warningLabel");
 		mapViewLayout.add(mapTimelineLabel);
@@ -193,7 +196,11 @@ public class ClimateApp implements EntryPoint {
 
 		mapViewLayout.add(viewMap);
 
-		/* Create horizontal panel to customize the table (to select which attributes will be shown in the table)*/  
+		/**
+		 * Create horizontal panel to customize the table 
+		 * (to select which attributes will be shown in the table)
+		 * 
+		 * */  
 
 		HorizontalPanel customizePanel = new HorizontalPanel();
 		customizePanel.setStyleName("paddedHorizontalPanel");
@@ -398,73 +405,33 @@ public class ClimateApp implements EntryPoint {
 		 * 
 		 * */
 
-
-
-
-		/*Create horizontal panel for the time line (time line widget with two sliders standing for start and end years)*/
-
-		//We do not need the range slider widget here as we implement the DatePicker boxes for the date filter.
-
-		// The year range slider is needed for the interactive map visualization
-
-		//		HorizontalPanel timelineFilter = new HorizontalPanel();
-		//		timelineFilter.setWidth("100%");
-		//
-		//		Label timelineLabel = new Label("here appears the timeline filter from 1849 to 2013, say in sprint 2 ;)");
-		//		timelineLabel.setStyleName("warningLabel");
-		//		timelineFilter.add(timelineLabel);
-
-
-		/*Create horizontal panel to place the flex table into it*/
-
-		VerticalPanel verticalTablePanel = new VerticalPanel();
+		
+		/**
+		 * 
+		 * Create horizontal panel to place the CellTable with climate data into it
+		 * 
+		 * */
 
 		Label tableLabel = new Label("Climate Data Table");
 		tableLabel.setStyleName("titleLabel");
-		verticalTablePanel.add(tableLabel);
-
-		HorizontalPanel viewTable = new HorizontalPanel();	
-
-		//FlexTable dataFlexTable = new FlexTable();
-/*
-		dataFlexTable.setText(0, 0, "Country");
-		dataFlexTable.setText(0, 1, "City");
-		dataFlexTable.setText(0, 2, "Date");
-		dataFlexTable.setText(0, 3, "Temperature");
-		dataFlexTable.setText(0, 4, "Precision");
-		dataFlexTable.setText(0, 5, "Longitude");
-		dataFlexTable.setText(0, 6, "Latitude");
-		
-		dataFlexTable.setCellPadding(30);
-
-		Label comingNextLabel = new Label("here comes the table visualization (customizable in sprint1 ?)");
-		comingNextLabel.setStyleName("warningLabel");
-		viewTable.add(comingNextLabel);
-		viewTable.setSpacing(30);
-
-
-		//		FlexTable dataFlexTable = new FlexTable();
-		//
-		//		dataFlexTable.setText(0, 0, "Country");
-		//		dataFlexTable.setText(0, 1, "City");
-		//		dataFlexTable.setText(0, 2, "Date");
-		//		dataFlexTable.setText(0, 3, "Temperature");
-		//		dataFlexTable.setText(0, 4, "Precision");
-		//		dataFlexTable.setText(0, 5, "Longitude");
-		//		dataFlexTable.setText(0, 6, "Latitude");
-		//		
-		//		dataFlexTable.setCellPadding(30);
-		//
-		//		viewTable.add(dataFlexTable);
-
-
+		tableViewLayout.add(tableLabel);
+	
+		HorizontalPanel tableView = new HorizontalPanel();
+			
 		Button exportCSV = new Button("Export as CSV");
 		exportCSV.setWidth("120px");
-		viewTable.add(exportCSV);
-*/
-		viewTable.add(verticalTablePanel);
+		
+		tableView.add(verticalTablePanel);
+		tableView.add(exportCSV);
 
-		/*Assemble the whole table view panel */
+
+		tableViewLayout.add(tableView);
+		
+		
+		/**
+		 * Assemble the whole table view panel 
+		 * 
+		 * */
 
 		Label customizeLabel = new Label("Customize table ");
 		customizeLabel.setStyleName("panelLabel");
@@ -478,9 +445,9 @@ public class ClimateApp implements EntryPoint {
 		Label sliderLabel = new Label("Set the range of years");
 		sliderLabel.setStyleName("panelLabel");
 		tableViewLayout.add(sliderLabel);
-		tableViewLayout.add(timelineFilter);
 		
-		tableViewLayout.add(verticalTablePanel);
+		
+		tableViewLayout.add(tableView);
 
 		/* To do:
 		 * 
@@ -565,5 +532,7 @@ public class ClimateApp implements EntryPoint {
 			filters.add(newFilter);
 		}
 	}
+	
+	
 
 }

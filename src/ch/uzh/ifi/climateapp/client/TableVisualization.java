@@ -25,6 +25,7 @@ public class TableVisualization implements IVisualization {
 	private ClimateData[] data;
 	private DataTable dataTable;
 	private Table table;
+	private Table.Options options;
 
 	@Override
 	public Widget getVisualization(final VerticalPanel verticalPanel) {
@@ -44,9 +45,9 @@ public class TableVisualization implements IVisualization {
 					dataTable.setValue(i, 2, data[i].getAverageTemperature());
 					dataTable.setValue(i, 1, data[i].getCity());
 				}
-				Table.Options options = Table.Options.create();
-				options.setHeight("400px");
-				options.setWidth("400px");
+				options = Table.Options.create();
+				options.setHeight("400");
+				options.setWidth("900");
 				
 				table = new Table(dataTable, options);
 				
