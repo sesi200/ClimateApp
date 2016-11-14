@@ -390,8 +390,6 @@ public class ClimateApp implements EntryPoint {
 
 
 
-
-
 		/* To do:
 
 		 * 
@@ -414,7 +412,7 @@ public class ClimateApp implements EntryPoint {
 
 		Label tableLabel = new Label("Climate Data Table");
 		tableLabel.setStyleName("titleLabel");
-		tableViewLayout.add(tableLabel);
+		
 	
 		HorizontalPanel tableView = new HorizontalPanel();
 			
@@ -422,6 +420,7 @@ public class ClimateApp implements EntryPoint {
 		exportCSV.setWidth("120px");
 		
 		tableView.add(verticalTablePanel);
+		verticalTablePanel.setSpacing(30);
 		tableView.add(exportCSV);
 
 
@@ -443,11 +442,8 @@ public class ClimateApp implements EntryPoint {
 		tableViewLayout.add(filterLabel);
 		tableViewLayout.add(filterPanel);
 		
-		Label sliderLabel = new Label("Set the range of years");
-		sliderLabel.setStyleName("panelLabel");
-		tableViewLayout.add(sliderLabel);
 		
-		
+		tableViewLayout.add(tableLabel);
 		tableViewLayout.add(tableView);
 
 		/* To do:
