@@ -441,6 +441,7 @@ public class ClimateApp implements EntryPoint {
 		Label filterLabel = new Label("Filter data ");
 		filterLabel.setStyleName("panelLabel");
 		tableViewLayout.add(filterLabel);
+		tableViewLayout.add(filterPanel);
 		
 		Label sliderLabel = new Label("Set the range of years");
 		sliderLabel.setStyleName("panelLabel");
@@ -475,9 +476,6 @@ public class ClimateApp implements EntryPoint {
 		sourcePanel.add(dataSourceLabel);
 		sourcePanel.add(sourceAnchor);
 		sourcePanel.add(updateSourceLabel);
-
-
-
 
 		//Add source panel to the main panel
 		mainPanel.add(sourcePanel);
@@ -532,7 +530,5 @@ public class ClimateApp implements EntryPoint {
 			filters.add(newFilter);
 		}
 	}
-	
-	
 
 }
