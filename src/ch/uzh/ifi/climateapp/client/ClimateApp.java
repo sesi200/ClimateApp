@@ -34,10 +34,11 @@ import ch.uzh.ifi.climateapp.shared.Filter;
  */
 public class ClimateApp implements EntryPoint {
 	
-	private VerticalPanel verticalPanel = new VerticalPanel();
+	private VerticalPanel verticalMapPanel = new VerticalPanel();
+	private VerticalPanel verticalTablePanel = new VerticalPanel();
     private VerticalPanel mainPanel;
 	private MapVisualization map;
-	private ClimateData [] data;
+	private TableVisualization table;
 	private DataFetcherServiceAsync dataFetcherService = GWT.create(DataFetcherService.class);
 	private ArrayList<Filter> filters = new ArrayList<Filter>();
 	
@@ -57,9 +58,10 @@ public class ClimateApp implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
+		buildUI();
 		
 		/* --------- Start RPC request example ---------- */
-		Filter f = new Filter();
+		/*Filter f = new Filter();
 		f.setMaxDeviation(0.7);
 		filters.add(f);
 		
@@ -78,28 +80,33 @@ public class ClimateApp implements EntryPoint {
 
 			@Override
 			public void onSuccess(ClimateData[] result) {
-				//TODO Auto-generated method stub
+				table.replaceData(result);
+				table.getVisualization(verticalTablePanel);
 			}
 			
 		};
 		
-		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);
+		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);*/
 		
 		/* --------- End RPC request test ---------- */
 		
-		buildUI();
+		
 		/*  -------- Start Test Data for MAP --------- */
 		ClimateData d1 = new ClimateData();
 		d1.setCountry("US");
+		d1.setCity("Atlanta");
 		d1.setAverageTemperature(-100);
 		ClimateData d2 = new ClimateData();
 		d2.setCountry("India");
+		d2.setCity("New Delhi");
 		d2.setAverageTemperature(30);
 		ClimateData d3 = new ClimateData();
 		d3.setCountry("Germany");
+		d3.setCity("Munich");
 		d3.setAverageTemperature(0);
 		ClimateData d4 = new ClimateData();
 		d4.setCountry("GB");
+		d4.setCity("Stonehenge");
 		d4.setAverageTemperature(14);
 		
 		
@@ -136,9 +143,12 @@ public class ClimateApp implements EntryPoint {
 
 		/*  -------- Start Map Visualization --------- */
 		map = new MapVisualization();
+		table = new TableVisualization();
 		map.replaceData(dataOne);
+		table.replaceData(dataOne);
 		
-		map.getVisualization(verticalPanel);
+		map.getVisualization(verticalMapPanel);
+		table.getVisualization(verticalTablePanel);
 		
 		/*  -------- End Map Visualization --------- */
 		
@@ -177,7 +187,7 @@ public class ClimateApp implements EntryPoint {
 
 
 		HorizontalPanel viewMap = new HorizontalPanel();
-		viewMap.add(verticalPanel);
+		viewMap.add(verticalMapPanel);
 		viewMap.setSpacing(30);
 		
 		Button exportPNG = new Button("Export as PNG");
@@ -395,16 +405,16 @@ public class ClimateApp implements EntryPoint {
 
 		/*Create horizontal panel to place the flex table into it*/
 
-		VerticalPanel tablePanel = new VerticalPanel();
+		VerticalPanel verticalTablePanel = new VerticalPanel();
 
 		Label tableLabel = new Label("Climate Data Table");
 		tableLabel.setStyleName("titleLabel");
-		tablePanel.add(tableLabel);
+		verticalTablePanel.add(tableLabel);
 
 		HorizontalPanel viewTable = new HorizontalPanel();	
 
-		FlexTable dataFlexTable = new FlexTable();
-
+		//FlexTable dataFlexTable = new FlexTable();
+/*
 		dataFlexTable.setText(0, 0, "Country");
 		dataFlexTable.setText(0, 1, "City");
 		dataFlexTable.setText(0, 2, "Date");
@@ -421,8 +431,8 @@ public class ClimateApp implements EntryPoint {
 		Button exportCSV = new Button("Export as CSV");
 		exportCSV.setWidth("120px");
 		viewTable.add(exportCSV);
-
-		tablePanel.add(viewTable);
+*/
+		viewTable.add(verticalTablePanel);
 
 		/*Assemble the whole table view panel */
 		
@@ -441,7 +451,7 @@ public class ClimateApp implements EntryPoint {
 		tableViewLayout.add(sliderLabel);
 		tableViewLayout.add(timelineFilter);
 		
-		tableViewLayout.add(tablePanel);
+		tableViewLayout.add(verticalTablePanel);
 
 		/* To do:
 		 * 
