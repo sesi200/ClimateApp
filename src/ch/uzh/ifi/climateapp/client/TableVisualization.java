@@ -74,4 +74,11 @@ public class TableVisualization implements IVisualization {
 		
 	}
 
+	/*
+	 * @return current data
+	 */
+	public ClimateData[] getData() {
+		return data;
+	}
+
 }

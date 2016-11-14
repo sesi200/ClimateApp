@@ -51,14 +51,6 @@ public class ClimateApp implements EntryPoint {
 	SuggestBox countryName;
 	SuggestBox cityName;
 
-	private DataTable dataTable;
-	private GeoMap.Options options;
-	private GeoMap geomap;
-	private int mapWidth = 500;
-	private int mapHeight = 500;
-
-
-
 	@Override
 	public void onModuleLoad() {
 		buildUI();
@@ -116,10 +108,6 @@ public class ClimateApp implements EntryPoint {
 
 		/*  -------- End Test Data for MAP --------- */
 
-
-
-
-
 		/*  -------- Start Map Visualization --------- */
 		map = new MapVisualization();
 		map.replaceData(dataOne);
@@ -129,7 +117,9 @@ public class ClimateApp implements EntryPoint {
 
 	}
 
-
+	/**
+	 * creates the UI of the application and adds it to the root panel
+	 */
 	private void buildUI(){
 
 		/**
@@ -552,6 +542,13 @@ public class ClimateApp implements EntryPoint {
 		};
 		
 		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);
+	}
+	
+	/**
+	 * @return current filters of the application
+	 */
+	public ArrayList<Filter> getFilters() {
+		return filters;
 	}
 
 }

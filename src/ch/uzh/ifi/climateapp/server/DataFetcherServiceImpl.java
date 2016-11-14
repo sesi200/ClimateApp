@@ -14,11 +14,16 @@ import ch.uzh.ifi.climateapp.shared.Filter;
 public class DataFetcherServiceImpl extends RemoteServiceServlet implements DataFetcherService {
 
 	@Override
+	/**
+	 * @return all data from the context that matches the filter
+	 */
 	public ClimateData[] getClimateData(Filter[] filter) {
 		ServletContext context = MyContextListener.getContext();
 		List<ClimateData> list = (List<ClimateData>) context.getAttribute("climateData");
+		//create array to store all matching data
 		ArrayList<ClimateData> returnData = new ArrayList<ClimateData>();
 		for (ClimateData data : list) {
+			//check whether the data matches
 			if (filter.length>0 && (data.getAverageTemperatureUncertainty() < filter[0].getMaxDeviation() || filter[0].getMaxDeviation()==-1)
 					&& filter[0].getMinDeviation()<=data.getAverageTemperatureUncertainty()) {
 				returnData.add(data);
@@ -27,7 +32,7 @@ public class DataFetcherServiceImpl extends RemoteServiceServlet implements Data
 			}
 		}
 		System.out.println("Returning list with "+returnData.size()+" elements.");
-		return returnData.toArray(new ClimateData[0]);
+		return returnData.toArray(new ClimateData[0]); //return all matching data
 	}
 
 }
