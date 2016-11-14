@@ -60,7 +60,7 @@ public class MyContextListener implements ServletContextListener {
 
 		// List<ClimateDataBean> list = (List<ClimateDataBean>)
 		// sce.getServletContext().getAttribute("climateData");
-		// for (int i=0; i < 10000; i+=100){
+		// for (int i=0; i < 100; i++){
 		// ClimateDataBean data = list.get(i);
 		// System.out.println(String.format("Date: %s, Country: %s, City: %s,
 		// Temperature: %f",
