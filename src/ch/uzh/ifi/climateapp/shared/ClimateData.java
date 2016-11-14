@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * The ClimateDataBean is a JavaBean object since the library which is used 
  * to retrieve the data from .csv file reads the lines from csv into bean object.
- * Which means that it has only fields, getters / setters for them and public default constructor.
+ * Which means that it has only fields, getters / setters for them, and public default constructor.
  * This class also complies with DTO standard.
  * 
  * The fields must be named as a header of the .csv file to be able 
