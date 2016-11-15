@@ -109,6 +109,7 @@ public class ClimateApp implements EntryPoint {
 		/*  -------- End Test Data for MAP --------- */
 
 		/*  -------- Start Map Visualization --------- */
+		
 		map = new MapVisualization();
 		map.replaceData(dataOne);
 		
@@ -128,7 +129,13 @@ public class ClimateApp implements EntryPoint {
 		 * */
 		mainPanel = new VerticalPanel();
 		mainPanel.setWidth("100%");
+		/*attach the main panel to the root panel*/
+		RootPanel.get().add(mainPanel);
 
+		/**
+		 * Create the tab panels of UI
+		 * 
+		 */
 		//Create the tab panel which is contained in the main vertical panel
 		TabPanel tabPanel = new TabPanel();
 		mainPanel.add(tabPanel);
@@ -143,11 +150,52 @@ public class ClimateApp implements EntryPoint {
 
 		//use the first tab as default 
 		tabPanel.selectTab(0);
-
-		/** Creating the map view panel 
-		 * 
-		 *  */
 		
+		//Creating MapView Layout
+		mapViewLayout = createMapViewLayout(mapViewLayout);
+		
+		//Creating TableViewLayout
+		tableViewLayout = createTableViewLayout(tableViewLayout);
+		
+
+
+		
+		/**
+		 *  Create Source Label
+		 */
+
+		//Create label to show the data source
+		Label dataSourceLabel = new Label("Source of raw data: Berkeley Earth");
+		dataSourceLabel.setStyleName("sourceLabel");
+
+		//Create an anchor to show the link to the external source
+		Anchor sourceAnchor = new Anchor("http://www.berkeleyearth.org", "http://www.berkeleyearth.org");
+		sourceAnchor.setStyleName("sourceLabel");
+
+		//Create label to show the last update of the data source
+		Label updateSourceLabel = new Label("Last data update: 01.08.2013"); //do we have to to mention last date of measurement or last upload of the csv file?
+		updateSourceLabel.setStyleName("sourceLabel");
+
+		//Create vertical panel to show the data source and the link one over another and add the label and the anchor to it 
+		VerticalPanel sourcePanel = new VerticalPanel();
+		sourcePanel.add(dataSourceLabel);
+		sourcePanel.add(sourceAnchor);
+		sourcePanel.add(updateSourceLabel);
+
+		//Add source panel to the main panel
+		mainPanel.add(sourcePanel);
+
+	}
+	
+	
+	
+	
+	
+	/** Creating the map view panel. Takes a vertical panel as input and adds all the panels and widget for the map view to it.
+	 * @param VerticalPanel mapViewLayout
+	 * @return VerticalPanel mapViewLayout
+	 *  */
+	private VerticalPanel createMapViewLayout(VerticalPanel mapViewLayout){
 		Label mapTimelineLabel = new Label("Here a timeline widget (slider) will be added in the sprint 2");
 		mapTimelineLabel.setStyleName("warningLabel");
 		mapViewLayout.add(mapTimelineLabel);
@@ -166,15 +214,17 @@ public class ClimateApp implements EntryPoint {
 
 		Button exportPNG = new Button("Export as PNG");
 		viewMap.add(exportPNG);
-
 		mapViewLayout.add(viewMap);
-
-		/**
-		 * Create horizontal panel to customize the table 
-		 * (to select which attributes will be shown in the table)
+		
+		return mapViewLayout;
+	}
+	
+	private VerticalPanel createTableViewLayout(VerticalPanel tableViewLayout){
+		
+		
+		/** Create Horizontal Customize Table
 		 * 
-		 * */  
-
+		 */
 		HorizontalPanel customizePanel = new HorizontalPanel();
 		customizePanel.setStyleName("paddedHorizontalPanel");
 		customizePanel.setSpacing(25);
@@ -214,8 +264,10 @@ public class ClimateApp implements EntryPoint {
 		showAvg.setValue(false);
 		showMax.setValue(false);
 		showMin.setValue(false);
-
-
+		
+		/**
+		 * Create Filter Data Table
+		 */
 		/*Create horizontal panel for the filter options (filters for location, temperature and precision)*/
 
 		HorizontalPanel filterPanel = new HorizontalPanel();
@@ -362,22 +414,6 @@ public class ClimateApp implements EntryPoint {
 		filterPanel.add(yearRangeFilter);
 		filterPanel.add(uncertaintyFilter);
 		filterPanel.add(resetFilterButton);
-
-
-
-		/* To do:
-
-		 * 
-		 * add check up for valid entries in text box widgets
-		 * 
-		 * add suggestions of the country and city names to suggest box widgets (use MultiWordSuggestOracle?)
-		 * 
-		 * add slider container and create slider widget (look up in FilmVisualizer)
-		 *		
-		 * add event handler  (for example (check box ----> flex table changes, key events in text boxes or suggest boxes ---> setting filter), etc.
-		 * 
-		 * */
-
 		
 		/**
 		 * 
@@ -420,40 +456,9 @@ public class ClimateApp implements EntryPoint {
 		
 		tableViewLayout.add(tableLabel);
 		tableViewLayout.add(tableView);
-
-		/* To do:
-		 * 
-		 * generate sample data to add to the table
-		 * 
-		 * */
-
-
-		/* add the source of data to the main panel*/
-
-		//Create label to show the data source
-		Label dataSourceLabel = new Label("Source of raw data: Berkeley Earth");
-		dataSourceLabel.setStyleName("sourceLabel");
-
-		//Create an anchor to show the link to the external source
-		Anchor sourceAnchor = new Anchor("http://www.berkeleyearth.org", "http://www.berkeleyearth.org");
-		sourceAnchor.setStyleName("sourceLabel");
-
-		//Create label to show the last update of the data source
-		Label updateSourceLabel = new Label("Last data update: 01.08.2013"); //do we have to to mention last date of measurement or last upload of the csv file?
-		updateSourceLabel.setStyleName("sourceLabel");
-
-		//Create vertical panel to show the data source and the link one over another and add the label and the anchor to it 
-		VerticalPanel sourcePanel = new VerticalPanel();
-		sourcePanel.add(dataSourceLabel);
-		sourcePanel.add(sourceAnchor);
-		sourcePanel.add(updateSourceLabel);
-
-		//Add source panel to the main panel
-		mainPanel.add(sourcePanel);
-
-		/*attach the main panel to the root panel*/
-		RootPanel.get().add(mainPanel);
-
+		
+		
+		return tableViewLayout;
 	}
 
 	/**

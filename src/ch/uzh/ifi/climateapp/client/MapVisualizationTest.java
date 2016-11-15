@@ -1,15 +1,16 @@
+package ch.uzh.ifi.climateapp.client;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import ch.uzh.ifi.climateapp.client.TableVisualization;
 import ch.uzh.ifi.climateapp.shared.ClimateData;
 
-public class TableVisualizationTest {
+public class MapVisualizationTest {
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void test() {
-		TableVisualization table = new TableVisualization();
+		MapVisualization map = new MapVisualization();
 		
 		ClimateData d1 = new ClimateData();
 		d1.setCountry("US");
@@ -42,11 +43,12 @@ public class TableVisualizationTest {
 		dataOne[4] = d5;
 		
 		
-		table.replaceData(dataOne);
-		ClimateData[] result = table.getData();
+		map.replaceData(dataOne);
+		ClimateData[] result = map.getData();
 		
 		
 		assertArrayEquals(dataOne, result);
 	}
 
+	
 }
