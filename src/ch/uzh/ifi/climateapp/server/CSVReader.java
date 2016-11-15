@@ -42,7 +42,7 @@ public class CSVReader {
 	 */
 	private static CellProcessor[] getProcessors() {
 
-		final CellProcessor[] processors = new CellProcessor[] { new ParseDate("yyyy-mm-dd"), // the
+		final CellProcessor[] processors = new CellProcessor[] { new ParseDate("yyyy-MM-dd"), // the
 																								// date
 																								// of
 																								// the
@@ -68,7 +68,7 @@ public class CSVReader {
 	 * The names of the .csv header must correspond to the field names of the
 	 * class.
 	 * 
-	 * @return list with ClimateDataBean objects
+	 * @return list with ClimateData objects
 	 * @throws IOException
 	 */
 	public List<ClimateData> readWithCsvBeanReader() throws IOException {

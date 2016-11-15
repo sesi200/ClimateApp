@@ -3,7 +3,6 @@ package ch.uzh.ifi.climateapp.server;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;

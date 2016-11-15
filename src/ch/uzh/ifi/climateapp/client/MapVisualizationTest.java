@@ -7,7 +7,6 @@ import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public class MapVisualizationTest {
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void test() {
 		MapVisualization map = new MapVisualization();

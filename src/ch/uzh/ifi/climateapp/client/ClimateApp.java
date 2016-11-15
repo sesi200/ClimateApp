@@ -5,27 +5,19 @@ import java.util.ArrayList;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-//import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 //import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.visualizations.GeoMap;
-
 import ch.uzh.ifi.climateapp.shared.ClimateData;
 import ch.uzh.ifi.climateapp.shared.Filter;
 
@@ -48,6 +40,8 @@ public class ClimateApp implements EntryPoint {
 	//needed class-wide textboxes to add filter values
 	TextBox uncertaintyFrom;
 	TextBox uncertaintyTo;
+	TextBox yearFrom;
+	TextBox yearTo;
 	SuggestBox countryName;
 	SuggestBox cityName;
 
@@ -289,6 +283,7 @@ public class ClimateApp implements EntryPoint {
 		countryName = new SuggestBox();
 		Button addCountryButton = new Button("Add");
 		addCountryButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event){
 				addCountryNameFilter();
 			}
@@ -309,6 +304,7 @@ public class ClimateApp implements EntryPoint {
 		cityName = new SuggestBox();
 		Button addCityButton = new Button("Add");
 		addCityButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event){
 				addCityNameFilter();
 			}
@@ -334,8 +330,14 @@ public class ClimateApp implements EntryPoint {
 		yearFromLabel.setStyleName("filterLabel");
 		yearFromLabel.setWidth("100px");
 
-		TextBox yearFrom = new TextBox();
+		yearFrom = new TextBox();
 		Button addYearFromButton = new Button("Add");
+		addYearFromButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event){
+				addYearFromFilter();
+			}
+		});
 
 		yearFromFilter.add(yearFromLabel);
 		yearFromFilter.add(yearFrom);
@@ -347,8 +349,14 @@ public class ClimateApp implements EntryPoint {
 		yearToLabel.setStyleName("filterLabel");
 		yearToLabel.setWidth("100px");
 
-		TextBox yearTo = new TextBox();
+		yearTo = new TextBox();
 		Button addYearToButton = new Button("Add");
+		addYearToButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event){
+				addYearToFilter();
+			}
+		});
 
 		yearToFilter.add(yearToLabel);
 		yearToFilter.add(yearTo);
@@ -372,6 +380,7 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyFrom.setText(Double.toString(STARTING_MIN_UNCERTAINTY));
 		Button addUncertaintyFromButton = new Button("Add");
 		addUncertaintyFromButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event){
 				addUncertaintyFromFilter();
 			}
@@ -391,6 +400,7 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyTo.setValue(Double.toString(STARTING_MAX_UNCERTAINTY));
 		Button addUncertaintyToButton = new Button("Add");
 		addUncertaintyToButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event){
 				addUncertaintyToFilter();
 			}
@@ -408,6 +418,12 @@ public class ClimateApp implements EntryPoint {
 
 		//Creates the button that resets the filters
 		Button resetFilterButton = new Button("Reset filter");
+		resetFilterButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				filters.clear();
+			}
+		});
 		
 		//Assemble filter panel
 		filterPanel.add(locationFilter);
@@ -500,6 +516,46 @@ public class ClimateApp implements EntryPoint {
 			reloadTable();
 		}
 	}
+	
+	/**
+	 * adds a new Filter to filters with endYear set to value read from textbox
+	 * does not work when there are some non-alphanumeric symbols in the textbox
+	 */
+	private void addYearToFilter() {
+		if (yearTo.getText()!=null) {
+			Filter newFilter;
+			if (filters.size()==0) {
+				newFilter = new Filter();
+				newFilter.setEndYear(Integer.parseInt(yearTo.getText()));
+				filters.add(newFilter);
+			} else {
+				newFilter = filters.get(0);
+				newFilter.setEndYear(Integer.parseInt(yearTo.getText()));
+			}
+			
+			reloadTable();
+		}
+	}
+	
+	/**
+	 * adds a new Filter to filters with startYear set to value read from textbox
+	 * does not work when there are some non-alphanumeric symbols in the textbox
+	 */
+	private void addYearFromFilter() {
+		if (yearFrom.getText()!=null) {
+			Filter newFilter;
+			if (filters.size()==0) {
+				newFilter = new Filter();
+				newFilter.setStartYear(Integer.parseInt(yearFrom.getText()));
+				filters.add(newFilter);
+			} else {
+				newFilter = filters.get(0);
+				newFilter.setStartYear(Integer.parseInt(yearFrom.getText()));
+			}
+			
+			reloadTable();
+		}
+	}
 
 	/**
 	 * adds a new Filter to filters with country set to value read from textbox
@@ -547,13 +603,6 @@ public class ClimateApp implements EntryPoint {
 		};
 		
 		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);
-	}
-	
-	/**
-	 * @return current filters of the application
-	 */
-	public ArrayList<Filter> getFilters() {
-		return filters;
 	}
 
 }

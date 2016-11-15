@@ -1,7 +1,5 @@
 package ch.uzh.ifi.climateapp.client;
 
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import ch.uzh.ifi.climateapp.shared.ClimateData;
