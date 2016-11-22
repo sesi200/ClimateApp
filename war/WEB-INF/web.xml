@@ -25,5 +25,15 @@
     <servlet-name>dataFetcherServiceImpl</servlet-name>
     <url-pattern>/climateapp/climateData</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>averageYearServiceImpl</servlet-name>
+    <servlet-class>ch.uzh.ifi.climateapp.server.AverageYearServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>averageYearServiceImpl</servlet-name>
+    <url-pattern>/climateapp/averageYear</url-pattern>
+  </servlet-mapping>
 
 </web-app>

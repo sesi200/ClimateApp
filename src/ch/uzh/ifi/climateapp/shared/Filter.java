@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Filter implements Serializable{
 
+	private static final long serialVersionUID = -4159245561958959415L;
 	private int startYear = -1;
 	private int endYear = -1;
 	private double maxDeviation = -1;

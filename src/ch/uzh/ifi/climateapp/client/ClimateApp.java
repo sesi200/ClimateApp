@@ -11,6 +11,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -35,7 +36,8 @@ public class ClimateApp implements EntryPoint {
 	private MapVisualization map = new MapVisualization();
 	private TableVisualization table = new TableVisualization();
 	private DataFetcherServiceAsync dataFetcherService = GWT.create(DataFetcherService.class);
-	private ArrayList<Filter> filters = new ArrayList<Filter>();
+	private ArrayList<Filter> filters = new ArrayList<Filter>(); /*filters[1+] is for cities and countries*/
+	private FlexTable currentFilterDisplay;
 
 	//needed class-wide textboxes to add filter values
 	TextBox uncertaintyFrom;
@@ -492,7 +494,7 @@ public class ClimateApp implements EntryPoint {
 				newFilter = filters.get(0);
 				newFilter.setMinDeviation(Double.parseDouble(uncertaintyFrom.getText()));
 			}
-			
+			updateCurrentFilterDisplay();
 			reloadTable();
 		}
 	}
@@ -512,7 +514,7 @@ public class ClimateApp implements EntryPoint {
 				newFilter = filters.get(0);
 				newFilter.setMaxDeviation(Double.parseDouble(uncertaintyTo.getText()));
 			}
-			
+			updateCurrentFilterDisplay();
 			reloadTable();
 		}
 	}
@@ -532,7 +534,7 @@ public class ClimateApp implements EntryPoint {
 				newFilter = filters.get(0);
 				newFilter.setEndYear(Integer.parseInt(yearTo.getText()));
 			}
-			
+			updateCurrentFilterDisplay();
 			reloadTable();
 		}
 	}
@@ -552,7 +554,7 @@ public class ClimateApp implements EntryPoint {
 				newFilter = filters.get(0);
 				newFilter.setStartYear(Integer.parseInt(yearFrom.getText()));
 			}
-			
+			updateCurrentFilterDisplay();
 			reloadTable();
 		}
 	}
@@ -565,6 +567,7 @@ public class ClimateApp implements EntryPoint {
 			Filter newFilter = new Filter();
 			newFilter.setCountry(countryName.getText());
 			filters.add(newFilter);
+			updateCurrentFilterDisplay();
 			reloadTable();
 		}
 	}
@@ -577,6 +580,7 @@ public class ClimateApp implements EntryPoint {
 			Filter newFilter = new Filter();
 			newFilter.setCity(cityName.getText());
 			filters.add(newFilter);
+			updateCurrentFilterDisplay();
 			reloadTable();
 		}
 	}
@@ -585,9 +589,10 @@ public class ClimateApp implements EntryPoint {
 	 * reloads the table view with currently set filters
 	 */
 	private void reloadTable() {
-		if (dataFetcherService==null)
+		if (dataFetcherService==null) {
 			dataFetcherService = GWT.create(DataFetcherService.class);
-
+		}
+		
 		//set up callback object
 		AsyncCallback<ClimateData[]> callback = new AsyncCallback<ClimateData[]>() {
 
@@ -603,6 +608,61 @@ public class ClimateApp implements EntryPoint {
 		};
 		
 		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);
+	}
+	
+	/**
+	 * reloads the display that shows the current filter options
+	 */
+	private void updateCurrentFilterDisplay() {
+		int currentLine=0;
+		FlexTable table = new FlexTable();
+		//deviation is always set
+		table.setText(currentLine, 0, "Deviation:");
+		table.setText(currentLine, 1, filters.get(0).getMinDeviation()+" - "+filters.get(0).getMaxDeviation());
+		++currentLine;
+		//add year if some year filtering is in place
+		if (filters.get(0).getStartYear()!=-1 || filters.get(0).getEndYear()!=-1) {
+			table.setText(currentLine, 0, "Year:");
+			//assemble range display
+			String text = "any";
+			if (filters.get(0).getStartYear()!=-1 && filters.get(0).getEndYear()==-1) {
+				//if there is some start year to display but no end year
+				text = filters.get(0).getStartYear()+" and later";
+			}else if (filters.get(0).getStartYear() == -1 && filters.get(0).getEndYear()!=-1) {
+				//if there is some end year to display but no start year
+				text = filters.get(0).getEndYear()+" and earlier";
+			} else {
+				//if there is a start year and an end year set
+				text = filters.get(0).getStartYear()+" - "+filters.get(0).getEndYear();
+			}
+			table.setText(currentLine, 1, text);
+			++currentLine;
+		}
+		
+		if (filters.size()>1/*there can be a filter set for cities or countries*/) {
+			//find out if there exist filters for country/city
+			boolean hasCity = false;
+			boolean hasCountry = false;
+			for (Filter filter : filters) {
+				if (filter.getCity()!=null)hasCity=true;
+				if (filter.getCountry()!=null)hasCountry=true;
+			}
+			//populate with existing filters
+			if (hasCity) {
+				table.setText(currentLine, 0, "Cities");
+				for (Filter filter: filters) {
+					if(filter.getCity()!=null) table.setText(currentLine++, 1, filter.getCity());
+				}
+			}
+			if (hasCountry) {
+				table.setText(currentLine, 0, "Countries");
+				for (Filter filter: filters) {
+					if(filter.getCountry()!=null) table.setText(currentLine++, 1, filter.getCountry());
+				}
+			}
+		}
+		
+		currentFilterDisplay = table;
 	}
 
 }
