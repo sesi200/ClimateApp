@@ -8,6 +8,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -27,8 +30,9 @@ import ch.uzh.ifi.climateapp.shared.Filter;
  */
 public class ClimateApp implements EntryPoint {
 	
-	private static final double STARTING_MAX_UNCERTAINTY = 0.3;
+	private static final double STARTING_MAX_UNCERTAINTY = 1.5;
 	private static final double STARTING_MIN_UNCERTAINTY = 0.0;
+	private static final int STARTING_YEAR = 2013;
 	
 	private VerticalPanel verticalMapPanel = new VerticalPanel();
 	private VerticalPanel verticalTablePanel = new VerticalPanel();
@@ -37,7 +41,7 @@ public class ClimateApp implements EntryPoint {
 	private TableVisualization table = new TableVisualization();
 	private DataFetcherServiceAsync dataFetcherService = GWT.create(DataFetcherService.class);
 	private ArrayList<Filter> filters = new ArrayList<Filter>(); /*filters[1+] is for cities and countries*/
-	private FlexTable currentFilterDisplay;
+	private FlexTable currentFilterDisplay = new FlexTable();
 
 	//needed class-wide textboxes to add filter values
 	TextBox uncertaintyFrom;
@@ -49,13 +53,13 @@ public class ClimateApp implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		buildUI();
-		
 		//populate table
-		Filter f = new Filter();
-		f.setMaxDeviation(STARTING_MAX_UNCERTAINTY);
-		filters.add(f);
+		setFilterToDefault();
+		updateCurrentFilterDisplay();
 		reloadTable();
+		
+		
+		buildUI();
         
         
 		/*  -------- Start Test Data for MAP --------- */
@@ -112,6 +116,16 @@ public class ClimateApp implements EntryPoint {
 		map.getVisualization(verticalMapPanel);
 		/*  -------- End Map Visualization --------- */
 
+	}
+
+	private void setFilterToDefault() {
+		filters.clear();
+		Filter f = new Filter();
+		f.setMaxDeviation(STARTING_MAX_UNCERTAINTY);
+		f.setMinDeviation(STARTING_MIN_UNCERTAINTY);
+		f.setStartYear(STARTING_YEAR);
+		f.setEndYear(STARTING_YEAR);
+		filters.add(f);
 	}
 
 	/**
@@ -275,7 +289,6 @@ public class ClimateApp implements EntryPoint {
 		VerticalPanel locationFilter = new VerticalPanel();
 
 		//Create country filter panel
-
 		HorizontalPanel countryFilter = new HorizontalPanel();
 
 		Label countryLabel = new Label("Select country");
@@ -283,6 +296,13 @@ public class ClimateApp implements EntryPoint {
 		countryLabel.setStyleName("filterLabel");
 
 		countryName = new SuggestBox();
+		countryName.addKeyDownHandler(new KeyDownHandler() {
+			public void onKeyDown(KeyDownEvent event) {
+				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
+					addCountryNameFilter();
+				}
+			}
+		});
 		Button addCountryButton = new Button("Add");
 		addCountryButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -304,6 +324,13 @@ public class ClimateApp implements EntryPoint {
 		cityLabel.setStyleName("filterLabel");
 
 		cityName = new SuggestBox();
+		cityName.addKeyDownHandler(new KeyDownHandler() {
+			public void onKeyDown(KeyDownEvent event) {
+				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
+					addCityNameFilter();
+				}
+			}
+		});
 		Button addCityButton = new Button("Add");
 		addCityButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -333,6 +360,14 @@ public class ClimateApp implements EntryPoint {
 		yearFromLabel.setWidth("100px");
 
 		yearFrom = new TextBox();
+		yearFrom.setText(""+STARTING_YEAR);
+		yearFrom.addKeyDownHandler(new KeyDownHandler() {
+			public void onKeyDown(KeyDownEvent event) {
+				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
+					addYearFromFilter();
+				}
+			}
+		});
 		Button addYearFromButton = new Button("Add");
 		addYearFromButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -352,6 +387,14 @@ public class ClimateApp implements EntryPoint {
 		yearToLabel.setWidth("100px");
 
 		yearTo = new TextBox();
+		yearTo.setText(""+STARTING_YEAR);
+		yearTo.addKeyDownHandler(new KeyDownHandler() {
+			public void onKeyDown(KeyDownEvent event) {
+				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
+					addYearToFilter();
+				}
+			}
+		});
 		Button addYearToButton = new Button("Add");
 		addYearToButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -380,6 +423,13 @@ public class ClimateApp implements EntryPoint {
 
 		uncertaintyFrom = new TextBox();
 		uncertaintyFrom.setText(Double.toString(STARTING_MIN_UNCERTAINTY));
+		uncertaintyFrom.addKeyDownHandler(new KeyDownHandler() {
+			public void onKeyDown(KeyDownEvent event) {
+				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
+					addUncertaintyFromFilter();
+				}
+			}
+		});
 		Button addUncertaintyFromButton = new Button("Add");
 		addUncertaintyFromButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -400,6 +450,13 @@ public class ClimateApp implements EntryPoint {
 
 		uncertaintyTo = new TextBox();
 		uncertaintyTo.setValue(Double.toString(STARTING_MAX_UNCERTAINTY));
+		uncertaintyTo.addKeyDownHandler(new KeyDownHandler() {
+			public void onKeyDown(KeyDownEvent event) {
+				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
+					addUncertaintyToFilter();
+				}
+			}
+		});
 		Button addUncertaintyToButton = new Button("Add");
 		addUncertaintyToButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -423,7 +480,9 @@ public class ClimateApp implements EntryPoint {
 		resetFilterButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				filters.clear();
+				setFilterToDefault();
+				updateCurrentFilterDisplay();
+				reloadTable();
 			}
 		});
 		
@@ -450,7 +509,7 @@ public class ClimateApp implements EntryPoint {
 		
 		tableView.add(verticalTablePanel);
 		verticalTablePanel.setSpacing(30);
-		tableView.add(exportCSV);
+		tableView.add(currentFilterDisplay);
 
 
 		tableViewLayout.add(tableView);
@@ -615,14 +674,15 @@ public class ClimateApp implements EntryPoint {
 	 */
 	private void updateCurrentFilterDisplay() {
 		int currentLine=0;
-		FlexTable table = new FlexTable();
+		currentFilterDisplay.clear();;
+		currentFilterDisplay.setText(currentLine++, 0, "Current Filter:");
 		//deviation is always set
-		table.setText(currentLine, 0, "Deviation:");
-		table.setText(currentLine, 1, filters.get(0).getMinDeviation()+" - "+filters.get(0).getMaxDeviation());
+		currentFilterDisplay.setText(currentLine, 0, "Deviation:");
+		currentFilterDisplay.setText(currentLine, 1, filters.get(0).getMinDeviation()+" - "+filters.get(0).getMaxDeviation());
 		++currentLine;
 		//add year if some year filtering is in place
 		if (filters.get(0).getStartYear()!=-1 || filters.get(0).getEndYear()!=-1) {
-			table.setText(currentLine, 0, "Year:");
+			currentFilterDisplay.setText(currentLine, 0, "Year:");
 			//assemble range display
 			String text = "any";
 			if (filters.get(0).getStartYear()!=-1 && filters.get(0).getEndYear()==-1) {
@@ -635,7 +695,7 @@ public class ClimateApp implements EntryPoint {
 				//if there is a start year and an end year set
 				text = filters.get(0).getStartYear()+" - "+filters.get(0).getEndYear();
 			}
-			table.setText(currentLine, 1, text);
+			currentFilterDisplay.setText(currentLine, 1, text);
 			++currentLine;
 		}
 		
@@ -649,20 +709,18 @@ public class ClimateApp implements EntryPoint {
 			}
 			//populate with existing filters
 			if (hasCity) {
-				table.setText(currentLine, 0, "Cities");
+				currentFilterDisplay.setText(currentLine, 0, "Cities:");
 				for (Filter filter: filters) {
-					if(filter.getCity()!=null) table.setText(currentLine++, 1, filter.getCity());
+					if(filter.getCity()!=null) currentFilterDisplay.setText(currentLine++, 1, filter.getCity());
 				}
 			}
 			if (hasCountry) {
-				table.setText(currentLine, 0, "Countries");
+				currentFilterDisplay.setText(currentLine, 0, "Countries:");
 				for (Filter filter: filters) {
-					if(filter.getCountry()!=null) table.setText(currentLine++, 1, filter.getCountry());
+					if(filter.getCountry()!=null) currentFilterDisplay.setText(currentLine++, 1, filter.getCountry());
 				}
 			}
 		}
-		
-		currentFilterDisplay = table;
 	}
 
 }
