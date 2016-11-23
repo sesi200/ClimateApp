@@ -1,6 +1,7 @@
 package ch.uzh.ifi.climateapp.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
@@ -50,6 +51,18 @@ public class ClimateApp implements EntryPoint {
 	TextBox yearTo;
 	SuggestBox countryName;
 	SuggestBox cityName;
+
+	//needed class-wide checkboxes to use for filtering
+	CheckBox showCountry = new CheckBox("show country");
+	CheckBox showCity = new CheckBox("show city");
+	CheckBox showDate = new CheckBox("show date");
+	CheckBox showTemperature = new CheckBox("show temperature");
+	CheckBox showUncertainty = new CheckBox("show uncertainty");
+	CheckBox showLongitude= new CheckBox("show longitude");
+	CheckBox showLatitude = new CheckBox("show latitude");
+	//CheckBox showAvg = new CheckBox("show average");
+	//CheckBox showMax = new CheckBox("show maximum");
+	//CheckBox showMin = new CheckBox("show minimum");
 
 	@Override
 	public void onModuleLoad() {
@@ -126,6 +139,18 @@ public class ClimateApp implements EntryPoint {
 		f.setStartYear(STARTING_YEAR);
 		f.setEndYear(STARTING_YEAR);
 		filters.add(f);
+		
+		//set default values for each checkbox
+		showCountry.setValue(true); 
+		showCity.setValue(true); 
+		showDate.setValue(true); 
+		showTemperature.setValue(true); 
+		showUncertainty.setValue(true); 
+		showLongitude.setValue(true);
+		showLatitude.setValue(true);
+		//showAvg.setValue(false);
+		//showMax.setValue(false);
+		//showMin.setValue(false);
 	}
 
 	/**
@@ -239,41 +264,34 @@ public class ClimateApp implements EntryPoint {
 		customizePanel.setStyleName("paddedHorizontalPanel");
 		customizePanel.setSpacing(25);
 
-		//Create check-box widgets to select attributes
-		CheckBox showCountry = new CheckBox("show country");
-		CheckBox showCity = new CheckBox("show city");
-		CheckBox showDate = new CheckBox("show date");
-		CheckBox showTemperature = new CheckBox("show temperature");
-		CheckBox showUncertainty = new CheckBox("show uncertainty");
-		CheckBox showLongitude= new CheckBox("show longitude");
-		CheckBox showLatitude = new CheckBox("show latitude");
-		CheckBox showAvg = new CheckBox("show average");
-		CheckBox showMax = new CheckBox("show maximum");
-		CheckBox showMin = new CheckBox("show minimum");
-
+		
+		//add check-box listeners
+		ClickHandler checkboxClickHandler = new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				table.setColumnOptions(getTableColumnShowValues());
+				table.getVisualization(verticalTablePanel);
+			}
+		};
+		showCountry.addClickHandler(checkboxClickHandler);
+		showCity.addClickHandler(checkboxClickHandler);
+		showDate.addClickHandler(checkboxClickHandler);
+		showTemperature.addClickHandler(checkboxClickHandler);
+		showUncertainty.addClickHandler(checkboxClickHandler);
+		showLatitude.addClickHandler(checkboxClickHandler);
+		showLongitude.addClickHandler(checkboxClickHandler);
+		
 		//add check-box widgets to the customize panel
 		customizePanel.add(showCountry);
 		customizePanel.add(showCity);
-		customizePanel.add(showDate);
 		customizePanel.add(showTemperature);
 		customizePanel.add(showUncertainty);
-		customizePanel.add(showLongitude);
+		customizePanel.add(showDate);
 		customizePanel.add(showLatitude);
-		customizePanel.add(showAvg); 
-		customizePanel.add(showMax); 
-		customizePanel.add(showMin); 
-
-		//set default values for each attribute
-		showCountry.setValue(true); 
-		showCity.setValue(true); 
-		showDate.setValue(true); 
-		showTemperature.setValue(true); 
-		showUncertainty.setValue(true); 
-		showLongitude.setValue(true);
-		showLatitude.setValue(true);
-		showAvg.setValue(false);
-		showMax.setValue(false);
-		showMin.setValue(false);
+		customizePanel.add(showLongitude);
+		//customizePanel.add(showAvg); 
+		//customizePanel.add(showMax); 
+		//customizePanel.add(showMin); 
 		
 		/**
 		 * Create Filter Data Table
@@ -660,6 +678,7 @@ public class ClimateApp implements EntryPoint {
 
 			@Override
 			public void onSuccess(ClimateData[] result) {
+				table.setColumnOptions(getTableColumnShowValues());
 				table.replaceData(result);
 				table.getVisualization(verticalTablePanel);
 			}
@@ -721,6 +740,23 @@ public class ClimateApp implements EntryPoint {
 				}
 			}
 		}
+	}
+	
+	
+	/**
+	 * 
+	 * @return HashMap with boolean values that show the checkbox status
+	 */
+	private HashMap<String, Boolean> getTableColumnShowValues() {
+		HashMap<String, Boolean> checkboxValues = new HashMap<String, Boolean>();
+		checkboxValues.put("Country", showCountry.getValue());
+		checkboxValues.put("City", showCity.getValue());
+		checkboxValues.put("Date", showDate.getValue());
+		checkboxValues.put("Temperature", showTemperature.getValue());
+		checkboxValues.put("Uncertainty", showUncertainty.getValue());
+		checkboxValues.put("Latitude", showLatitude.getValue());
+		checkboxValues.put("Longitude", showLongitude.getValue());
+		return checkboxValues;
 	}
 
 }

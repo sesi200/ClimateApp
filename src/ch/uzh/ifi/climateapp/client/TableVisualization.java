@@ -1,5 +1,7 @@
 package ch.uzh.ifi.climateapp.client;
 
+import java.util.HashMap;
+
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.DataTable;
@@ -15,7 +17,8 @@ public class TableVisualization implements IVisualization {
 	private DataTable dataTable;
 	private Table table;
 	private Table.Options options;
-
+	private HashMap<String,Boolean> columnOptions = null;
+	
 	@Override
 	public Widget getVisualization(final VerticalPanel verticalPanel) {
 		Runnable onLoadCallback = new Runnable() {
@@ -45,6 +48,32 @@ public class TableVisualization implements IVisualization {
 				options = Table.Options.create();
 				options.setPageSize(15);
 				
+				//remove columns which should not be shown
+				//perform right to left to not mess with the indices
+				if (columnOptions!=null) {
+					if(!columnOptions.get("Longitude")) {
+						dataTable.removeColumn(6);
+					}
+					if(!columnOptions.get("Latitude")) {
+						dataTable.removeColumn(5);
+					}
+					if(!columnOptions.get("Date")) {
+						dataTable.removeColumn(4);
+					}
+					if(!columnOptions.get("Uncertainty")) {
+						dataTable.removeColumn(3);
+					}
+					if(!columnOptions.get("Temperature")) {
+						dataTable.removeColumn(2);
+					}
+					if(!columnOptions.get("City")) {
+						dataTable.removeColumn(1);
+					}
+					if(!columnOptions.get("Country")) {
+						dataTable.removeColumn(0);
+					}
+				}
+				
 				table = new Table(dataTable, options);
 				
 				verticalPanel.clear();
@@ -61,6 +90,19 @@ public class TableVisualization implements IVisualization {
 	public void replaceData(ClimateData[] newData) {
 		data = newData;
 		
+	}
+	
+	public void setColumnOptions(HashMap<String,Boolean> options) {
+		//only set correct options
+		if(options.containsKey("Country")
+				&&options.containsKey("City")
+				&&options.containsKey("Temperature")
+				&&options.containsKey("Uncertainty")
+				&&options.containsKey("Date")
+				&&options.containsKey("Latitude")
+				&&options.containsKey("Longitude")){
+			columnOptions = options;
+		}
 	}
 
 	/*
