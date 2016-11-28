@@ -6,9 +6,11 @@ public class AverageData implements Serializable {
 	
 	/**
 	 * The class stores the data for the map view: the year is stored as an integer
-	 * for easy manipulation, the average temperature is stored as a string
-	 * to allow more precise representation on the map 
-	 * (since it can only represent integers or strings)
+	 * for easy manipulation, the average temperature is stored as a double
+	 * to allow more precise representation in the table, if we decide to show
+	 * the average data per country 
+	 * Map will modify round the double to the int, since it is impossible
+	 * to represent any other type in tooltip
 	 */
 	private static final long serialVersionUID = 8388654543381139460L;
 	private String country;
