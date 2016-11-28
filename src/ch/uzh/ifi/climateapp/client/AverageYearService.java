@@ -9,5 +9,5 @@ import ch.uzh.ifi.climateapp.shared.AverageData;
 
 @RemoteServiceRelativePath("averageYear")
 public interface AverageYearService extends RemoteService {
-	List<AverageData> getAverageForYear(int year);
+	AverageData[] getAverageForYear(int year);
 }

@@ -13,10 +13,12 @@ public class AverageYearServiceImpl extends RemoteServiceServlet implements Aver
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<AverageData> getAverageForYear(int year) {
+	public AverageData[] getAverageForYear(int year) {
 		Map<Integer, List<AverageData>> yearToAvgData= (Map<Integer, List<AverageData>>) this.getServletContext().getAttribute(ContextContent.AVERAGE_PER_YEAR);
 		System.out.println("returning avg data for year "+year);
-		return yearToAvgData.get(year);
+		AverageData[] data = new AverageData[yearToAvgData.get(year).size()];
+		data = (AverageData[]) yearToAvgData.get(year).toArray();
+		return data;
 	}
 
 }
