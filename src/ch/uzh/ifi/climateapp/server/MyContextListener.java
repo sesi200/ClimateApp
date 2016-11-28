@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import ch.uzh.ifi.climateapp.shared.AverageData;
 import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public class MyContextListener implements ServletContextListener {
@@ -22,18 +24,19 @@ public class MyContextListener implements ServletContextListener {
 	 *      the data from the .csv file List of climate data objects is created
 	 *      and filled with the data objects generated from .csv file The list
 	 *      is made unmodifiable, since climate data is not supposed to be added
-	 *      or deleted in this application Finally the list is put into the
-	 *      context of the application
+	 *      or deleted in this application 
+	 *      Finally the list is put into the context of the application
+	 *      
+	 *      The climate data is aggregated per year and country and put into the
+	 *      map from year to AverageData to make the access to this data easy.
 	 * 
 	 * @author lada
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 
-		// getting the context and assigning it to the field of special
-		// singleton holder class
 		context = sce.getServletContext();
-		ServletContextHolder.getInstance(context);
+		AverageCalculator avgCalc = new AverageCalculator();
 
 		System.out.println("Context loaded!");
 
@@ -54,19 +57,20 @@ public class MyContextListener implements ServletContextListener {
 		long timeTaken = System.currentTimeMillis() - before;
 		System.out.println("Loaded " + climateData.size() + " climate data entries in " + timeTaken + "ms.");
 
-		sce.getServletContext().setAttribute("climateData", climateData);
+		Map<Integer, List<AverageData>> averageDataMap = avgCalc.calculateAveragePerYearAndCountry(climateData);
+		averageDataMap = Collections.unmodifiableMap(averageDataMap);
 
+		sce.getServletContext().setAttribute(ContextContent.CLIMATE_DATA, climateData);
+		sce.getServletContext().setAttribute(ContextContent.AVERAGE_PER_YEAR, averageDataMap);
+		
 		// test for getting the data out of the context
 
-		// List<ClimateDataBean> list = (List<ClimateDataBean>)
-		// sce.getServletContext().getAttribute("climateData");
-		// for (int i=0; i < 100; i++){
-		// ClimateDataBean data = list.get(i);
-		// System.out.println(String.format("Date: %s, Country: %s, City: %s,
-		// Temperature: %f",
-		// data.getDt().toString(), data.getCountry(), data.getCity(),
-		// data.getAverageTemperature()));
-		// }
+//		 @SuppressWarnings("unchecked")
+//		 List<ClimateData> list = (List<ClimateData>) sce.getServletContext().getAttribute("climateData");
+//		 for (int i=0; i < 100; i++){
+//		 ClimateData data = list.get(i);
+//		 System.out.println(data);
+//		 }
 	}
 
 	@Override
