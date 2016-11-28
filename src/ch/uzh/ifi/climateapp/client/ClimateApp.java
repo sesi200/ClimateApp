@@ -3,6 +3,7 @@ package ch.uzh.ifi.climateapp.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
@@ -26,6 +27,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import ch.uzh.ifi.climateapp.shared.ClimateData;
 import ch.uzh.ifi.climateapp.shared.Filter;
+
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.SliderBar;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -236,6 +240,7 @@ public class ClimateApp implements EntryPoint {
 		Label mapTimelineLabel = new Label("Here a timeline widget (slider) will be added in the sprint 2");
 		mapTimelineLabel.setStyleName("warningLabel");
 		mapViewLayout.add(mapTimelineLabel);
+		mapViewLayout.add(getSlider());
 		
 		// TODO here the slider widget should be added
 		// mapViewLayout.add(sliderWidget);
@@ -254,6 +259,147 @@ public class ClimateApp implements EntryPoint {
 		mapViewLayout.add(viewMap);
 		
 		return mapViewLayout;
+	}
+	
+	int firstDataYear = 1886;
+	int lastDataYear = 2016;
+	
+	int sliderFromValue =  firstDataYear;
+	int sliderUntilValue = lastDataYear;
+	
+	SliderBar fromSlider;
+	SliderBar untilSlider;
+	VerticalPanel verticalPanelSlider;
+	VerticalPanel verticalPanel;
+	boolean sliderIsLoading;
+	
+	private Widget getSlider(){
+		
+		verticalPanelSlider = new VerticalPanel();
+		fromSlider = new SliderBar(1886, 2016);
+		fromSlider.setStepSize(5);
+		fromSlider.setCurrentValue(firstDataYear);
+		fromSlider.setNumTicks(130);
+		fromSlider.setNumLabels(26);
+		
+		verticalPanelSlider.add(fromSlider);
+		fromSlider.setVisible(true);
+		fromSlider.setHeight("52px");
+		fromSlider.setWidth("100%");
+
+		fromSlider.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (!sliderIsLoading) {
+					sliderIsLoading = true;
+					if (sliderUntilValue - sliderFromValue > 0) {
+						sliderUntilValue = (int) untilSlider.getCurrentValue();
+						sliderFromValue = (int) fromSlider.getCurrentValue();
+					} else {
+						sliderFromValue = (int) untilSlider.getCurrentValue();
+						sliderUntilValue = (int) fromSlider.getCurrentValue();
+					}
+
+//					final String sliderQuerry = ("WHERE releasedate >= '" + sliderFromValue + ".00.00' AND releasedate <= '"
+//							+ (sliderFromValue + 1) + ".00.00'");
+					
+//					strQuerry.append(sliderQuerry);
+					
+//					dbconnection.getDBData(strQuerry.toString(), new AsyncCallback<ArrayList<Movie>>() {
+//						public void onFailure(Throwable caught) {
+//							// Show the RPC error message to the user
+//						}
+//
+//						public void onSuccess(ArrayList<Movie> result) {
+//							try {
+//								// ############ table ############
+//								list.clear();
+//								globalList.clear();
+//								for (Movie movie : result) {
+//									list.add(movie);
+//									globalList.add(movie);
+//								}
+//								map.printMap("SELECT countries, Count(*) FROM moviedata " + sliderQuerry + " GROUP BY countries", verticalPanel);
+//
+//							} catch (NullPointerException e) {
+//								// serverResponseLabel2.setHTML("AW SHIT,
+//								// NULLPOINTER IS IN DA HOUSE!");
+//							}
+//							System.out.println(strQuerry);
+//							clearStringquerry();
+//						}
+//					});
+					sliderIsLoading = false;
+				} else {
+					// TO DO: WHAT HAPPENS IF STH IS LOADING
+					// fromSlider.setCurrentValue((double)sliderFromValue);
+				}
+			}
+		});
+/*
+		untilSlider = new SliderBar(1886, 2016);
+
+		untilSlider.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (!sliderIsLoading) {
+					sliderIsLoading = true;
+					if (sliderUntilValue - sliderFromValue > 0) {
+						sliderUntilValue = (int) untilSlider.getCurrentValue();
+						sliderFromValue = (int) fromSlider.getCurrentValue();
+					} else {
+						sliderFromValue = (int) untilSlider.getCurrentValue();
+						sliderUntilValue = (int) fromSlider.getCurrentValue();
+					}
+
+
+//					final StringBuilder concatSlider = new StringBuilder("WHERE releasedate > '" + sliderFromValue + ".00.00' AND releasedate < '"
+//							+ (sliderFromValue + 1) + ".00.00' ");
+//					strQuerry.append(concatSlider);
+//					dbconnection.getDBData(strQuerry.toString(), new AsyncCallback<ArrayList<Movie>>() {
+//						public void onFailure(Throwable caught) {
+//							// Show the RPC error message to the user
+//						}
+//
+//						public void onSuccess(ArrayList<Movie> result) {
+//							try {
+//								// ############ table ############
+//								list.clear();
+//								globalList.clear();
+//								for (Movie movie : result) {
+//									list.add(movie);
+//									globalList.add(movie);
+//								}
+//								
+//								map.printMap("SELECT countries, Count(*) FROM moviedata " + concatSlider + " GROUP BY countries", verticalPanel);
+//								
+//							} catch (NullPointerException e) {
+//								// serverResponseLabel2.setHTML("AW SHIT,
+//								// NULLPOINTER IS IN DA HOUSE!");
+//							}
+//							System.out.println(strQuerry);
+//							clearStringquerry();
+//
+//						}
+//					});
+					sliderIsLoading = false;
+				} else {
+					// TO DO do sth if loading
+					// untilSlider.setCurrentValue((double)sliderUntilValue);
+				}
+
+			}
+		});
+		untilSlider.setStepSize(1);
+		untilSlider.setCurrentValue(lastDataYear);
+		untilSlider.setNumTicks(130);
+		untilSlider.setNumLabels(26);
+		//RootPanel.get().add(verticalPanelSlider);
+		untilSlider.setVisible(true);
+		untilSlider.setHeight("50px");
+		untilSlider.setWidth("500px");
+		*/
+		return verticalPanelSlider;
 	}
 	
 	private VerticalPanel createTableViewLayout(VerticalPanel tableViewLayout){
@@ -524,8 +670,7 @@ public class ClimateApp implements EntryPoint {
 	
 		HorizontalPanel tableView = new HorizontalPanel();
 			
-		Button exportCSV = new Button("Export as CSV");
-		exportCSV.setWidth("120px");
+
 		
 		tableView.add(verticalTablePanel);
 		verticalTablePanel.setSpacing(30);
