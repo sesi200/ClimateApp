@@ -8,7 +8,7 @@ import ch.uzh.ifi.climateapp.shared.ClimateData;
 public class MapVisualizationTest {
 
 	@Test
-	public void test() {
+	public void testDummyDataClimateData() {
 		MapVisualization map = new MapVisualization();
 		
 		ClimateData d1 = new ClimateData();
@@ -48,6 +48,5 @@ public class MapVisualizationTest {
 		
 		assertArrayEquals(dataOne, result);
 	}
-
 	
 }

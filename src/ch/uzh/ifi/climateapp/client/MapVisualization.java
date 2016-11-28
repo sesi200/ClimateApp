@@ -29,7 +29,7 @@ public class MapVisualization implements IVisualization{
 	public MapVisualization(){}
 	
 	
-
+/*
 	public Widget getVisualization(final VerticalPanel verticalPanel, List<AverageData> averageForYear) {
 		this.averageForYear = averageForYear;
 		
@@ -42,7 +42,7 @@ public class MapVisualization implements IVisualization{
 			 * @return visualized map widget
 			 */
 	
-	
+	/*
 			@Override
 			public void run() {
 				// Building 
@@ -76,7 +76,7 @@ public class MapVisualization implements IVisualization{
 		return verticalPanel;
 	}
 	
-	
+	*/
 	
 	
 	
