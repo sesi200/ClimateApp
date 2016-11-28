@@ -2,3 +2,4 @@
 /gwt-UnitCache/
 /gwt-google-apis-master/
 /war/WEB-INF/classes
+*.rpc

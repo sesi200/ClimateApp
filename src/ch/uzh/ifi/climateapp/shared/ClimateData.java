@@ -3,6 +3,8 @@ package ch.uzh.ifi.climateapp.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.google.appengine.labs.repackaged.com.google.common.primitives.Ints;
+
 /**
  * The ClimateDataBean is a JavaBean object since the library which is used 
  * to retrieve the data from .csv file reads the lines from csv into bean object.
@@ -15,12 +17,28 @@ import java.util.Date;
  * @author lada
  *
  */
-public class ClimateData implements Serializable {
+@SuppressWarnings("deprecation") // using deprecated Date#getYear - it's ok in our case
+public class ClimateData implements Serializable, Comparable<ClimateData> {
 	
 	private static final long serialVersionUID = 966748726465050125L;
 	
 	public ClimateData() {}
 	
+	
+	
+	public ClimateData(Date dt, double averageTemperature, double averageTemperatureUncertainty, String city,
+			String country, String longitude, String latitude) {
+		this.dt = dt;
+		AverageTemperature = averageTemperature;
+		AverageTemperatureUncertainty = averageTemperatureUncertainty;
+		City = city;
+		Country = country;
+		Longitude = longitude;
+		Latitude = latitude;
+	}
+
+
+
 	private Date dt;
 	private double AverageTemperature;
 	private double AverageTemperatureUncertainty;
@@ -117,9 +135,16 @@ public class ClimateData implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "ClimateDataBean [dt=" + dt + ", AverageTemperature=" + AverageTemperature
+		return "ClimateDataBean [dt=" + (dt.getYear() + 1900) + ", AverageTemperature=" + AverageTemperature
 				+ ", AverageTemperatureUncertainty=" + AverageTemperatureUncertainty + ", City=" + City + ", Country="
 				+ Country + ", Longitude=" + Longitude + ", Latitude=" + Latitude + "]";
+	}
+	
+	@Override
+	public int compareTo(ClimateData o) {
+		int yearRes = Integer.compare(getDt().getYear(), o.getDt().getYear());
+		if (yearRes != 0) return yearRes;
+		return getCountry().compareTo(o.getCountry());
 	}
 
 }
