@@ -49,13 +49,11 @@ public class MapVisualization implements IVisualization{
 				dataTable = DataTable.create();
 				dataTable.addColumn(ColumnType.STRING, "Country");
 				dataTable.addColumn(ColumnType.NUMBER, "Temperature");
-				//dataTable.addColumn(ColumnType.STRING, "Precise Temperature");
 				
 				dataTable.addRows(climateData.length);
 				for (int i = 0; i < climateData.length; i++){
 					dataTable.setValue(i, 0, climateData[i].getCountry());
 					dataTable.setValue(i, 1, climateData[i].getAverageTemperature());
-					//dataTable.setValue(i, 2, "Chocolate" + climateData[i].getTemperature());
 				}
 				
 				options = GeoMap.Options.create();
@@ -63,14 +61,11 @@ public class MapVisualization implements IVisualization{
 				options.setRegion("world");
 				options.setWidth(mapWidth);
 				options.setHeight(mapHeight);
-				options.setShowZoomOut(true);
 				options.setShowLegend(true);
 				geomap = new GeoMap(dataTable, options);
 				
 				verticalPanel.clear();
 				verticalPanel.add(geomap);
-				
-				System.out.println("dataTable done");
 				
 			}
 		};

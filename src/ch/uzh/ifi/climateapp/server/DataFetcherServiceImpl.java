@@ -22,10 +22,9 @@ public class DataFetcherServiceImpl extends RemoteServiceServlet implements Data
 	 * @return all data from the context that matches the filter
 	 */
 	public ClimateData[] getClimateData(Filter[] filter) {
-		ServletContext context = MyContextListener.getContext();
 		date.applyPattern("yyyy");
 		@SuppressWarnings("unchecked")
-		List<ClimateData> list = (List<ClimateData>) context.getAttribute("climateData");
+		List<ClimateData> list = (List<ClimateData>) this.getServletContext().getAttribute("climateData");
 		int currentBatch = filter[0].getBatch();
 		System.out.println("processing batch "+currentBatch);
 		int matchedEntries = 0;

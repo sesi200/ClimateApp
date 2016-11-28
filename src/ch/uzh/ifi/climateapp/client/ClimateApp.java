@@ -257,7 +257,6 @@ public class ClimateApp implements EntryPoint {
 	private VerticalPanel createMapViewLayout(VerticalPanel mapViewLayout){
 		Label mapTimelineLabel = new Label("Here a timeline widget (slider) will be added in the sprint 2");
 		mapTimelineLabel.setStyleName("warningLabel");
-		mapViewLayout.add(mapTimelineLabel);
 		mapViewLayout.add(getSlider());
 		
 		// TODO here the slider widget should be added
@@ -279,14 +278,10 @@ public class ClimateApp implements EntryPoint {
 		return mapViewLayout;
 	}
 	
-	int firstDataYear = 1886;
-	int lastDataYear = 2016;
+	int firstDataYear = 1743;
+	int lastDataYear = 2013;
 	
-	int sliderFromValue =  firstDataYear;
-	int sliderUntilValue = lastDataYear;
-	
-	SliderBar fromSlider;
-	SliderBar untilSlider;
+	SliderBar sliderBar;
 	VerticalPanel verticalPanelSlider;
 	VerticalPanel verticalPanel;
 	boolean sliderIsLoading;
@@ -294,130 +289,54 @@ public class ClimateApp implements EntryPoint {
 	private Widget getSlider(){
 		
 		verticalPanelSlider = new VerticalPanel();
-		fromSlider = new SliderBar(1886, 2016);
-		fromSlider.setStepSize(5);
-		fromSlider.setCurrentValue(firstDataYear);
-		fromSlider.setNumTicks(130);
-		fromSlider.setNumLabels(26);
+		sliderBar = new SliderBar(firstDataYear, lastDataYear);
+		sliderBar.setStepSize(1);
+		sliderBar.setCurrentValue(STARTING_YEAR);
+		sliderBar.setNumTicks(lastDataYear-firstDataYear);
+		sliderBar.setNumLabels(27);
 		
-		verticalPanelSlider.add(fromSlider);
-		fromSlider.setVisible(true);
-		fromSlider.setHeight("52px");
-		fromSlider.setWidth("100%");
+		verticalPanelSlider.add(sliderBar);
+		sliderBar.setVisible(true);
+		sliderBar.setHeight("52px");
+		sliderBar.setWidth("1200px");
 
-		fromSlider.addClickHandler(new ClickHandler() {
+		sliderBar.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (!sliderIsLoading) {
 					sliderIsLoading = true;
-					if (sliderUntilValue - sliderFromValue > 0) {
-						sliderUntilValue = (int) untilSlider.getCurrentValue();
-						sliderFromValue = (int) fromSlider.getCurrentValue();
-					} else {
-						sliderFromValue = (int) untilSlider.getCurrentValue();
-						sliderUntilValue = (int) fromSlider.getCurrentValue();
-					}
-
-//					final String sliderQuerry = ("WHERE releasedate >= '" + sliderFromValue + ".00.00' AND releasedate <= '"
-//							+ (sliderFromValue + 1) + ".00.00'");
-					
-//					strQuerry.append(sliderQuerry);
-					
-//					dbconnection.getDBData(strQuerry.toString(), new AsyncCallback<ArrayList<Movie>>() {
-//						public void onFailure(Throwable caught) {
-//							// Show the RPC error message to the user
-//						}
-//
-//						public void onSuccess(ArrayList<Movie> result) {
-//							try {
-//								// ############ table ############
-//								list.clear();
-//								globalList.clear();
-//								for (Movie movie : result) {
-//									list.add(movie);
-//									globalList.add(movie);
-//								}
-//								map.printMap("SELECT countries, Count(*) FROM moviedata " + sliderQuerry + " GROUP BY countries", verticalPanel);
-//
-//							} catch (NullPointerException e) {
-//								// serverResponseLabel2.setHTML("AW SHIT,
-//								// NULLPOINTER IS IN DA HOUSE!");
-//							}
-//							System.out.println(strQuerry);
-//							clearStringquerry();
-//						}
-//					});
-					sliderIsLoading = false;
+					reloadMapForYear((int)sliderBar.getCurrentValue());
 				} else {
-					// TO DO: WHAT HAPPENS IF STH IS LOADING
-					// fromSlider.setCurrentValue((double)sliderFromValue);
+					//map is currently loading
 				}
 			}
 		});
-/*
-		untilSlider = new SliderBar(1886, 2016);
-
-		untilSlider.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				if (!sliderIsLoading) {
-					sliderIsLoading = true;
-					if (sliderUntilValue - sliderFromValue > 0) {
-						sliderUntilValue = (int) untilSlider.getCurrentValue();
-						sliderFromValue = (int) fromSlider.getCurrentValue();
-					} else {
-						sliderFromValue = (int) untilSlider.getCurrentValue();
-						sliderUntilValue = (int) fromSlider.getCurrentValue();
-					}
-
-
-//					final StringBuilder concatSlider = new StringBuilder("WHERE releasedate > '" + sliderFromValue + ".00.00' AND releasedate < '"
-//							+ (sliderFromValue + 1) + ".00.00' ");
-//					strQuerry.append(concatSlider);
-//					dbconnection.getDBData(strQuerry.toString(), new AsyncCallback<ArrayList<Movie>>() {
-//						public void onFailure(Throwable caught) {
-//							// Show the RPC error message to the user
-//						}
-//
-//						public void onSuccess(ArrayList<Movie> result) {
-//							try {
-//								// ############ table ############
-//								list.clear();
-//								globalList.clear();
-//								for (Movie movie : result) {
-//									list.add(movie);
-//									globalList.add(movie);
-//								}
-//								
-//								map.printMap("SELECT countries, Count(*) FROM moviedata " + concatSlider + " GROUP BY countries", verticalPanel);
-//								
-//							} catch (NullPointerException e) {
-//								// serverResponseLabel2.setHTML("AW SHIT,
-//								// NULLPOINTER IS IN DA HOUSE!");
-//							}
-//							System.out.println(strQuerry);
-//							clearStringquerry();
-//
-//						}
-//					});
-					sliderIsLoading = false;
-				} else {
-					// TO DO do sth if loading
-					// untilSlider.setCurrentValue((double)sliderUntilValue);
-				}
-
-			}
-		});
-		untilSlider.setStepSize(1);
-		untilSlider.setCurrentValue(lastDataYear);
-		untilSlider.setNumTicks(130);
-		untilSlider.setNumLabels(26);
-		//RootPanel.get().add(verticalPanelSlider);
-		untilSlider.setVisible(true);
-		untilSlider.setHeight("50px");
-		untilSlider.setWidth("500px");
-		*/
+		reloadMapForYear((int)sliderBar.getCurrentValue());
+		sliderIsLoading=false;
 		return verticalPanelSlider;
+	}
+	
+	private void reloadMapForYear(int year) {
+		averageService.getAverageForYear(year, new AsyncCallback<List<AverageData>>() {
+			
+			@Override
+			public void onSuccess(List<AverageData> result) {
+				ArrayList<ClimateData> resultList = new ArrayList<ClimateData>();
+				for (AverageData dataPoint : result) {
+					ClimateData newClimateData = new ClimateData();
+					newClimateData.setAverageTemperature(Double.parseDouble(dataPoint.getAvgTemp()));
+					newClimateData.setCountry(dataPoint.getCountry());
+				}
+				map.replaceData((ClimateData[])resultList.toArray());
+				map.getVisualization(verticalMapPanel);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				sliderIsLoading=false;
+				Window.alert("map RPC failed");
+			}
+		});
 	}
 	
 	private VerticalPanel createTableViewLayout(VerticalPanel tableViewLayout){

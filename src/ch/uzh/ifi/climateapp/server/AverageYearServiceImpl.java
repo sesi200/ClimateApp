@@ -1,6 +1,5 @@
 package ch.uzh.ifi.climateapp.server;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +15,7 @@ public class AverageYearServiceImpl extends RemoteServiceServlet implements Aver
 	@Override
 	public List<AverageData> getAverageForYear(int year) {
 		Map<Integer, List<AverageData>> yearToAvgData= (Map<Integer, List<AverageData>>) this.getServletContext().getAttribute(ContextContent.AVERAGE_PER_YEAR);
-		
+		System.out.println("returning avg data for year "+year);
 		return yearToAvgData.get(year);
 	}
 
