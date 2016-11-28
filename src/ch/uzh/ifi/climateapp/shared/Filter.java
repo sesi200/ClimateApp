@@ -11,7 +11,16 @@ public class Filter implements Serializable{
 	private double minDeviation = 0;
 	private String city = null;
 	private String country = null;
+	private int batch;
 	
+	public int getBatch() {
+		return batch;
+	}
+
+	public void setBatch(int batch) {
+		this.batch = batch;
+	}
+
 	public Filter() {}
 	
 	public int getStartYear() {

@@ -1,11 +1,15 @@
 package ch.uzh.ifi.climateapp.client;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.VisualizationUtils;
+import com.google.gwt.visualization.client.events.PageHandler;
 import com.google.gwt.visualization.client.visualizations.Table;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 
@@ -13,11 +17,12 @@ import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public class TableVisualization implements IVisualization {
 	
-	private ClimateData[] data;
+	private ArrayList<ClimateData> data = new ArrayList<ClimateData>();
 	private DataTable dataTable;
 	private Table table;
 	private Table.Options options;
 	private HashMap<String,Boolean> columnOptions = null;
+	private int currentPage;
 	
 	@Override
 	public Widget getVisualization(final VerticalPanel verticalPanel) {
@@ -25,6 +30,10 @@ public class TableVisualization implements IVisualization {
 
 			@Override
 			public void run() {
+				//remember user scroll position
+				int topScroll = Window.getScrollTop();
+				int leftScroll = Window.getScrollLeft();
+				
 				// Building 
 				dataTable = DataTable.create();
 				dataTable.addColumn(ColumnType.STRING, "Country");
@@ -35,18 +44,23 @@ public class TableVisualization implements IVisualization {
 				dataTable.addColumn(ColumnType.STRING, "Latitude");
 				dataTable.addColumn(ColumnType.STRING, "Longitude");
 				
-				dataTable.addRows(data.length);
-				for (int i = 0; i < data.length; i++){
-					dataTable.setValue(i, 0, data[i].getCountry());
-					dataTable.setValue(i, 2, data[i].getAverageTemperature());
-					dataTable.setValue(i, 1, data[i].getCity());
-					dataTable.setValue(i, 3, data[i].getAverageTemperatureUncertainty());
-					dataTable.setValue(i, 4, data[i].getDt());
-					dataTable.setValue(i, 5, data[i].getLatitude());
-					dataTable.setValue(i, 6, data[i].getLongitude());
+				dataTable.addRows(data.size());
+				int i = 0;
+				for (ClimateData dataPoint : data){
+					dataTable.setValue(i, 0, dataPoint.getCountry());
+					dataTable.setValue(i, 2, dataPoint.getAverageTemperature());
+					dataTable.setValue(i, 1, dataPoint.getCity());
+					dataTable.setValue(i, 3, dataPoint.getAverageTemperatureUncertainty());
+					dataTable.setValue(i, 4, dataPoint.getDt());
+					dataTable.setValue(i, 5, dataPoint.getLatitude());
+					dataTable.setValue(i, 6, dataPoint.getLongitude());
+					++i;
 				}
+				
 				options = Table.Options.create();
-				options.setPageSize(15);
+				options.setPageSize(50);
+				options.setStartPage(currentPage);
+				options.set("pagingButtons", 10d);
 				
 				//remove columns which should not be shown
 				//perform right to left to not mess with the indices
@@ -75,21 +89,36 @@ public class TableVisualization implements IVisualization {
 				}
 				
 				table = new Table(dataTable, options);
+				table.addPageHandler(new PageHandler(){
+					public void onPage(PageEvent event) {
+						currentPage = event.getPage();
+					}
+				});
 				
 				verticalPanel.clear();
 				verticalPanel.add(table);
+				
+				//return user to previous scroll position
+				Window.scrollTo(leftScroll, topScroll);
 			}
 			
 		};
 		
+		//draw table
 		VisualizationUtils.loadVisualizationApi(onLoadCallback, Table.PACKAGE);
+		
 		return verticalPanel;
 	}
 
 	@Override
 	public void replaceData(ClimateData[] newData) {
-		data = newData;
+		data.clear();
+		data.addAll(Arrays.asList(newData));
 		
+	}
+	
+	public void addData(ClimateData[] add) {
+		data.addAll(Arrays.asList(add));
 	}
 	
 	public void setColumnOptions(HashMap<String,Boolean> options) {
@@ -104,12 +133,14 @@ public class TableVisualization implements IVisualization {
 			columnOptions = options;
 		}
 	}
-
-	/*
-	 * @return current data
-	 */
+	
 	public ClimateData[] getData() {
-		return data;
+		return (ClimateData[])data.toArray();
+	}
+	
+	public void clearData() {
+		data.clear();
+		currentPage = 0;
 	}
 
 }

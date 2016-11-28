@@ -17,7 +17,6 @@ public class DataFetcherServiceImpl extends RemoteServiceServlet implements Data
 	
 	private SimpleDateFormat date = new SimpleDateFormat();
 
-	@SuppressWarnings("deprecation")
 	@Override
 	/**
 	 * @return all data from the context that matches the filter
@@ -27,6 +26,9 @@ public class DataFetcherServiceImpl extends RemoteServiceServlet implements Data
 		date.applyPattern("yyyy");
 		@SuppressWarnings("unchecked")
 		List<ClimateData> list = (List<ClimateData>) context.getAttribute("climateData");
+		int currentBatch = filter[0].getBatch();
+		System.out.println("processing batch "+currentBatch);
+		int matchedEntries = 0;
 		
 		ArrayList<String> countryFilter = new ArrayList<String>();
 		ArrayList<String> cityFilter = new ArrayList<String>();
@@ -58,7 +60,15 @@ public class DataFetcherServiceImpl extends RemoteServiceServlet implements Data
 							int year = Integer.parseInt(date.format(data.getDt()));
 							if (year<=filter[0].getEndYear()||filter[0].getEndYear()==-1) {
 								if (year>=filter[0].getStartYear()) {
-									returnData.add(data);
+									//data is correct, return if it belongs to current batch
+									++matchedEntries;
+									if (matchedEntries>=currentBatch*5000) {
+										returnData.add(data);
+										//send data if batch is full
+										if (returnData.size()==5000) {
+											break;
+										}
+									}
 								}
 								
 							}

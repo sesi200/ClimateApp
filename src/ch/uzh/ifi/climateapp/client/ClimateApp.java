@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -31,7 +32,7 @@ import ch.uzh.ifi.climateapp.shared.Filter;
  */
 public class ClimateApp implements EntryPoint {
 	
-	private static final double STARTING_MAX_UNCERTAINTY = 1.5;
+	private static final double STARTING_MAX_UNCERTAINTY = 4;
 	private static final double STARTING_MIN_UNCERTAINTY = 0.0;
 	private static final int STARTING_YEAR = 2013;
 	
@@ -40,6 +41,7 @@ public class ClimateApp implements EntryPoint {
     private VerticalPanel mainPanel;
 	private MapVisualization map = new MapVisualization();
 	private TableVisualization table = new TableVisualization();
+	private int currentBatch;
 	private DataFetcherServiceAsync dataFetcherService = GWT.create(DataFetcherService.class);
 	private ArrayList<Filter> filters = new ArrayList<Filter>(); /*filters[1+] is for cities and countries*/
 	private FlexTable currentFilterDisplay = new FlexTable();
@@ -666,20 +668,34 @@ public class ClimateApp implements EntryPoint {
 	 * reloads the table view with currently set filters
 	 */
 	private void reloadTable() {
+		currentBatch = 0;
+		table.clearData();
+		requestAndAddNextBatchForTable();
+	}
+	
+	/**
+	 * requests the next batch of data and adds it to the table
+	 */
+	private void requestAndAddNextBatchForTable() {
 		if (dataFetcherService==null) {
 			dataFetcherService = GWT.create(DataFetcherService.class);
 		}
+		filters.get(0).setBatch(currentBatch++);
 		
 		//set up callback object
 		AsyncCallback<ClimateData[]> callback = new AsyncCallback<ClimateData[]>() {
 
 			@Override
-			public void onFailure(Throwable caught) {}
+			public void onFailure(Throwable caught) {
+				Window.alert("RPC failed");
+			}
 
 			@Override
 			public void onSuccess(ClimateData[] result) {
-				table.setColumnOptions(getTableColumnShowValues());
-				table.replaceData(result);
+				if(result.length==5000) {
+					requestAndAddNextBatchForTable();
+				}
+				table.addData(result);
 				table.getVisualization(verticalTablePanel);
 			}
 
