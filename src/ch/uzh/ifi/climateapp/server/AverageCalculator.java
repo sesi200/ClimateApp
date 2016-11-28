@@ -53,7 +53,7 @@ public class AverageCalculator {
 		
 		for (Map.Entry<CountryYear, Double> entry : countryYearToAverage.entrySet()){
 			String country = entry.getKey().getCountry();
-			String avgTemp = roundAndToString(entry.getValue()); //as String to enable the output on the map
+			double avgTemp = round(entry.getValue(), 2); //as double with 2 digits after decimal point
 			int year = entry.getKey().getYear();
 			AverageData averageData = new AverageData(country, avgTemp, year);
 			

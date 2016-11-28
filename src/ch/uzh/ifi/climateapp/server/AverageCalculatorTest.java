@@ -38,12 +38,12 @@ public class AverageCalculatorTest {
 		// verify
 		Map<Integer, List<AverageData>> expected = new LinkedHashMap<Integer, List<AverageData>>();
 		expected.put(2001, Arrays.asList(
-				new AverageData("Switzerland", "20.50", 2001),
-				new AverageData("USA", "21.00", 2001)
+				new AverageData("Switzerland", 20.50, 2001),
+				new AverageData("USA", 21.00, 2001)
 				));
 		expected.put(2000, Arrays.asList(
-				new AverageData("Switzerland", "21.00", 2000),
-				new AverageData("USA", "21.00", 2000)));
+				new AverageData("Switzerland", 21.00, 2000),
+				new AverageData("USA", 21.00, 2000)));
 		
 		assertEquals(expected, actual);
 	}
@@ -73,8 +73,8 @@ public class AverageCalculatorTest {
 		// verify
 		Map<Integer, List<AverageData>> expected = new LinkedHashMap<Integer, List<AverageData>>();
 		expected.put(2001, Arrays.asList(
-				new AverageData("CH", "1.51", 2001),
-				new AverageData("UA", "1.50", 2001)
+				new AverageData("CH", 1.51, 2001),
+				new AverageData("UA", 1.50, 2001)
 				));
 		assertEquals(expected, actual);
 	}

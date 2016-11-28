@@ -12,13 +12,13 @@ public class AverageData implements Serializable {
 	 */
 	private static final long serialVersionUID = 8388654543381139460L;
 	private String country;
-	private String avgTemp;
+	private double avgTemp;
 	private int year;
 	
 	public AverageData() {
 
 	}
-	public AverageData(String country, String avgTemp, int year) {
+	public AverageData(String country, double avgTemp, int year) {
 		super();
 		this.country = country;
 		this.avgTemp = avgTemp;
@@ -28,7 +28,7 @@ public class AverageData implements Serializable {
 		return country;
 	}
 	
-	public String getAvgTemp() {
+	public double getAvgTemp() {
 		return avgTemp;
 	}
 	
@@ -46,7 +46,7 @@ public class AverageData implements Serializable {
 	/**
 	 * @param avgTemp the avgTemp to set
 	 */
-	public void setAvgTemp(String avgTemp) {
+	public void setAvgTemp(double avgTemp) {
 		this.avgTemp = avgTemp;
 	}
 	/**
@@ -65,7 +65,9 @@ public class AverageData implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((avgTemp == null) ? 0 : avgTemp.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(avgTemp);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + year;
 		return result;
@@ -80,10 +82,7 @@ public class AverageData implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		AverageData other = (AverageData) obj;
-		if (avgTemp == null) {
-			if (other.avgTemp != null)
-				return false;
-		} else if (!avgTemp.equals(other.avgTemp))
+		if (Double.doubleToLongBits(avgTemp) != Double.doubleToLongBits(other.avgTemp))
 			return false;
 		if (country == null) {
 			if (other.country != null)
@@ -94,5 +93,6 @@ public class AverageData implements Serializable {
 			return false;
 		return true;
 	}
+	
 
 }
