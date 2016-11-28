@@ -42,15 +42,10 @@ public class CSVReader {
 	 */
 	private static CellProcessor[] getProcessors() {
 
-		final CellProcessor[] processors = new CellProcessor[] { new ParseDate("yyyy-MM-dd"), // the
-																								// date
-																								// of
-																								// the
-																								// measurement
-				new Optional(new ParseDouble()), // average temperature may be
-													// null
-				new Optional(new ParseDouble()), // average temperature
-													// inaccuracy may be null
+		final CellProcessor[] processors = new CellProcessor[] { 
+				new ParseDate("yyyy-MM-dd"), // the date of the measurement
+				new Optional(new ParseDouble()), // average temperature may be null
+				new Optional(new ParseDouble()), // average temperature inaccuracy may be null
 				new NotNull(), // city
 				new NotNull(), // country
 				new NotNull(), // latitude
