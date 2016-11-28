@@ -324,7 +324,7 @@ public class ClimateApp implements EntryPoint {
 				ArrayList<ClimateData> resultList = new ArrayList<ClimateData>();
 				for (AverageData dataPoint : result) {
 					ClimateData newClimateData = new ClimateData();
-					newClimateData.setAverageTemperature(Double.parseDouble(dataPoint.getAvgTemp()));
+					newClimateData.setAverageTemperature(dataPoint.getAvgTemp());
 					newClimateData.setCountry(dataPoint.getCountry());
 				}
 				map.replaceData((ClimateData[])resultList.toArray());
