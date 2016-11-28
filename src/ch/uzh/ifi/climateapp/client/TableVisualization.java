@@ -110,7 +110,6 @@ public class TableVisualization implements IVisualization {
 		return verticalPanel;
 	}
 
-	@Override
 	public void replaceData(ClimateData[] newData) {
 		data.clear();
 		data.addAll(Arrays.asList(newData));
