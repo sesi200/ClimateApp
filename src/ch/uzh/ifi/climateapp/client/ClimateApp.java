@@ -2,9 +2,6 @@ package ch.uzh.ifi.climateapp.client;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
-
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
@@ -86,63 +83,63 @@ public class ClimateApp implements EntryPoint {
         
         
 		/*  -------- Start Test Data for MAP --------- */
-		ClimateData d1 = new ClimateData();
-		d1.setCountry("US");
-		d1.setCity("Atlanta");
-		d1.setAverageTemperature(-100);
-		ClimateData d2 = new ClimateData();
-		d2.setCountry("India");
-		d2.setCity("New Delhi");
-		d2.setAverageTemperature(30);
-		ClimateData d3 = new ClimateData();
-		d3.setCountry("Germany");
-		d3.setCity("Munich");
-		d3.setAverageTemperature(0);
-		ClimateData d4 = new ClimateData();
-		d4.setCountry("GB");
-		d4.setCity("Stonehenge");
-		d4.setAverageTemperature(14);
-
-
-		ClimateData [] dataOne = new ClimateData[4];
-		dataOne[0] = d1;
-		dataOne[1] = d2;
-		dataOne[2] = d3;
-		dataOne[3] = d4;
-
-		ClimateData d5 = new ClimateData();
-		d5.setCountry("France");
-		d5.setAverageTemperature(15);
-		ClimateData d6 = new ClimateData();
-		d6.setCountry("Spain");
-		d6.setAverageTemperature(20);
-		ClimateData d7 = new ClimateData();
-		d7.setCountry("Greece");
-		d7.setAverageTemperature(0);
-		ClimateData d8 = new ClimateData();
-		d8.setCountry("Poland");
-		d8.setAverageTemperature(30);
-
-		ClimateData [] dataTwo = new ClimateData[4];
-		dataTwo[0] = d5;
-		dataTwo[1] = d6;
-		dataTwo[2] = d7;
-		dataTwo[3] = d8;
-
-		/*  -------- End Test Data for MAP --------- */
+//		ClimateData d1 = new ClimateData();
+//		d1.setCountry("US");
+//		d1.setCity("Atlanta");
+//		d1.setAverageTemperature(-100);
+//		ClimateData d2 = new ClimateData();
+//		d2.setCountry("India");
+//		d2.setCity("New Delhi");
+//		d2.setAverageTemperature(30);
+//		ClimateData d3 = new ClimateData();
+//		d3.setCountry("Germany");
+//		d3.setCity("Munich");
+//		d3.setAverageTemperature(0);
+//		ClimateData d4 = new ClimateData();
+//		d4.setCountry("GB");
+//		d4.setCity("Stonehenge");
+//		d4.setAverageTemperature(14);
+//
+//
+//		ClimateData [] dataOne = new ClimateData[4];
+//		dataOne[0] = d1;
+//		dataOne[1] = d2;
+//		dataOne[2] = d3;
+//		dataOne[3] = d4;
+//
+//		ClimateData d5 = new ClimateData();
+//		d5.setCountry("France");
+//		d5.setAverageTemperature(15);
+//		ClimateData d6 = new ClimateData();
+//		d6.setCountry("Spain");
+//		d6.setAverageTemperature(20);
+//		ClimateData d7 = new ClimateData();
+//		d7.setCountry("Greece");
+//		d7.setAverageTemperature(0);
+//		ClimateData d8 = new ClimateData();
+//		d8.setCountry("Poland");
+//		d8.setAverageTemperature(30);
+//
+//		ClimateData [] dataTwo = new ClimateData[4];
+//		dataTwo[0] = d5;
+//		dataTwo[1] = d6;
+//		dataTwo[2] = d7;
+//		dataTwo[3] = d8;
+//
+//		/*  -------- End Test Data for MAP --------- */
 
 		/*  -------- Start Map Visualization --------- */
 		
-		map = new MapVisualization();
-		map.replaceData(dataOne);
-		map.getVisualization(verticalMapPanel);
+//		map = new MapVisualization();
+//		//map.replaceData(dataOne);
+//		map.getVisualization(verticalMapPanel);
 		/*  -------- End Map Visualization --------- */
 		
 		//for now average data is just logged to the console 
-		averageService.getAverageForYear(2000, new AsyncCallback<List<AverageData>>() {
+		averageService.getAverageForYear(2000, new AsyncCallback<AverageData[]>() {
 			
 			@Override
-			public void onSuccess(List<AverageData> result) {
+			public void onSuccess(AverageData[] result) {
 				GWT.log(result.toString());
 				
 			}
@@ -284,7 +281,6 @@ public class ClimateApp implements EntryPoint {
 	SliderBar sliderBar;
 	VerticalPanel verticalPanelSlider;
 	VerticalPanel verticalPanel;
-	boolean sliderIsLoading;
 	
 	private Widget getSlider(){
 		
@@ -303,37 +299,24 @@ public class ClimateApp implements EntryPoint {
 		sliderBar.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (!sliderIsLoading) {
-					sliderIsLoading = true;
 					reloadMapForYear((int)sliderBar.getCurrentValue());
-				} else {
-					//map is currently loading
-				}
 			}
 		});
 		reloadMapForYear((int)sliderBar.getCurrentValue());
-		sliderIsLoading=false;
 		return verticalPanelSlider;
 	}
 	
 	private void reloadMapForYear(int year) {
-		averageService.getAverageForYear(year, new AsyncCallback<List<AverageData>>() {
+		averageService.getAverageForYear(year, new AsyncCallback<AverageData[]>() {
 			
 			@Override
-			public void onSuccess(List<AverageData> result) {
-				ArrayList<ClimateData> resultList = new ArrayList<ClimateData>();
-				for (AverageData dataPoint : result) {
-					ClimateData newClimateData = new ClimateData();
-					newClimateData.setAverageTemperature(dataPoint.getAvgTemp());
-					newClimateData.setCountry(dataPoint.getCountry());
-				}
-				map.replaceData((ClimateData[])resultList.toArray());
+			public void onSuccess(AverageData[] result) {
+				map.replaceData(result);
 				map.getVisualization(verticalMapPanel);
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				sliderIsLoading=false;
 				Window.alert("map RPC failed");
 			}
 		});
@@ -400,6 +383,7 @@ public class ClimateApp implements EntryPoint {
 
 		countryName = new SuggestBox();
 		countryName.addKeyDownHandler(new KeyDownHandler() {
+			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
 					addCountryNameFilter();
@@ -428,6 +412,7 @@ public class ClimateApp implements EntryPoint {
 
 		cityName = new SuggestBox();
 		cityName.addKeyDownHandler(new KeyDownHandler() {
+			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
 					addCityNameFilter();
@@ -465,6 +450,7 @@ public class ClimateApp implements EntryPoint {
 		yearFrom = new TextBox();
 		yearFrom.setText(""+STARTING_YEAR);
 		yearFrom.addKeyDownHandler(new KeyDownHandler() {
+			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
 					addYearFromFilter();
@@ -492,6 +478,7 @@ public class ClimateApp implements EntryPoint {
 		yearTo = new TextBox();
 		yearTo.setText(""+STARTING_YEAR);
 		yearTo.addKeyDownHandler(new KeyDownHandler() {
+			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
 					addYearToFilter();
@@ -527,6 +514,7 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyFrom = new TextBox();
 		uncertaintyFrom.setText(Double.toString(STARTING_MIN_UNCERTAINTY));
 		uncertaintyFrom.addKeyDownHandler(new KeyDownHandler() {
+			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
 					addUncertaintyFromFilter();
@@ -554,6 +542,7 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyTo = new TextBox();
 		uncertaintyTo.setValue(Double.toString(STARTING_MAX_UNCERTAINTY));
 		uncertaintyTo.addKeyDownHandler(new KeyDownHandler() {
+			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
 					addUncertaintyToFilter();

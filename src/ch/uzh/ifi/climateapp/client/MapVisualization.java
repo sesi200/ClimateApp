@@ -22,8 +22,7 @@ public class MapVisualization implements IVisualization{
 	private GeoMap.Options options;
 	private GeoMap geomap;
 	
-	private ClimateData[] climateData;
-	private List<AverageData> averageForYear;
+	private AverageData[] averageData;
 	
 	
 	public MapVisualization(){}
@@ -78,32 +77,6 @@ public class MapVisualization implements IVisualization{
 	
 	*/
 	
-	
-	
-	public void replaceAvgData(List<AverageData> averageForYear) {
-		this.averageForYear = averageForYear;
-	}
-	
-	public List<AverageData> getDataAvg(){
-		return this.averageForYear;
-	}
-	
-	public MapVisualization(int mapWidth, int mapHeight, List<AverageData> averageForYear){
-		this.mapWidth = mapWidth;
-		this.mapHeight = mapHeight;
-		this.averageForYear = averageForYear;
-	}
-	
-	
-	/** Depricated Method to get Map Visualization*/
-	
-	
-	public MapVisualization(int mapWidth, int mapHeight, ClimateData[] climateData){
-		this.mapWidth = mapWidth;
-		this.mapHeight = mapHeight;
-		this.climateData = climateData;
-	}
-	
 	@Override
 	public Widget getVisualization(final VerticalPanel verticalPanel) {
 		Runnable onLoadCallback = new Runnable(){
@@ -122,10 +95,10 @@ public class MapVisualization implements IVisualization{
 				dataTable.addColumn(ColumnType.STRING, "Country");
 				dataTable.addColumn(ColumnType.NUMBER, "Temperature");
 				
-				dataTable.addRows(climateData.length);
-				for (int i = 0; i < climateData.length; i++){
-					dataTable.setValue(i, 0, climateData[i].getCountry());
-					dataTable.setValue(i, 1, climateData[i].getAverageTemperature());
+				dataTable.addRows(averageData.length);
+				for (int i = 0; i < averageData.length; i++){
+					dataTable.setValue(i, 0, averageData[i].getCountry());
+					dataTable.setValue(i, 1, averageData[i].getAvgTemp());
 				}
 				
 				options = GeoMap.Options.create();
@@ -154,16 +127,9 @@ public class MapVisualization implements IVisualization{
 	 * @return void
 	 */
 
-	public void replaceData(ClimateData[] newData) {
-		this.climateData = newData;
+	public void replaceData(AverageData[] newData) {
+		this.averageData = newData;
 	}
-	
-	public ClimateData[] getData(){
-		return this.climateData;
-	}
-	
-	
-
 
 }
 
