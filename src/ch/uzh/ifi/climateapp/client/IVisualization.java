@@ -6,6 +6,6 @@ import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public interface IVisualization {
 	public abstract Widget getVisualization(final VerticalPanel verticalPanel);
-	public abstract void replaceData(ClimateData[] newData);
+	
 }
  
