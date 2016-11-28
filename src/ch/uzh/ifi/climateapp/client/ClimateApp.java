@@ -709,7 +709,7 @@ public class ClimateApp implements EntryPoint {
 	 */
 	private void updateCurrentFilterDisplay() {
 		int currentLine=0;
-		currentFilterDisplay.clear();;
+		currentFilterDisplay.removeAllRows();
 		currentFilterDisplay.setText(currentLine++, 0, "Current Filter:");
 		//deviation is always set
 		currentFilterDisplay.setText(currentLine, 0, "Deviation:");
