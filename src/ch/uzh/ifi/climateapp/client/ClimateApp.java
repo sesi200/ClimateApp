@@ -1,7 +1,8 @@
 package ch.uzh.ifi.climateapp.client;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 
 import com.google.gwt.core.client.EntryPoint;
@@ -25,6 +26,8 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import ch.uzh.ifi.climateapp.shared.AverageData;
 import ch.uzh.ifi.climateapp.shared.ClimateData;
 import ch.uzh.ifi.climateapp.shared.Filter;
 
@@ -47,6 +50,7 @@ public class ClimateApp implements EntryPoint {
 	private TableVisualization table = new TableVisualization();
 	private int currentBatch;
 	private DataFetcherServiceAsync dataFetcherService = GWT.create(DataFetcherService.class);
+	private AverageYearServiceAsync averageService = GWT.create(AverageYearService.class);
 	private ArrayList<Filter> filters = new ArrayList<Filter>(); /*filters[1+] is for cities and countries*/
 	private FlexTable currentFilterDisplay = new FlexTable();
 
@@ -131,10 +135,24 @@ public class ClimateApp implements EntryPoint {
 		
 		map = new MapVisualization();
 		map.replaceData(dataOne);
-		
 		map.getVisualization(verticalMapPanel);
 		/*  -------- End Map Visualization --------- */
-
+		
+		//for now average data is just logged to the console 
+		averageService.getAverageForYear(2000, new AsyncCallback<List<AverageData>>() {
+			
+			@Override
+			public void onSuccess(List<AverageData> result) {
+				GWT.log(result.toString());
+				
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				GWT.log("got exception " + caught.getMessage());
+			}
+		});
 	}
 
 	private void setFilterToDefault() {
@@ -906,10 +924,10 @@ public class ClimateApp implements EntryPoint {
 	
 	/**
 	 * 
-	 * @return HashMap with boolean values that show the checkbox status
+	 * @return LinkedHashMap with boolean values that show the checkbox status
 	 */
-	private HashMap<String, Boolean> getTableColumnShowValues() {
-		HashMap<String, Boolean> checkboxValues = new HashMap<String, Boolean>();
+	private LinkedHashMap<String, Boolean> getTableColumnShowValues() {
+		LinkedHashMap<String, Boolean> checkboxValues = new LinkedHashMap<String, Boolean>();
 		checkboxValues.put("Country", showCountry.getValue());
 		checkboxValues.put("City", showCity.getValue());
 		checkboxValues.put("Date", showDate.getValue());

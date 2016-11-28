@@ -1,6 +1,8 @@
 package ch.uzh.ifi.climateapp.server;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -10,14 +12,12 @@ import ch.uzh.ifi.climateapp.shared.AverageData;
 @SuppressWarnings("serial")
 public class AverageYearServiceImpl extends RemoteServiceServlet implements AverageYearService{
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public AverageData[] getAverageForYear(int year) {
-		// TODO Auto-generated method stub
-		//Lada: this is the thing i meant with the date pattern:
-		//private SimpleDateFormat date = new SimpleDateFormat();
-		//date.applyPattern("yyyy");
-		//use: date.format([object of type Date])
-		return null;
+	public List<AverageData> getAverageForYear(int year) {
+		Map<Integer, List<AverageData>> yearToAvgData= (Map<Integer, List<AverageData>>) this.getServletContext().getAttribute(ContextContent.AVERAGE_PER_YEAR);
+		
+		return yearToAvgData.get(year);
 	}
 
 }
