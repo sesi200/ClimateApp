@@ -2,8 +2,6 @@ package ch.uzh.ifi.climateapp.server;
 
 import static org.junit.Assert.*;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;

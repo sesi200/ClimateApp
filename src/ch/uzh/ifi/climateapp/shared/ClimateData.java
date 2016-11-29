@@ -3,8 +3,6 @@ package ch.uzh.ifi.climateapp.shared;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.google.appengine.labs.repackaged.com.google.common.primitives.Ints;
-
 /**
  * The ClimateDataBean is a JavaBean object since the library which is used 
  * to retrieve the data from .csv file reads the lines from csv into bean object.

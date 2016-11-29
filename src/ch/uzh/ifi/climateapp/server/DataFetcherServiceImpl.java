@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import ch.uzh.ifi.climateapp.client.DataFetcherService;

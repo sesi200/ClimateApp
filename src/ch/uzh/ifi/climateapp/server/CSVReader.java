@@ -68,7 +68,7 @@ public class CSVReader {
 	 */
 	public List<ClimateData> readWithCsvBeanReader() throws IOException {
 
-		List<ClimateData> dataList = new ArrayList();
+		List<ClimateData> dataList = new ArrayList<ClimateData>();
 
 		ICsvBeanReader beanReader = null;
 		try {

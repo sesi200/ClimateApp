@@ -1,7 +1,5 @@
 package ch.uzh.ifi.climateapp.client;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
@@ -10,7 +8,6 @@ import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.GeoMap;
 
 import ch.uzh.ifi.climateapp.shared.AverageData;
-import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public class MapVisualization implements IVisualization{
 	
