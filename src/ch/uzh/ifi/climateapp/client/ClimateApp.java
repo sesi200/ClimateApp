@@ -817,18 +817,57 @@ public class ClimateApp implements EntryPoint {
 			if (hasCity) {
 				currentFilterDisplay.setText(currentLine, 0, "Cities:");
 				for (Filter filter: filters) {
-					if(filter.getCity()!=null) currentFilterDisplay.setText(currentLine++, 1, filter.getCity());
+					if(filter.getCity()!= null){ 
+						currentFilterDisplay.setText(currentLine, 1, filter.getCity());
+						/*Button for removing the filter for city*/
+						Button removeButtonCity = new Button("X");
+						currentFilterDisplay.setWidget(currentLine++, 2, removeButtonCity);
+
+						/*ClickHandler for deleting the filter for cities one by one*/
+						removeButtonCity.addClickHandler(new ClickHandler() {
+							public void onClick(ClickEvent event) {						
+								 int rowIndex = currentFilterDisplay.getCellForEvent(event).getRowIndex();
+								 String val=currentFilterDisplay.getText(rowIndex, 1);
+								 for(Filter filter:filters){
+									 if(filter.getCity().equals(val) && val != null) filters.remove(filter);
+									 }
+								 updateCurrentFilterDisplay();
+								 reloadTable();
+							}
+						});
+
+					}
 				}
 			}
+			
+			
 			if (hasCountry) {
 				currentFilterDisplay.setText(currentLine, 0, "Countries:");
 				for (Filter filter: filters) {
-					if(filter.getCountry()!=null) currentFilterDisplay.setText(currentLine++, 1, filter.getCountry());
+					if(filter.getCountry()!= null) {
+						currentFilterDisplay.setText(currentLine, 1, filter.getCountry());
+						/*Button for removing the filter for country*/
+						Button removeButtonCountry = new Button("X");
+						currentFilterDisplay.setWidget(currentLine++, 2, removeButtonCountry);
+						
+						/*ClickHandler for deleting the filter for cities one by one*/
+						removeButtonCountry.addClickHandler(new ClickHandler() {
+							public void onClick(ClickEvent event) {						
+								 int rowIndex = currentFilterDisplay.getCellForEvent(event).getRowIndex();
+								 String val=currentFilterDisplay.getText(rowIndex, 1);
+								 for(Filter filter:filters){
+									 if(filter.getCountry().equals(val) && val != null) filters.remove(filter);
+									 }
+								 updateCurrentFilterDisplay();
+								 reloadTable();
+							}
+						});
+					}
 				}
 			}
 		}
 	}
-	
+
 	
 	/**
 	 * 
