@@ -16,6 +16,8 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -35,14 +37,14 @@ import com.google.gwt.widgetideas.client.SliderBar;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ClimateApp implements EntryPoint {
-	
+
 	private static final double STARTING_MAX_UNCERTAINTY = 4;
 	private static final double STARTING_MIN_UNCERTAINTY = 0.0;
 	private static final int STARTING_YEAR = 2013;
-	
+
 	private VerticalPanel verticalMapPanel = new VerticalPanel();
 	private VerticalPanel verticalTablePanel = new VerticalPanel();
-    private VerticalPanel mainPanel;
+	private VerticalPanel mainPanel;
 	private MapVisualization map = new MapVisualization();
 	private TableVisualization table = new TableVisualization();
 	private int currentBatch;
@@ -51,7 +53,7 @@ public class ClimateApp implements EntryPoint {
 	private ArrayList<Filter> filters = new ArrayList<Filter>(); /*filters[1+] is for cities and countries*/
 	private FlexTable currentFilterDisplay = new FlexTable();
 
-	//needed class-wide textboxes to add filter values
+	//needed class-wide text boxes to add filter values
 	TextBox uncertaintyFrom;
 	TextBox uncertaintyTo;
 	TextBox yearFrom;
@@ -59,7 +61,7 @@ public class ClimateApp implements EntryPoint {
 	SuggestBox countryName;
 	SuggestBox cityName;
 
-	//needed class-wide checkboxes to use for filtering
+	//needed class-wide check boxes to use for filtering
 	CheckBox showCountry = new CheckBox("show country");
 	CheckBox showCity = new CheckBox("show city");
 	CheckBox showDate = new CheckBox("show date");
@@ -77,73 +79,73 @@ public class ClimateApp implements EntryPoint {
 		setFilterToDefault();
 		updateCurrentFilterDisplay();
 		reloadTable();
-		
-		
+
+
 		buildUI();
-        
-        
+
+
 		/*  -------- Start Test Data for MAP --------- */
-//		ClimateData d1 = new ClimateData();
-//		d1.setCountry("US");
-//		d1.setCity("Atlanta");
-//		d1.setAverageTemperature(-100);
-//		ClimateData d2 = new ClimateData();
-//		d2.setCountry("India");
-//		d2.setCity("New Delhi");
-//		d2.setAverageTemperature(30);
-//		ClimateData d3 = new ClimateData();
-//		d3.setCountry("Germany");
-//		d3.setCity("Munich");
-//		d3.setAverageTemperature(0);
-//		ClimateData d4 = new ClimateData();
-//		d4.setCountry("GB");
-//		d4.setCity("Stonehenge");
-//		d4.setAverageTemperature(14);
-//
-//
-//		ClimateData [] dataOne = new ClimateData[4];
-//		dataOne[0] = d1;
-//		dataOne[1] = d2;
-//		dataOne[2] = d3;
-//		dataOne[3] = d4;
-//
-//		ClimateData d5 = new ClimateData();
-//		d5.setCountry("France");
-//		d5.setAverageTemperature(15);
-//		ClimateData d6 = new ClimateData();
-//		d6.setCountry("Spain");
-//		d6.setAverageTemperature(20);
-//		ClimateData d7 = new ClimateData();
-//		d7.setCountry("Greece");
-//		d7.setAverageTemperature(0);
-//		ClimateData d8 = new ClimateData();
-//		d8.setCountry("Poland");
-//		d8.setAverageTemperature(30);
-//
-//		ClimateData [] dataTwo = new ClimateData[4];
-//		dataTwo[0] = d5;
-//		dataTwo[1] = d6;
-//		dataTwo[2] = d7;
-//		dataTwo[3] = d8;
-//
-//		/*  -------- End Test Data for MAP --------- */
+		//		ClimateData d1 = new ClimateData();
+		//		d1.setCountry("US");
+		//		d1.setCity("Atlanta");
+		//		d1.setAverageTemperature(-100);
+		//		ClimateData d2 = new ClimateData();
+		//		d2.setCountry("India");
+		//		d2.setCity("New Delhi");
+		//		d2.setAverageTemperature(30);
+		//		ClimateData d3 = new ClimateData();
+		//		d3.setCountry("Germany");
+		//		d3.setCity("Munich");
+		//		d3.setAverageTemperature(0);
+		//		ClimateData d4 = new ClimateData();
+		//		d4.setCountry("GB");
+		//		d4.setCity("Stonehenge");
+		//		d4.setAverageTemperature(14);
+		//
+		//
+		//		ClimateData [] dataOne = new ClimateData[4];
+		//		dataOne[0] = d1;
+		//		dataOne[1] = d2;
+		//		dataOne[2] = d3;
+		//		dataOne[3] = d4;
+		//
+		//		ClimateData d5 = new ClimateData();
+		//		d5.setCountry("France");
+		//		d5.setAverageTemperature(15);
+		//		ClimateData d6 = new ClimateData();
+		//		d6.setCountry("Spain");
+		//		d6.setAverageTemperature(20);
+		//		ClimateData d7 = new ClimateData();
+		//		d7.setCountry("Greece");
+		//		d7.setAverageTemperature(0);
+		//		ClimateData d8 = new ClimateData();
+		//		d8.setCountry("Poland");
+		//		d8.setAverageTemperature(30);
+		//
+		//		ClimateData [] dataTwo = new ClimateData[4];
+		//		dataTwo[0] = d5;
+		//		dataTwo[1] = d6;
+		//		dataTwo[2] = d7;
+		//		dataTwo[3] = d8;
+		//
+		//		/*  -------- End Test Data for MAP --------- */
 
 		/*  -------- Start Map Visualization --------- */
-		
-//		map = new MapVisualization();
-//		//map.replaceData(dataOne);
-//		map.getVisualization(verticalMapPanel);
+
+		//		map = new MapVisualization();
+		//		//map.replaceData(dataOne);
+		//		map.getVisualization(verticalMapPanel);
 		/*  -------- End Map Visualization --------- */
-		
+
 		//for now average data is just logged to the console 
 		averageService.getAverageForYear(2000, new AsyncCallback<AverageData[]>() {
-			
+
 			@Override
 			public void onSuccess(AverageData[] result) {
 				GWT.log(result.toString());
-				
+
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
@@ -160,8 +162,8 @@ public class ClimateApp implements EntryPoint {
 		f.setStartYear(STARTING_YEAR);
 		f.setEndYear(STARTING_YEAR);
 		filters.add(f);
-		
-		//set default values for each checkbox
+
+		//set default values for each check box
 		showCountry.setValue(true); 
 		showCity.setValue(true); 
 		showDate.setValue(true); 
@@ -206,16 +208,16 @@ public class ClimateApp implements EntryPoint {
 
 		//use the first tab as default 
 		tabPanel.selectTab(0);
-		
+
 		//Creating MapView Layout
 		mapViewLayout = createMapViewLayout(mapViewLayout);
-		
+
 		//Creating TableViewLayout
 		tableViewLayout = createTableViewLayout(tableViewLayout);
-		
 
 
-		
+
+
 		/**
 		 *  Create Source Label
 		 */
@@ -242,55 +244,68 @@ public class ClimateApp implements EntryPoint {
 		mainPanel.add(sourcePanel);
 
 	}
-	
-	
-	
-	
-	
+
+
+
 	/** Creating the map view panel. Takes a vertical panel as input and adds all the panels and widget for the map view to it.
 	 * @param VerticalPanel mapViewLayout
 	 * @return VerticalPanel mapViewLayout
 	 *  */
 	private VerticalPanel createMapViewLayout(VerticalPanel mapViewLayout){
-		Label mapTimelineLabel = new Label("Here a timeline widget (slider) will be added in the sprint 2");
-		mapTimelineLabel.setStyleName("warningLabel");
+
 		mapViewLayout.add(getSlider());
-		
-		// TODO here the slider widget should be added
-		// mapViewLayout.add(sliderWidget);
 
 		Label mapLabel = new Label("Climate Data Map");
 		mapLabel.setStyleName("titleLabel");
 		mapViewLayout.add(mapLabel);
 
 
-		HorizontalPanel viewMap = new HorizontalPanel();
-		viewMap.add(verticalMapPanel); //after Sprint 2 there will be a label with selected year underneath the panel, as we will add several map views from the year filter
-		viewMap.setSpacing(30);
-
-		Button exportPNG = new Button("Export as PNG");
-		viewMap.add(exportPNG);
+		FlexTable viewMap = new FlexTable();
+		viewMap = generateMap(viewMap);
 		mapViewLayout.add(viewMap);
-		
+
 		return mapViewLayout;
 	}
-	
+
+	FlexTable generateMap(FlexTable viewMap){
+
+		Button addMap = new Button("Add map");
+		Button deleteMap = new Button(" Remove ");
+
+		viewMap.setWidget(0,0,verticalMapPanel); 
+		viewMap.setWidget(0,1,addMap);
+		viewMap.setWidget(0,2,deleteMap);
+		viewMap.getColumnFormatter().setWidth(1, "120px");
+		viewMap.getColumnFormatter().setWidth(2, "120px");
+
+		viewMap.getCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT,HasVerticalAlignment.ALIGN_TOP);
+		viewMap.getCellFormatter().setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,HasVerticalAlignment.ALIGN_TOP);
+
+		addMap.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {	
+
+			}
+
+		});
+		return viewMap;
+	}
+
 	int firstDataYear = 1743;
 	int lastDataYear = 2013;
-	
+
 	SliderBar sliderBar;
 	VerticalPanel verticalPanelSlider;
 	VerticalPanel verticalPanel;
-	
+
 	private Widget getSlider(){
-		
+
 		verticalPanelSlider = new VerticalPanel();
 		sliderBar = new SliderBar(firstDataYear, lastDataYear);
 		sliderBar.setStepSize(1);
 		sliderBar.setCurrentValue(STARTING_YEAR);
 		sliderBar.setNumTicks(lastDataYear-firstDataYear);
 		sliderBar.setNumLabels(27);
-		
+
 		verticalPanelSlider.add(sliderBar);
 		sliderBar.setVisible(true);
 		sliderBar.setHeight("52px");
@@ -299,32 +314,36 @@ public class ClimateApp implements EntryPoint {
 		sliderBar.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-					reloadMapForYear((int)sliderBar.getCurrentValue());
+				reloadMapForYear((int)sliderBar.getCurrentValue());
 			}
 		});
 		reloadMapForYear((int)sliderBar.getCurrentValue());
 		return verticalPanelSlider;
 	}
-	
+
 	private void reloadMapForYear(int year) {
+
 		averageService.getAverageForYear(year, new AsyncCallback<AverageData[]>() {
-			
+
 			@Override
 			public void onSuccess(AverageData[] result) {
 				map.replaceData(result);
 				map.getVisualization(verticalMapPanel);
+
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("map RPC failed");
 			}
 		});
+
 	}
-	
+
+
 	private VerticalPanel createTableViewLayout(VerticalPanel tableViewLayout){
-		
-		
+
+
 		/** Create Horizontal Customize Table
 		 * 
 		 */
@@ -332,7 +351,7 @@ public class ClimateApp implements EntryPoint {
 		customizePanel.setStyleName("paddedHorizontalPanel");
 		customizePanel.setSpacing(25);
 
-		
+
 		//add check-box listeners
 		ClickHandler checkboxClickHandler = new ClickHandler() {
 			@Override
@@ -348,7 +367,7 @@ public class ClimateApp implements EntryPoint {
 		showUncertainty.addClickHandler(checkboxClickHandler);
 		showLatitude.addClickHandler(checkboxClickHandler);
 		showLongitude.addClickHandler(checkboxClickHandler);
-		
+
 		//add check-box widgets to the customize panel
 		customizePanel.add(showCountry);
 		customizePanel.add(showCity);
@@ -360,7 +379,7 @@ public class ClimateApp implements EntryPoint {
 		//customizePanel.add(showAvg); 
 		//customizePanel.add(showMax); 
 		//customizePanel.add(showMin); 
-		
+
 		/**
 		 * Create Filter Data Table
 		 */
@@ -577,13 +596,13 @@ public class ClimateApp implements EntryPoint {
 				reloadTable();
 			}
 		});
-		
+
 		//Assemble filter panel
 		filterPanel.add(locationFilter);
 		filterPanel.add(yearRangeFilter);
 		filterPanel.add(uncertaintyFilter);
 		filterPanel.add(resetFilterButton);
-		
+
 		/**
 		 * 
 		 * Create horizontal panel to place the CellTable with climate data into it
@@ -592,20 +611,20 @@ public class ClimateApp implements EntryPoint {
 
 		Label tableLabel = new Label("Climate Data Table");
 		tableLabel.setStyleName("titleLabel");
-		
-	
-		HorizontalPanel tableView = new HorizontalPanel();
-			
 
-		
+
+		HorizontalPanel tableView = new HorizontalPanel();
+
+
+
 		tableView.add(verticalTablePanel);
 		verticalTablePanel.setSpacing(30);
 		tableView.add(currentFilterDisplay);
 
 
 		tableViewLayout.add(tableView);
-		
-		
+
+
 		/**
 		 * Assemble the whole table view panel 
 		 * 
@@ -620,12 +639,12 @@ public class ClimateApp implements EntryPoint {
 		filterLabel.setStyleName("panelLabel");
 		tableViewLayout.add(filterLabel);
 		tableViewLayout.add(filterPanel);
-		
-		
+
+
 		tableViewLayout.add(tableLabel);
 		tableViewLayout.add(tableView);
-		
-		
+
+
 		return tableViewLayout;
 	}
 
@@ -668,7 +687,7 @@ public class ClimateApp implements EntryPoint {
 			reloadTable();
 		}
 	}
-	
+
 	/**
 	 * adds a new Filter to filters with endYear set to value read from textbox
 	 * does not work when there are some non-alphanumeric symbols in the textbox
@@ -688,7 +707,7 @@ public class ClimateApp implements EntryPoint {
 			reloadTable();
 		}
 	}
-	
+
 	/**
 	 * adds a new Filter to filters with startYear set to value read from textbox
 	 * does not work when there are some non-alphanumeric symbols in the textbox
@@ -734,7 +753,7 @@ public class ClimateApp implements EntryPoint {
 			reloadTable();
 		}
 	}
-	
+
 	/**
 	 * reloads the table view with currently set filters
 	 */
@@ -743,7 +762,7 @@ public class ClimateApp implements EntryPoint {
 		table.clearData();
 		requestAndAddNextBatchForTable();
 	}
-	
+
 	/**
 	 * requests the next batch of data and adds it to the table
 	 */
@@ -752,7 +771,7 @@ public class ClimateApp implements EntryPoint {
 			dataFetcherService = GWT.create(DataFetcherService.class);
 		}
 		filters.get(0).setBatch(currentBatch++);
-		
+
 		//set up callback object
 		AsyncCallback<ClimateData[]> callback = new AsyncCallback<ClimateData[]>() {
 
@@ -771,10 +790,10 @@ public class ClimateApp implements EntryPoint {
 			}
 
 		};
-		
+
 		dataFetcherService.getClimateData(filters.toArray(new Filter[0]), callback);
 	}
-	
+
 	/**
 	 * reloads the display that shows the current filter options
 	 */
@@ -804,7 +823,7 @@ public class ClimateApp implements EntryPoint {
 			currentFilterDisplay.setText(currentLine, 1, text);
 			++currentLine;
 		}
-		
+
 		if (filters.size()>1/*there can be a filter set for cities or countries*/) {
 			//find out if there exist filters for country/city
 			boolean hasCity = false;
@@ -826,21 +845,21 @@ public class ClimateApp implements EntryPoint {
 						/*ClickHandler for deleting the filter for cities one by one*/
 						removeButtonCity.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {						
-								 int rowIndex = currentFilterDisplay.getCellForEvent(event).getRowIndex();
-								 String val=currentFilterDisplay.getText(rowIndex, 1);
-								 for(Filter filter:filters){
-									 if(filter.getCity().equals(val) && val != null) filters.remove(filter);
-									 }
-								 updateCurrentFilterDisplay();
-								 reloadTable();
+								int rowIndex = currentFilterDisplay.getCellForEvent(event).getRowIndex();
+								String val=currentFilterDisplay.getText(rowIndex, 1);
+								for(Filter filter:filters){
+									if(filter.getCity().equals(val) && val != null) filters.remove(filter);
+								}
+								updateCurrentFilterDisplay();
+								reloadTable();
 							}
 						});
 
 					}
 				}
 			}
-			
-			
+
+
 			if (hasCountry) {
 				currentFilterDisplay.setText(currentLine, 0, "Countries:");
 				for (Filter filter: filters) {
@@ -849,17 +868,17 @@ public class ClimateApp implements EntryPoint {
 						/*Button for removing the filter for country*/
 						Button removeButtonCountry = new Button("X");
 						currentFilterDisplay.setWidget(currentLine++, 2, removeButtonCountry);
-						
+
 						/*ClickHandler for deleting the filter for cities one by one*/
 						removeButtonCountry.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {						
-								 int rowIndex = currentFilterDisplay.getCellForEvent(event).getRowIndex();
-								 String val=currentFilterDisplay.getText(rowIndex, 1);
-								 for(Filter filter:filters){
-									 if(filter.getCountry().equals(val) && val != null) filters.remove(filter);
-									 }
-								 updateCurrentFilterDisplay();
-								 reloadTable();
+								int rowIndex = currentFilterDisplay.getCellForEvent(event).getRowIndex();
+								String val=currentFilterDisplay.getText(rowIndex, 1);
+								for(Filter filter:filters){
+									if(filter.getCountry().equals(val) && val != null) filters.remove(filter);
+								}
+								updateCurrentFilterDisplay();
+								reloadTable();
 							}
 						});
 					}
@@ -868,7 +887,7 @@ public class ClimateApp implements EntryPoint {
 		}
 	}
 
-	
+
 	/**
 	 * 
 	 * @return LinkedHashMap with boolean values that show the checkbox status

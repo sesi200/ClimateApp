@@ -1,5 +1,6 @@
 package ch.uzh.ifi.climateapp.client;
 
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
@@ -108,6 +109,13 @@ public class MapVisualization implements IVisualization{
 				
 				verticalPanel.clear();
 				verticalPanel.add(geomap);
+				
+				FlexTable selectedYear = new FlexTable();
+				int year = averageData[1].getYear();
+				selectedYear.setText(0, 1, "Average temperatures for the year ");
+				String yearText = Integer.toString(year);
+				selectedYear.setText(0, 2, yearText);
+				verticalPanel.add(selectedYear);
 				
 			}
 		};
