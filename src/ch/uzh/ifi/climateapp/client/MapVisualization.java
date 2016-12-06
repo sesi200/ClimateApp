@@ -113,6 +113,7 @@ public class MapVisualization implements IVisualization{
 				FlexTable selectedYear = new FlexTable();
 				int year = averageData[1].getYear();
 				selectedYear.setText(0, 1, "Average temperatures for the year ");
+				selectedYear.addStyleName("mapLabel");
 				String yearText = Integer.toString(year);
 				selectedYear.setText(0, 2, yearText);
 				verticalPanel.add(selectedYear);
