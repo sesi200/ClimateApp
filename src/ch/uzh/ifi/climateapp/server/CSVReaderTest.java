@@ -24,7 +24,7 @@ public class CSVReaderTest {
 
 	@Test
 	public void testReadWithCsvBeanReader() throws ParseException, IOException {
-		Date firstDate = new SimpleDateFormat("yyyyMMdd").parse("18490101");
+		//Date firstDate = new SimpleDateFormat("yyyyMMdd").parse("18490101");
 		double firstAvTemp = 26.704;
 		double firstAvTempUncertainty = 1.435;
 		String firstCity = "Abidjan";

@@ -71,6 +71,7 @@ public class AverageCalculator {
 	 * @param value
 	 * @return String representation of the value with 2 digits after decimal point
 	 */
+	@SuppressWarnings("unused")
 	private String roundAndToString(Double value) {		
 		double rounded = round(value, 2);
 		return formatter.format(rounded);

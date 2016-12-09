@@ -7,6 +7,7 @@ import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public class MapVisualizationTest {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testDummyDataClimateData() {
 		MapVisualization map = new MapVisualization();
