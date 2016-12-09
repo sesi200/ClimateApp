@@ -73,6 +73,7 @@ public class ClimateApp implements EntryPoint {
 	//CheckBox showMax = new CheckBox("show maximum");
 	//CheckBox showMin = new CheckBox("show minimum");
 
+
 	@Override
 	public void onModuleLoad() {
 		//populate table
@@ -171,9 +172,6 @@ public class ClimateApp implements EntryPoint {
 		showUncertainty.setValue(true); 
 		showLongitude.setValue(true);
 		showLatitude.setValue(true);
-		//showAvg.setValue(false);
-		//showMax.setValue(false);
-		//showMin.setValue(false);
 	}
 
 	/**
@@ -216,8 +214,6 @@ public class ClimateApp implements EntryPoint {
 		tableViewLayout = createTableViewLayout(tableViewLayout);
 
 
-
-
 		/**
 		 *  Create Source Label
 		 */
@@ -252,43 +248,20 @@ public class ClimateApp implements EntryPoint {
 	 * @return VerticalPanel mapViewLayout
 	 *  */
 	private VerticalPanel createMapViewLayout(VerticalPanel mapViewLayout){
-
 		mapViewLayout.add(getSlider());
 
-		Label mapLabel = new Label("Climate Data Map");
-		mapLabel.setStyleName("titleLabel");
-		mapViewLayout.add(mapLabel);
+		//		Label mapLabel = new Label("Climate Data Map");
+		//		mapLabel.setStyleName("titleLabel");
+		//		mapViewLayout.add(mapLabel);
 
 
-		FlexTable viewMap = new FlexTable();
-		viewMap = generateMap(viewMap);
+		VerticalPanel viewMap = new VerticalPanel();
+		verticalMapPanel.setWidth("1200px");
+		viewMap.add(verticalMapPanel);
 		mapViewLayout.add(viewMap);
-
 		return mapViewLayout;
 	}
 
-	FlexTable generateMap(FlexTable viewMap){
-
-		Button addMap = new Button("Add map");
-		Button deleteMap = new Button(" Remove ");
-
-		viewMap.setWidget(0,0,verticalMapPanel); 
-		viewMap.setWidget(0,1,addMap);
-		viewMap.setWidget(0,2,deleteMap);
-		viewMap.getColumnFormatter().setWidth(1, "120px");
-		viewMap.getColumnFormatter().setWidth(2, "120px");
-
-		viewMap.getCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT,HasVerticalAlignment.ALIGN_TOP);
-		viewMap.getCellFormatter().setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,HasVerticalAlignment.ALIGN_TOP);
-
-		addMap.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {	
-
-			}
-
-		});
-		return viewMap;
-	}
 
 	int firstDataYear = 1743;
 	int lastDataYear = 2013;

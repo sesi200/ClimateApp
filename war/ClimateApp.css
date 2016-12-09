@@ -69,6 +69,7 @@ h1 {
 
 /* label for presentation of the selected year under the map visualization*/
 .mapLabel {
+	margin-top:20px;
 	font-weight: bold;
 	text-align: left;
 	font-weight: bold;
