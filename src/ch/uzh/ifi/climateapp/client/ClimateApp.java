@@ -69,6 +69,9 @@ public class ClimateApp implements EntryPoint {
 	CheckBox showUncertainty = new CheckBox("show uncertainty");
 	CheckBox showLongitude= new CheckBox("show longitude");
 	CheckBox showLatitude = new CheckBox("show latitude");
+	//CheckBox showAvg = new CheckBox("show average");
+	//CheckBox showMax = new CheckBox("show maximum");
+	//CheckBox showMin = new CheckBox("show minimum");
 
 	@Override
 	public void onModuleLoad() {
@@ -76,7 +79,79 @@ public class ClimateApp implements EntryPoint {
 		setFilterToDefault();
 		updateCurrentFilterDisplay();
 		reloadTable();
+
+
 		buildUI();
+
+
+		/*  -------- Start Test Data for MAP --------- */
+		//		ClimateData d1 = new ClimateData();
+		//		d1.setCountry("US");
+		//		d1.setCity("Atlanta");
+		//		d1.setAverageTemperature(-100);
+		//		ClimateData d2 = new ClimateData();
+		//		d2.setCountry("India");
+		//		d2.setCity("New Delhi");
+		//		d2.setAverageTemperature(30);
+		//		ClimateData d3 = new ClimateData();
+		//		d3.setCountry("Germany");
+		//		d3.setCity("Munich");
+		//		d3.setAverageTemperature(0);
+		//		ClimateData d4 = new ClimateData();
+		//		d4.setCountry("GB");
+		//		d4.setCity("Stonehenge");
+		//		d4.setAverageTemperature(14);
+		//
+		//
+		//		ClimateData [] dataOne = new ClimateData[4];
+		//		dataOne[0] = d1;
+		//		dataOne[1] = d2;
+		//		dataOne[2] = d3;
+		//		dataOne[3] = d4;
+		//
+		//		ClimateData d5 = new ClimateData();
+		//		d5.setCountry("France");
+		//		d5.setAverageTemperature(15);
+		//		ClimateData d6 = new ClimateData();
+		//		d6.setCountry("Spain");
+		//		d6.setAverageTemperature(20);
+		//		ClimateData d7 = new ClimateData();
+		//		d7.setCountry("Greece");
+		//		d7.setAverageTemperature(0);
+		//		ClimateData d8 = new ClimateData();
+		//		d8.setCountry("Poland");
+		//		d8.setAverageTemperature(30);
+		//
+		//		ClimateData [] dataTwo = new ClimateData[4];
+		//		dataTwo[0] = d5;
+		//		dataTwo[1] = d6;
+		//		dataTwo[2] = d7;
+		//		dataTwo[3] = d8;
+		//
+		//		/*  -------- End Test Data for MAP --------- */
+
+		/*  -------- Start Map Visualization --------- */
+
+		//		map = new MapVisualization();
+		//		//map.replaceData(dataOne);
+		//		map.getVisualization(verticalMapPanel);
+		/*  -------- End Map Visualization --------- */
+
+		//for now average data is just logged to the console 
+		averageService.getAverageForYear(2000, new AsyncCallback<AverageData[]>() {
+
+			@Override
+			public void onSuccess(AverageData[] result) {
+				GWT.log(result.toString());
+
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				GWT.log("got exception " + caught.getMessage());
+			}
+		});
 	}
 
 	private void setFilterToDefault() {
@@ -331,6 +406,7 @@ public class ClimateApp implements EntryPoint {
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
 					addCountryNameFilter();
+					countryName.setValue("");
 				}
 			}
 		});
@@ -339,6 +415,7 @@ public class ClimateApp implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event){
 				addCountryNameFilter();
+				countryName.setValue("");
 			}
 		});
 
@@ -360,6 +437,7 @@ public class ClimateApp implements EntryPoint {
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
 					addCityNameFilter();
+					cityName.setValue("");
 				}
 			}
 		});
@@ -368,6 +446,7 @@ public class ClimateApp implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event){
 				addCityNameFilter();
+				countryName.setValue("");
 			}
 		});
 
@@ -657,26 +736,54 @@ public class ClimateApp implements EntryPoint {
 	 * adds a new Filter to filters with country set to value read from textbox
 	 */
 	private void addCountryNameFilter() {
-		if (countryName.getText()!=null) {
 			Filter newFilter = new Filter();
 			newFilter.setCountry(countryName.getText());
-			filters.add(newFilter);
-			updateCurrentFilterDisplay();
-			reloadTable();
-		}
+			if(isFilterDuplicate(newFilter)){
+				Window.alert("Filter already exist");
+			}
+			else{
+				filters.add(newFilter);
+				updateCurrentFilterDisplay();
+				reloadTable();
+			}
+		
 	}
 
 	/**
 	 * adds a new Filter to filters with city set to value read from textbox
 	 */
 	private void addCityNameFilter() {
-		if (cityName.getText()!=null) {
-			Filter newFilter = new Filter();
+			Filter newFilter = new Filter();		
 			newFilter.setCity(cityName.getText());
-			filters.add(newFilter);
-			updateCurrentFilterDisplay();
-			reloadTable();
+			if(isFilterDuplicate(newFilter)){
+				Window.alert("Filter already exist");
+			}
+			else{
+				filters.add(newFilter);
+				updateCurrentFilterDisplay();
+				reloadTable();
+			}
 		}
+	
+	
+	/**
+	 * checks if a filter doublicate or if no value is in the filter
+	 * returns true if filter is dublicate or has no value
+	 * returns false if filter is new and has value
+	 * @param Filter newFilter
+	 * @return boolean
+	 */
+	private boolean isFilterDuplicate(Filter newFilter){
+		if(newFilter.getCountry().trim().equals("") && newFilter.getCity().trim().equals("")){
+			return true;
+		}
+		
+		for (Filter filter : filters){			
+			if(filter.getCountry().equals(newFilter.getCountry()) && filter.getCity().equals(newFilter.getCity())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
