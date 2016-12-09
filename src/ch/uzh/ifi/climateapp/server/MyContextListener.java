@@ -15,8 +15,6 @@ import ch.uzh.ifi.climateapp.shared.ClimateData;
 
 public class MyContextListener implements ServletContextListener {
 
-	private static ServletContext context;
-
 	/**
 	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
 	 * 
@@ -35,7 +33,6 @@ public class MyContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 
-		context = sce.getServletContext();
 		AverageCalculator avgCalc = new AverageCalculator();
 
 		System.out.println("Context loaded!");
@@ -77,9 +74,4 @@ public class MyContextListener implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent sce) {
 		// shutdown code here
 	}
-
-	public static ServletContext getContext() {
-		return context;
-	}
-
 }

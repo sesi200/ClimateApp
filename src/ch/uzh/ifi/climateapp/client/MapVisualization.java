@@ -12,17 +12,15 @@ import com.google.gwt.visualization.client.visualizations.GeoMap;
 import ch.uzh.ifi.climateapp.shared.AverageData;
 
 public class MapVisualization implements IVisualization{
-
-
 	private DataTable dataTable;
 	private GeoMap.Options options;
-	private GeoMap geomap;
-
+	private GeoMap geomap = null;
+	
 	private AverageData[] averageData;
 
 
 	public MapVisualization(){}
-
+	
 	@Override
 	public Widget getVisualization(final VerticalPanel verticalPanel) {
 		Runnable onLoadCallback = new Runnable(){
@@ -36,9 +34,6 @@ public class MapVisualization implements IVisualization{
 			@Override
 			public void run() {
 
-				int mapWidth = verticalPanel.getOffsetWidth();
-				int mapHeight = 500;
-
 				// Building 
 				dataTable = DataTable.create();
 				dataTable.addColumn(ColumnType.STRING, "Country");
@@ -50,29 +45,26 @@ public class MapVisualization implements IVisualization{
 					dataTable.setValue(i, 1, averageData[i].getAvgTemp());
 				}
 
-				options = GeoMap.Options.create();
-				options.setDataMode(GeoMap.DataMode.REGIONS);
-				options.setRegion("world");
-				options.setWidth(mapWidth);
-				options.setHeight(mapHeight);
-				options.setShowLegend(true);
-				geomap = new GeoMap(dataTable, options);
-
-				verticalPanel.clear();
-
-				Label selectedYear = new Label();
-
-				int year = averageData[1].getYear();
-				String yearText = Integer.toString(year);
-				selectedYear.setText("Average temperatures for the year " + yearText);
-				selectedYear.addStyleName("mapLabel");
-
-				verticalPanel.add(selectedYear);
-
-				verticalPanel.add(geomap);
-
-
-
+				if(verticalPanel.getWidgetCount()==0) {
+					if (geomap == null) {
+						options = GeoMap.Options.create();
+						options.setDataMode(GeoMap.DataMode.REGIONS);
+						options.setRegion("world");
+						options.setWidth(1200);
+						options.setShowLegend(true);
+						geomap = new GeoMap(dataTable, options);
+					}
+					
+					Label selectedYear = new Label();
+					int year = averageData[1].getYear();
+					String yearText = Integer.toString(year);
+					selectedYear.setText("Average temperatures for the year " + yearText);
+					selectedYear.addStyleName("mapLabel");
+					verticalPanel.add(selectedYear);
+					verticalPanel.add(geomap);
+				}
+				geomap.draw(dataTable);
+				
 			}
 		};
 

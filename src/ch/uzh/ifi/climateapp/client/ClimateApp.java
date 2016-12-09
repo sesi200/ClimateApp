@@ -69,9 +69,6 @@ public class ClimateApp implements EntryPoint {
 	CheckBox showUncertainty = new CheckBox("show uncertainty");
 	CheckBox showLongitude= new CheckBox("show longitude");
 	CheckBox showLatitude = new CheckBox("show latitude");
-	//CheckBox showAvg = new CheckBox("show average");
-	//CheckBox showMax = new CheckBox("show maximum");
-	//CheckBox showMin = new CheckBox("show minimum");
 
 
 	@Override
@@ -80,26 +77,7 @@ public class ClimateApp implements EntryPoint {
 		setFilterToDefault();
 		updateCurrentFilterDisplay();
 		reloadTable();
-
-
 		buildUI();
-
-
-		//for now average data is just logged to the console 
-		averageService.getAverageForYear(2000, new AsyncCallback<AverageData[]>() {
-
-			@Override
-			public void onSuccess(AverageData[] result) {
-				GWT.log(result.toString());
-
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				GWT.log("got exception " + caught.getMessage());
-			}
-		});
 	}
 
 	private void setFilterToDefault() {
