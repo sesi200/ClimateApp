@@ -571,6 +571,10 @@ public class ClimateApp implements EntryPoint {
 				setFilterToDefault();
 				updateCurrentFilterDisplay();
 				reloadTable();
+				yearFrom.setValue("" + STARTING_YEAR);
+				yearTo.setValue("" + STARTING_YEAR);
+				uncertaintyFrom.setValue("" + STARTING_MIN_UNCERTAINTY);
+				uncertaintyTo.setValue("" + STARTING_MAX_UNCERTAINTY);
 			}
 		});
 
@@ -630,6 +634,12 @@ public class ClimateApp implements EntryPoint {
 	 * does not work when there are some non-alphanumeric symbols in the textbox
 	 */
 	private void addUncertaintyFromFilter() {
+		if (Integer.parseInt(uncertaintyFrom.getText()) > Integer.parseInt(uncertaintyTo.getText())){
+			Window.alert("\"Uncertainty from\" must be smaller or equal \"Uncertainty to\"");
+			return;
+		}
+		
+		
 		if (uncertaintyFrom.getText()!=null) {
 			Filter newFilter;
 			if (filters.size()==0) {
@@ -650,6 +660,11 @@ public class ClimateApp implements EntryPoint {
 	 * does not work when there are some non-alphanumeric symbols in the textbox
 	 */
 	private void addUncertaintyToFilter() {
+		if (Integer.parseInt(uncertaintyFrom.getText()) > Integer.parseInt(uncertaintyTo.getText())){
+			Window.alert("\"Uncertainty to\" must be greater or equal \"Uncertainty from\"");
+			return;
+		}
+		
 		if (uncertaintyTo.getText()!=null) {
 			Filter newFilter;
 			if (filters.size()==0) {
@@ -670,6 +685,11 @@ public class ClimateApp implements EntryPoint {
 	 * does not work when there are some non-alphanumeric symbols in the textbox
 	 */
 	private void addYearToFilter() {
+		if (Integer.parseInt(yearFrom.getText()) > Integer.parseInt(yearTo.getText())){
+			Window.alert("\"Year to\" must be greater or equal \"Year from\" \n year to >= year from");
+			return;
+		}
+		
 		if (yearTo.getText()!=null) {
 			Filter newFilter;
 			if (filters.size()==0) {
@@ -690,6 +710,11 @@ public class ClimateApp implements EntryPoint {
 	 * does not work when there are some non-alphanumeric symbols in the textbox
 	 */
 	private void addYearFromFilter() {
+		if (Integer.parseInt(yearFrom.getText()) > Integer.parseInt(yearTo.getText())){
+			Window.alert("\"Year from\" must be smaller or equal \"Year to\" \n year from <= year to");
+			return;
+		}
+		
 		if (yearFrom.getText()!=null) {
 			Filter newFilter;
 			if (filters.size()==0) {
