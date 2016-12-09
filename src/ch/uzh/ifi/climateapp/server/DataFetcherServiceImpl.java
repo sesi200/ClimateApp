@@ -49,25 +49,21 @@ public class DataFetcherServiceImpl extends RemoteServiceServlet implements Data
 				//check for temperature deviation
 				if ((data.getAverageTemperatureUncertainty() <= filter[0].getMaxDeviation() || filter[0].getMaxDeviation()==-1)
 						&& filter[0].getMinDeviation()<=data.getAverageTemperatureUncertainty()) {
-					//check for city
-					if(cityFilter.contains(data.getCity())||cityFilter.isEmpty()) {
-						//check for country
-						if (countryFilter.contains(data.getCountry())||countryFilter.isEmpty()) {
-							//check for date
-							int year = Integer.parseInt(date.format(data.getDt()));
-							if (year<=filter[0].getEndYear()||filter[0].getEndYear()==-1) {
-								if (year>=filter[0].getStartYear()) {
-									//data is correct, return if it belongs to current batch
-									++matchedEntries;
-									if (matchedEntries>=currentBatch*5000) {
-										returnData.add(data);
-										//send data if batch is full
-										if (returnData.size()==5000) {
-											break;
-										}
+					//check for city and country
+					if(cityFilter.contains(data.getCity())||countryFilter.contains(data.getCountry())||(cityFilter.isEmpty()&&countryFilter.isEmpty())) {
+						//check for date
+						int year = Integer.parseInt(date.format(data.getDt()));
+						if (year<=filter[0].getEndYear()||filter[0].getEndYear()==-1) {
+							if (year>=filter[0].getStartYear()) {
+								//data is correct, return if it belongs to current batch
+								++matchedEntries;
+								if (matchedEntries>=currentBatch*5000) {
+									returnData.add(data);
+									//send data if batch is full
+									if (returnData.size()==5000) {
+										break;
 									}
 								}
-								
 							}
 						}
 					}
