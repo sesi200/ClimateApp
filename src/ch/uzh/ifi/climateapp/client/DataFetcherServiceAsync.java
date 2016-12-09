@@ -8,5 +8,6 @@ import ch.uzh.ifi.climateapp.shared.Filter;
 public interface DataFetcherServiceAsync {
 
 	void getClimateData(Filter[] filter, AsyncCallback<ClimateData[]> callback);
-
+	void getCountryNames(AsyncCallback<String[]> callback);
+	void getCityNames(AsyncCallback<String[]> callback);
 }
