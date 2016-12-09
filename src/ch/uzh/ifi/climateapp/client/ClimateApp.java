@@ -73,6 +73,7 @@ public class ClimateApp implements EntryPoint {
 	//CheckBox showMax = new CheckBox("show maximum");
 	//CheckBox showMin = new CheckBox("show minimum");
 
+
 	@Override
 	public void onModuleLoad() {
 		//populate table
@@ -83,59 +84,6 @@ public class ClimateApp implements EntryPoint {
 
 		buildUI();
 
-
-		/*  -------- Start Test Data for MAP --------- */
-		//		ClimateData d1 = new ClimateData();
-		//		d1.setCountry("US");
-		//		d1.setCity("Atlanta");
-		//		d1.setAverageTemperature(-100);
-		//		ClimateData d2 = new ClimateData();
-		//		d2.setCountry("India");
-		//		d2.setCity("New Delhi");
-		//		d2.setAverageTemperature(30);
-		//		ClimateData d3 = new ClimateData();
-		//		d3.setCountry("Germany");
-		//		d3.setCity("Munich");
-		//		d3.setAverageTemperature(0);
-		//		ClimateData d4 = new ClimateData();
-		//		d4.setCountry("GB");
-		//		d4.setCity("Stonehenge");
-		//		d4.setAverageTemperature(14);
-		//
-		//
-		//		ClimateData [] dataOne = new ClimateData[4];
-		//		dataOne[0] = d1;
-		//		dataOne[1] = d2;
-		//		dataOne[2] = d3;
-		//		dataOne[3] = d4;
-		//
-		//		ClimateData d5 = new ClimateData();
-		//		d5.setCountry("France");
-		//		d5.setAverageTemperature(15);
-		//		ClimateData d6 = new ClimateData();
-		//		d6.setCountry("Spain");
-		//		d6.setAverageTemperature(20);
-		//		ClimateData d7 = new ClimateData();
-		//		d7.setCountry("Greece");
-		//		d7.setAverageTemperature(0);
-		//		ClimateData d8 = new ClimateData();
-		//		d8.setCountry("Poland");
-		//		d8.setAverageTemperature(30);
-		//
-		//		ClimateData [] dataTwo = new ClimateData[4];
-		//		dataTwo[0] = d5;
-		//		dataTwo[1] = d6;
-		//		dataTwo[2] = d7;
-		//		dataTwo[3] = d8;
-		//
-		//		/*  -------- End Test Data for MAP --------- */
-
-		/*  -------- Start Map Visualization --------- */
-
-		//		map = new MapVisualization();
-		//		//map.replaceData(dataOne);
-		//		map.getVisualization(verticalMapPanel);
-		/*  -------- End Map Visualization --------- */
 
 		//for now average data is just logged to the console 
 		averageService.getAverageForYear(2000, new AsyncCallback<AverageData[]>() {
@@ -171,9 +119,6 @@ public class ClimateApp implements EntryPoint {
 		showUncertainty.setValue(true); 
 		showLongitude.setValue(true);
 		showLatitude.setValue(true);
-		//showAvg.setValue(false);
-		//showMax.setValue(false);
-		//showMin.setValue(false);
 	}
 
 	/**
@@ -216,8 +161,6 @@ public class ClimateApp implements EntryPoint {
 		tableViewLayout = createTableViewLayout(tableViewLayout);
 
 
-
-
 		/**
 		 *  Create Source Label
 		 */
@@ -252,43 +195,20 @@ public class ClimateApp implements EntryPoint {
 	 * @return VerticalPanel mapViewLayout
 	 *  */
 	private VerticalPanel createMapViewLayout(VerticalPanel mapViewLayout){
-
 		mapViewLayout.add(getSlider());
 
-		Label mapLabel = new Label("Climate Data Map");
-		mapLabel.setStyleName("titleLabel");
-		mapViewLayout.add(mapLabel);
+		//		Label mapLabel = new Label("Climate Data Map");
+		//		mapLabel.setStyleName("titleLabel");
+		//		mapViewLayout.add(mapLabel);
 
 
-		FlexTable viewMap = new FlexTable();
-		viewMap = generateMap(viewMap);
+		VerticalPanel viewMap = new VerticalPanel();
+		verticalMapPanel.setWidth("1200px");
+		viewMap.add(verticalMapPanel);
 		mapViewLayout.add(viewMap);
-
 		return mapViewLayout;
 	}
 
-	FlexTable generateMap(FlexTable viewMap){
-
-		Button addMap = new Button("Add map");
-		Button deleteMap = new Button(" Remove ");
-
-		viewMap.setWidget(0,0,verticalMapPanel); 
-		viewMap.setWidget(0,1,addMap);
-		viewMap.setWidget(0,2,deleteMap);
-		viewMap.getColumnFormatter().setWidth(1, "120px");
-		viewMap.getColumnFormatter().setWidth(2, "120px");
-
-		viewMap.getCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT,HasVerticalAlignment.ALIGN_TOP);
-		viewMap.getCellFormatter().setAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT,HasVerticalAlignment.ALIGN_TOP);
-
-		addMap.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {	
-
-			}
-
-		});
-		return viewMap;
-	}
 
 	int firstDataYear = 1743;
 	int lastDataYear = 2013;
