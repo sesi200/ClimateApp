@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,7 @@ import javax.servlet.ServletContextListener;
 
 import ch.uzh.ifi.climateapp.shared.AverageData;
 import ch.uzh.ifi.climateapp.shared.ClimateData;
+import ch.uzh.ifi.climateapp.shared.ClimateField;
 
 public class MyContextListener implements ServletContextListener {
 
@@ -34,21 +36,11 @@ public class MyContextListener implements ServletContextListener {
 	/* (non-Javadoc)
 	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
 	 */
-	/* (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
-	 */
-	/* (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
-	 */
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 
 		AverageCalculator avgCalc = new AverageCalculator();
 		//sets for lookup and arrays to give the list with all country and city names
-		Set<String> countryNamesSet = new HashSet<String>();
-		Set<String> cityNamesSet = new HashSet<String>();
-		String[] countryNames;
-		String[] cityNames;
 
 		System.out.println("Context loaded!");
 
@@ -65,30 +57,12 @@ public class MyContextListener implements ServletContextListener {
 			e.printStackTrace();
 		}
 		
-		/**
-		 * Create lookup hashset for country names and city names
-		 * For each ClimateData add the country / city name to the set,
-		 * if not is not yet there
-		 */
-		for(ClimateData data : climateData){
-			String currCountName = data.getCountry();
-			String currCityName = data.getCity();
-			
-			if(!countryNamesSet.contains(currCountName)){
-				countryNamesSet.add(currCountName);
-			}
-			if (!cityNamesSet.contains(currCityName)){
-				cityNamesSet.add(currCityName);
-			}
-		}
+
+		String [] uniqueSortedCountries = getSortedUniqueFieldValues(climateData, ClimateField.COUNTRY);
+		String [] uniqueSortedCities = getSortedUniqueFieldValues(climateData, ClimateField.CITY);
 		
-		//transforming the sets to array and putting them to the context
-		countryNames = countryNamesSet.toArray(new String[countryNamesSet.size()]);
-		Arrays.sort(countryNames);		
-		cityNames = cityNamesSet.toArray(new String[cityNamesSet.size()]);
-		Arrays.sort(countryNames);
-		sce.getServletContext().setAttribute(ContextContent.COUNTRIES, countryNames);
-		sce.getServletContext().setAttribute(ContextContent.CITIES, cityNames);
+		setInContext(sce, ContextContent.COUNTRIES, uniqueSortedCountries);
+		setInContext(sce, ContextContent.CITIES, uniqueSortedCities);
 		
 		climateData = Collections.unmodifiableList(climateData);
 		long timeTaken = System.currentTimeMillis() - before;
@@ -97,9 +71,23 @@ public class MyContextListener implements ServletContextListener {
 		Map<Integer, List<AverageData>> averageDataMap = avgCalc.calculateAveragePerYearAndCountry(climateData);
 		averageDataMap = Collections.unmodifiableMap(averageDataMap);
 
-		sce.getServletContext().setAttribute(ContextContent.CLIMATE_DATA, climateData);
-		sce.getServletContext().setAttribute(ContextContent.AVERAGE_PER_YEAR, averageDataMap);
+		setInContext(sce, ContextContent.CLIMATE_DATA, climateData);
+		setInContext(sce, ContextContent.AVERAGE_PER_YEAR, averageDataMap);
 		
+	}
+	
+	private void setInContext(ServletContextEvent sce, String key, Object value) {
+		sce.getServletContext().setAttribute(key, value);
+	}
+	
+	private String[] getSortedUniqueFieldValues(List<ClimateData> climateData, ClimateField field) {
+		Set<String> valuesSet = new HashSet<String>();
+		for (ClimateData d : climateData) {
+			valuesSet.add(d.getField(field));
+		}
+		String[] valuesArray = valuesSet.toArray(new String[valuesSet.size()]);
+		Arrays.sort(valuesArray);	
+		return valuesArray;
 	}
 
 	@Override
@@ -107,3 +95,5 @@ public class MyContextListener implements ServletContextListener {
 		// shutdown code here
 	}
 }
+
+

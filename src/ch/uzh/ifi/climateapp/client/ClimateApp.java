@@ -150,7 +150,6 @@ public class ClimateApp implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				GWT.log("got exception " + caught.getMessage());
 			}
 		});
@@ -749,8 +748,7 @@ public class ClimateApp implements EntryPoint {
 				filters.add(newFilter);
 				updateCurrentFilterDisplay();
 				reloadTable();
-			}
-		
+			}		
 	}
 
 	/**
@@ -939,5 +937,4 @@ public class ClimateApp implements EntryPoint {
 		checkboxValues.put("Longitude", showLongitude.getValue());
 		return checkboxValues;
 	}
-
 }
