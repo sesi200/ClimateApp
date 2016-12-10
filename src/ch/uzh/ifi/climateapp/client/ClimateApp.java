@@ -52,6 +52,7 @@ public class ClimateApp implements EntryPoint {
 	private AverageYearServiceAsync averageService = GWT.create(AverageYearService.class);
 	private ArrayList<Filter> filters = new ArrayList<Filter>(); /*filters[1+] is for cities and countries*/
 	private FlexTable currentFilterDisplay = new FlexTable();
+	
 
 	//needed class-wide text boxes to add filter values
 	TextBox uncertaintyFrom;
@@ -80,7 +81,7 @@ public class ClimateApp implements EntryPoint {
 		setFilterToDefault();
 		updateCurrentFilterDisplay();
 		reloadTable();
-
+		suggestBoxes();
 
 		buildUI();
 
@@ -153,6 +154,11 @@ public class ClimateApp implements EntryPoint {
 				GWT.log("got exception " + caught.getMessage());
 			}
 		});
+	}
+
+	private void suggestBoxes() {
+		
+		
 	}
 
 	private void setFilterToDefault() {
