@@ -60,6 +60,18 @@ public class Filter implements Serializable{
 		this.country = country;
 	}
 	
-	
+	public void setField(FilterField field, String value) {
+		switch(field) {
+		case CITY:
+			setCity(value);
+			break;
+		case COUNTRY:
+			setCountry(value);
+			break;
+		default:
+			throw new IllegalArgumentException("Don't know how to set " + field);
+		
+		}
+	}
 	
 }
