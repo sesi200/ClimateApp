@@ -1,6 +1,5 @@
 package ch.uzh.ifi.climateapp.client;
 
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -12,6 +11,7 @@ import com.google.gwt.visualization.client.visualizations.GeoMap;
 import ch.uzh.ifi.climateapp.shared.AverageData;
 
 public class MapVisualization implements IVisualization{
+	
 	private DataTable dataTable;
 	private GeoMap.Options options;
 	private GeoMap geomap = null;
@@ -51,7 +51,8 @@ public class MapVisualization implements IVisualization{
 						options = GeoMap.Options.create();
 						options.setDataMode(GeoMap.DataMode.REGIONS);
 						options.setRegion("world");
-						options.setWidth(1200);
+						options.setWidth(verticalPanel.getOffsetWidth());
+						options.setHeight(500);
 						options.setShowLegend(true);
 						geomap = new GeoMap(dataTable, options);
 					}
@@ -63,7 +64,7 @@ public class MapVisualization implements IVisualization{
 				int year = averageData[1].getYear();
 				String yearText = Integer.toString(year);
 				selectedYear.setText("Average temperatures for the year " + yearText);
-				geomap.draw(dataTable);
+				geomap.draw(dataTable,options);
 				
 			}
 		};
