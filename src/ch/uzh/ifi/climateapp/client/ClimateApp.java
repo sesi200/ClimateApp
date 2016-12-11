@@ -81,64 +81,7 @@ public class ClimateApp implements EntryPoint {
 		updateCurrentFilterDisplay();
 		reloadTable();
 
-
 		buildUI();
-
-
-		/*  -------- Start Test Data for MAP --------- */
-		//		ClimateData d1 = new ClimateData();
-		//		d1.setCountry("US");
-		//		d1.setCity("Atlanta");
-		//		d1.setAverageTemperature(-100);
-		//		ClimateData d2 = new ClimateData();
-		//		d2.setCountry("India");
-		//		d2.setCity("New Delhi");
-		//		d2.setAverageTemperature(30);
-		//		ClimateData d3 = new ClimateData();
-		//		d3.setCountry("Germany");
-		//		d3.setCity("Munich");
-		//		d3.setAverageTemperature(0);
-		//		ClimateData d4 = new ClimateData();
-		//		d4.setCountry("GB");
-		//		d4.setCity("Stonehenge");
-		//		d4.setAverageTemperature(14);
-		//
-		//
-		//		ClimateData [] dataOne = new ClimateData[4];
-		//		dataOne[0] = d1;
-		//		dataOne[1] = d2;
-		//		dataOne[2] = d3;
-		//		dataOne[3] = d4;
-		//
-		//		ClimateData d5 = new ClimateData();
-		//		d5.setCountry("France");
-		//		d5.setAverageTemperature(15);
-		//		ClimateData d6 = new ClimateData();
-		//		d6.setCountry("Spain");
-		//		d6.setAverageTemperature(20);
-		//		ClimateData d7 = new ClimateData();
-		//		d7.setCountry("Greece");
-		//		d7.setAverageTemperature(0);
-		//		ClimateData d8 = new ClimateData();
-		//		d8.setCountry("Poland");
-		//		d8.setAverageTemperature(30);
-		//
-		//		ClimateData [] dataTwo = new ClimateData[4];
-		//		dataTwo[0] = d5;
-		//		dataTwo[1] = d6;
-		//		dataTwo[2] = d7;
-		//		dataTwo[3] = d8;
-		//
-		//		/*  -------- End Test Data for MAP --------- */
-
-		/*  -------- Start Map Visualization --------- */
-
-		//		map = new MapVisualization();
-		//		//map.replaceData(dataOne);
-		//		map.getVisualization(verticalMapPanel);
-		/*  -------- End Map Visualization --------- */
-
-		//for now average data is just logged to the console 
 		averageService.getAverageForYear(2000, new AsyncCallback<AverageData[]>() {
 
 			@Override
