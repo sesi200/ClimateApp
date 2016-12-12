@@ -1,7 +1,6 @@
 package ch.uzh.ifi.climateapp.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
@@ -20,14 +19,10 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
-//import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -38,8 +33,6 @@ import ch.uzh.ifi.climateapp.shared.Filter;
 import ch.uzh.ifi.climateapp.shared.FilterField;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
-import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 import com.google.gwt.widgetideas.client.SliderBar;
 
 /**
@@ -51,6 +44,12 @@ public class ClimateApp implements EntryPoint {
 	private static final double STARTING_MIN_UNCERTAINTY = 0.0;
 	private static final int STARTING_YEAR = 2013;
 
+	int firstDataYear = 1743;
+	int lastDataYear = 2013;
+
+	SliderBar sliderBar;
+	VerticalPanel verticalPanelSlider;
+	VerticalPanel verticalPanel;
 	private VerticalPanel verticalMapPanel = new VerticalPanel();
 	private VerticalPanel verticalTablePanel = new VerticalPanel();
 	private VerticalPanel mainPanel;
@@ -80,9 +79,6 @@ public class ClimateApp implements EntryPoint {
 	CheckBox showUncertainty = new CheckBox("show uncertainty");
 	CheckBox showLongitude= new CheckBox("show longitude");
 	CheckBox showLatitude = new CheckBox("show latitude");
-	//CheckBox showAvg = new CheckBox("show average");
-	//CheckBox showMax = new CheckBox("show maximum");
-	//CheckBox showMin = new CheckBox("show minimum");
 
 
 	@Override
@@ -91,86 +87,14 @@ public class ClimateApp implements EntryPoint {
 		setFilterToDefault();
 		updateCurrentFilterDisplay();
 		reloadTable();
-		suggestBoxes();
 
 		buildUI();
 		populateSuggestBoxes();
-
-
-		/*  -------- Start Test Data for MAP --------- */
-		//		ClimateData d1 = new ClimateData();
-		//		d1.setCountry("US");
-		//		d1.setCity("Atlanta");
-		//		d1.setAverageTemperature(-100);
-		//		ClimateData d2 = new ClimateData();
-		//		d2.setCountry("India");
-		//		d2.setCity("New Delhi");
-		//		d2.setAverageTemperature(30);
-		//		ClimateData d3 = new ClimateData();
-		//		d3.setCountry("Germany");
-		//		d3.setCity("Munich");
-		//		d3.setAverageTemperature(0);
-		//		ClimateData d4 = new ClimateData();
-		//		d4.setCountry("GB");
-		//		d4.setCity("Stonehenge");
-		//		d4.setAverageTemperature(14);
-		//
-		//
-		//		ClimateData [] dataOne = new ClimateData[4];
-		//		dataOne[0] = d1;
-		//		dataOne[1] = d2;
-		//		dataOne[2] = d3;
-		//		dataOne[3] = d4;
-		//
-		//		ClimateData d5 = new ClimateData();
-		//		d5.setCountry("France");
-		//		d5.setAverageTemperature(15);
-		//		ClimateData d6 = new ClimateData();
-		//		d6.setCountry("Spain");
-		//		d6.setAverageTemperature(20);
-		//		ClimateData d7 = new ClimateData();
-		//		d7.setCountry("Greece");
-		//		d7.setAverageTemperature(0);
-		//		ClimateData d8 = new ClimateData();
-		//		d8.setCountry("Poland");
-		//		d8.setAverageTemperature(30);
-		//
-		//		ClimateData [] dataTwo = new ClimateData[4];
-		//		dataTwo[0] = d5;
-		//		dataTwo[1] = d6;
-		//		dataTwo[2] = d7;
-		//		dataTwo[3] = d8;
-		//
-		//		/*  -------- End Test Data for MAP --------- */
-
-		/*  -------- Start Map Visualization --------- */
-
-		//		map = new MapVisualization();
-		//		//map.replaceData(dataOne);
-		//		map.getVisualization(verticalMapPanel);
-		/*  -------- End Map Visualization --------- */
-
-		//for now average data is just logged to the console 
-		averageService.getAverageForYear(2000, new AsyncCallback<AverageData[]>() {
-
-			@Override
-			public void onSuccess(AverageData[] result) {
-				GWT.log(result.toString());
-
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				GWT.log("got exception " + caught.getMessage());
-			}
-		});
 	}
 
-	private void suggestBoxes() {
-		
-		
-	}
-
+	/**
+	 * resets all filters to their default values and sets the checkboxes and texboxes to their original states
+	 */
 	private void setFilterToDefault() {
 		filters.clear();
 		Filter f = new Filter();
@@ -230,10 +154,9 @@ public class ClimateApp implements EntryPoint {
 		tableViewLayout = createTableViewLayout(tableViewLayout);
 
 
-		/**
+		/*
 		 *  Create Source Label
 		 */
-
 		//Create label to show the data source
 		Label dataSourceLabel = new Label("Source of raw data: Berkeley Earth");
 		dataSourceLabel.setStyleName("sourceLabel");
@@ -265,26 +188,12 @@ public class ClimateApp implements EntryPoint {
 	 *  */
 	private VerticalPanel createMapViewLayout(VerticalPanel mapViewLayout){
 		mapViewLayout.add(getSlider());
-
-		//		Label mapLabel = new Label("Climate Data Map");
-		//		mapLabel.setStyleName("titleLabel");
-		//		mapViewLayout.add(mapLabel);
-
-
 		VerticalPanel viewMap = new VerticalPanel();
 		verticalMapPanel.setWidth("1200px");
 		viewMap.add(verticalMapPanel);
 		mapViewLayout.add(viewMap);
 		return mapViewLayout;
 	}
-
-
-	int firstDataYear = 1743;
-	int lastDataYear = 2013;
-
-	SliderBar sliderBar;
-	VerticalPanel verticalPanelSlider;
-	VerticalPanel verticalPanel;
 
 	private Widget getSlider(){
 
@@ -318,7 +227,6 @@ public class ClimateApp implements EntryPoint {
 			public void onSuccess(AverageData[] result) {
 				map.replaceData(result);
 				map.getVisualization(verticalMapPanel);
-
 			}
 
 			@Override
@@ -329,12 +237,10 @@ public class ClimateApp implements EntryPoint {
 
 	}
 
-
 	private VerticalPanel createTableViewLayout(VerticalPanel tableViewLayout){
 
-
-		/** Create Horizontal Customize Table
-		 * 
+		/**
+		 * Create Horizontal Customize Table 
 		 */
 		HorizontalPanel customizePanel = new HorizontalPanel();
 		customizePanel.setStyleName("paddedHorizontalPanel");
@@ -365,15 +271,11 @@ public class ClimateApp implements EntryPoint {
 		customizePanel.add(showDate);
 		customizePanel.add(showLatitude);
 		customizePanel.add(showLongitude);
-		//customizePanel.add(showAvg); 
-		//customizePanel.add(showMax); 
-		//customizePanel.add(showMin); 
 
-		/**
+		/*
 		 * Create Filter Data Table
 		 */
 		/*Create horizontal panel for the filter options (filters for location, temperature and precision)*/
-
 		HorizontalPanel filterPanel = new HorizontalPanel();
 		filterPanel.setStyleName("paddedHorizontalPanel");
 		filterPanel.setSpacing(25);
@@ -388,7 +290,6 @@ public class ClimateApp implements EntryPoint {
 		//Assemble country filter panel
 		locationFilter.add(countryFilter);
 		locationFilter.add(cityFilter);
-
 
 		// Create year range filter
 		VerticalPanel yearRangeFilter = new VerticalPanel();
@@ -509,8 +410,6 @@ public class ClimateApp implements EntryPoint {
 			}
 		});
 
-
-
 		uncerataintyToFilter.add(uncertaintyToLabel);
 		uncerataintyToFilter.add(uncertaintyTo);
 		uncerataintyToFilter.add(addUncertaintyToButton);
@@ -552,15 +451,12 @@ public class ClimateApp implements EntryPoint {
 
 		HorizontalPanel tableView = new HorizontalPanel();
 
-
-
 		tableView.add(verticalTablePanel);
 		verticalTablePanel.setSpacing(30);
 		tableView.add(currentFilterDisplay);
 
 
 		tableViewLayout.add(tableView);
-
 
 		/**
 		 * Assemble the whole table view panel 
@@ -586,9 +482,9 @@ public class ClimateApp implements EntryPoint {
 	}
 
 	/**
-	 * @param suggestBox TODO
-	 * @param labelText TODO
-	 * @return
+	 * @param suggestBox the variable that becomes the new SuggestBox
+	 * @param labelText The SuggestBox will be labelled "Select labelText"
+	 * @return HorizontalPanel that contains the SuggestBox and the label 
 	 */
 	private HorizontalPanel createSuggestFilterPanel(final SuggestBox suggestBox, String labelText, 
 													 final FilterField field) {
@@ -632,7 +528,6 @@ public class ClimateApp implements EntryPoint {
 			Window.alert("\"Uncertainty from\" must be smaller or equal \"Uncertainty to\"");
 			return;
 		}
-		
 		
 		if (uncertaintyFrom.getText()!=null) {
 			Filter newFilter;
@@ -741,11 +636,10 @@ public class ClimateApp implements EntryPoint {
 	}
 	
 	/**
-	 * checks if a filter duplicate or if no value is in the filter
-	 * returns true if filter is duplicate or has no value
-	 * returns false if filter is new and has value
+	 * checks if a filter is a duplicate or if no value is in the filter
 	 * @param Filter newFilter
-	 * @return boolean
+	 * @return true if filter is duplicate or has no valid value
+	 * @return false if filter is new and has value
 	 */
 	private boolean isFilterDuplicate(Filter newFilter){
 
@@ -861,11 +755,9 @@ public class ClimateApp implements EntryPoint {
 								reloadTable();
 							}
 						});
-
 					}
 				}
 			}
-
 
 			if (hasCountry) {
 				currentFilterDisplay.setText(currentLine, 0, "Countries:");
@@ -893,7 +785,6 @@ public class ClimateApp implements EntryPoint {
 			}
 		}
 	}
-
 
 	/**
 	 * 

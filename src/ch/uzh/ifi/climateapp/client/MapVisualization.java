@@ -19,62 +19,23 @@ public class MapVisualization implements IVisualization{
 
 	private AverageData[] averageData;
 
-
 	public MapVisualization(){}
 
 	@Override
 	public Widget getVisualization(final VerticalPanel verticalPanel) {
 		Runnable onLoadCallback = new Runnable(){
 
-
 			/**
 			 * This method uses he gwt-visualization-1.1.2 libarary to visualize the climate data on to a map
-			 * 
 			 * @return visualized map widget
 			 */
 			@Override
 			public void run() {
 
-
 				// Building 
 				dataTable = DataTable.create();
 				dataTable.addColumn(ColumnType.STRING, "Country");
 				dataTable.addColumn(ColumnType.NUMBER, "Temperature");
-
-				//				/** Default presentation of the map with the green gradients legend:
-				//				 * the colors in the legend are changing for each visualization depending  
-				//				 * on the temperature range in this visualization
-				//				 */
-				//
-				//				dataTable.addRows(averageData.length);
-				//				for (int i = 0; i < averageData.length; i++){
-				//					dataTable.setValue(i, 0, averageData[i].getCountry());
-				//					dataTable.setValue(i, 1, averageData[i].getAvgTemp());
-				//				}
-				//
-				//				if(verticalPanel.getWidgetCount()==0) {
-				//					if (geomap == null) {
-				//						options = GeoMap.Options.create();
-				//						options.setDataMode(GeoMap.DataMode.REGIONS);
-				//						options.setRegion("world");
-				//						options.setWidth(verticalPanel.getOffsetWidth());
-				//						options.setHeight(500);
-				//						options.setShowLegend(true);
-				//						geomap = new GeoMap(dataTable, options);
-				//					}
-				//
-				//					selectedYear.addStyleName("mapLabel");
-				//					verticalPanel.add(selectedYear);
-				//					verticalPanel.add(geomap);
-				//				}
-				//
-				//				int year = averageData[1].getYear();
-				//				String yearText = Integer.toString(year);
-				//				selectedYear.setText("Average temperatures for the year " + yearText);
-				//				geomap.draw(dataTable,options);
-				//
-				//			}
-				//		};
 
 				/** Alternative colorful presentation of the map with the fixed legend
 				 * for all the visualizations
@@ -126,7 +87,6 @@ public class MapVisualization implements IVisualization{
 	 * 
 	 * @return void
 	 */
-
 	public void replaceData(AverageData[] newData) {
 		this.averageData = newData;
 	}
