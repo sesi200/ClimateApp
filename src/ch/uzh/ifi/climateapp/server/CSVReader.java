@@ -1,8 +1,7 @@
 package ch.uzh.ifi.climateapp.server;
 
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +76,7 @@ public class CSVReader {
 			URL url = CSVReader.class.getClassLoader().getResource("GlobalLandTemperaturesByMajorCity_v1.csv");
 			String filesPathAndName = url.getPath();
 
-			beanReader = new CsvBeanReader(new InputStreamReader(new FileInputStream(filesPathAndName), "UTF-8"), CsvPreference.STANDARD_PREFERENCE);
+			beanReader = new CsvBeanReader(new FileReader(filesPathAndName), CsvPreference.STANDARD_PREFERENCE);
 
 			// the header elements are used to map the values to the bean (names
 			// must match)

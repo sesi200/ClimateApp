@@ -144,11 +144,6 @@ public class ClimateData implements Serializable, Comparable<ClimateData> {
 		if (yearRes != 0) return yearRes;
 		return getCountry().compareTo(o.getCountry());
 	}
-	
-	public String getField(ClimateField field) {
-		if (field == ClimateField.CITY) return getCity();
-		else if (field == ClimateField.COUNTRY) return getCountry();
-		else throw new IllegalArgumentException("Wrong field " + field);
-	}
+
 }
 

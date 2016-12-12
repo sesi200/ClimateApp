@@ -19,8 +19,8 @@ public class TableVisualization implements IVisualization {
 	
 	private ArrayList<ClimateData> data = new ArrayList<ClimateData>();
 	private DataTable dataTable;
-	private Table table = null;
-	private Table.Options options = null;
+	private Table table;
+	private Table.Options options;
 	private HashMap<String,Boolean> columnOptions = null;
 	private int currentPage;
 	
@@ -57,7 +57,12 @@ public class TableVisualization implements IVisualization {
 					++i;
 				}
 				
-				//remove columns which should not be shown according to columnOptions
+				options = Table.Options.create();
+				options.setPageSize(50);
+				options.setStartPage(currentPage);
+				options.set("pagingButtons", 10d);
+				
+				//remove columns which should not be shown
 				//perform right to left to not mess with the indices
 				if (columnOptions!=null) {
 					if(!columnOptions.get("Longitude")) {
@@ -82,13 +87,6 @@ public class TableVisualization implements IVisualization {
 						dataTable.removeColumn(0);
 					}
 				}
-				
-				if (options==null) {
-					options = Table.Options.create();
-					options.setPageSize(50);
-					options.set("pagingButtons", 10d);
-				}
-				options.setStartPage(currentPage);
 				
 				table = new Table(dataTable, options);
 				table.addPageHandler(new PageHandler(){

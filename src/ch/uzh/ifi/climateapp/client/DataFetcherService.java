@@ -9,6 +9,4 @@ import ch.uzh.ifi.climateapp.shared.Filter;
 @RemoteServiceRelativePath("climateData")
 public interface DataFetcherService extends RemoteService{
 	ClimateData[] getClimateData(Filter[] filter);
-	String[] getCountryNames();
-	String[] getCityNames();
 }

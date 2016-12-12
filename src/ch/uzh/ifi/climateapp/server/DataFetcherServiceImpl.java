@@ -79,14 +79,4 @@ public class DataFetcherServiceImpl extends RemoteServiceServlet implements Data
 		return returnData.toArray(new ClimateData[0]); //return all matching data
 	}
 
-	@Override
-	public String[] getCountryNames() {	
-		return (String[]) this.getServletContext().getAttribute(ContextContent.COUNTRIES);
-	}
-
-	@Override
-	public String[] getCityNames() {
-		return (String[]) this.getServletContext().getAttribute(ContextContent.CITIES);
-	}
-
 }
