@@ -27,6 +27,8 @@ public class DataFetcherServiceImpl extends RemoteServiceServlet implements Data
 		System.out.println("processing batch "+currentBatch);
 		int matchedEntries = 0;
 		
+		System.out.println(filter[0].getMinDeviation()+" - "+filter[0].getMaxDeviation());
+		
 		ArrayList<String> countryFilter = new ArrayList<String>();
 		ArrayList<String> cityFilter = new ArrayList<String>();
 		//read all filtered countries and cities

@@ -9,6 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodeEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 
@@ -21,10 +22,10 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import ch.uzh.ifi.climateapp.shared.AverageData;
@@ -40,8 +41,8 @@ import com.google.gwt.widgetideas.client.SliderBar;
  */
 public class ClimateApp implements EntryPoint {
 
-	private static final double STARTING_MAX_UNCERTAINTY = 4;
-	private static final double STARTING_MIN_UNCERTAINTY = 0.0;
+	private static final long STARTING_MAX_UNCERTAINTY = 4l;
+	private static final long STARTING_MIN_UNCERTAINTY = 0l;
 	private static final int STARTING_YEAR = 2013;
 
 	int firstDataYear = 1743;
@@ -61,13 +62,15 @@ public class ClimateApp implements EntryPoint {
 	private ArrayList<Filter> filters = new ArrayList<Filter>(); /*filters[1+] is for cities and countries*/
 	private FlexTable currentFilterDisplay = new FlexTable();
 	private MultiWordSuggestOracle countriesOracle = new MultiWordSuggestOracle(); 
-	private MultiWordSuggestOracle citiesOracle = new MultiWordSuggestOracle(); 	
+	private MultiWordSuggestOracle citiesOracle = new MultiWordSuggestOracle(); 
+	private HorizontalPanel currentMapYearDisplay = new HorizontalPanel();
+	private YearBox currentMapYearBox = new YearBox();
 
 	//needed class-wide text boxes to add filter values
 	TextBox uncertaintyFrom;
 	TextBox uncertaintyTo;
-	TextBox yearFrom;
-	TextBox yearTo;
+	YearBox yearFrom;
+	YearBox yearTo;
 	SuggestBox countryName = new SuggestBox(countriesOracle);
 	SuggestBox cityName = new SuggestBox(citiesOracle);
 
@@ -190,6 +193,20 @@ public class ClimateApp implements EntryPoint {
 		mapViewLayout.add(getSlider());
 		VerticalPanel viewMap = new VerticalPanel();
 		verticalMapPanel.setWidth("1200px");
+		Label currentYearLabel = new Label("Average temperatures for the year");
+		currentYearLabel.addStyleName("mapLabel");
+		currentMapYearDisplay.add(currentYearLabel);
+		currentMapYearBox.addKeyDownHandler(new KeyDownHandler() {
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode()==KeyCodes.KEY_ENTER) {
+					sliderBar.setCurrentValue(currentMapYearBox.getValue());
+					reloadMapForYear(currentMapYearBox.getValue());
+				}
+			}
+		});
+		currentMapYearDisplay.add(currentMapYearBox);
+		viewMap.add(currentMapYearDisplay);
 		viewMap.add(verticalMapPanel);
 		mapViewLayout.add(viewMap);
 		return mapViewLayout;
@@ -220,6 +237,7 @@ public class ClimateApp implements EntryPoint {
 	}
 
 	private void reloadMapForYear(int year) {
+		currentMapYearBox.setValue(year);
 
 		averageService.getAverageForYear(year, new AsyncCallback<AverageData[]>() {
 
@@ -300,8 +318,8 @@ public class ClimateApp implements EntryPoint {
 		yearFromLabel.setStyleName("filterLabel");
 		yearFromLabel.setWidth("100px");
 
-		yearFrom = new TextBox();
-		yearFrom.setText(""+STARTING_YEAR);
+		yearFrom = new YearBox();
+		yearFrom.setValue(STARTING_YEAR);
 		yearFrom.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -328,8 +346,8 @@ public class ClimateApp implements EntryPoint {
 		yearToLabel.setStyleName("filterLabel");
 		yearToLabel.setWidth("100px");
 
-		yearTo = new TextBox();
-		yearTo.setText(""+STARTING_YEAR);
+		yearTo = new YearBox();
+		yearTo.setValue(STARTING_YEAR);
 		yearTo.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -365,7 +383,7 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyFromLabel.setWidth("120px");
 
 		uncertaintyFrom = new TextBox();
-		uncertaintyFrom.setText(Double.toString(STARTING_MIN_UNCERTAINTY));
+		uncertaintyFrom.setText(""+STARTING_MIN_UNCERTAINTY);
 		uncertaintyFrom.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -393,7 +411,7 @@ public class ClimateApp implements EntryPoint {
 		uncertaintyToLabel.setWidth("120px");
 
 		uncertaintyTo = new TextBox();
-		uncertaintyTo.setValue(Double.toString(STARTING_MAX_UNCERTAINTY));
+		uncertaintyTo.setText(""+STARTING_MAX_UNCERTAINTY);
 		uncertaintyTo.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -426,10 +444,10 @@ public class ClimateApp implements EntryPoint {
 				setFilterToDefault();
 				updateCurrentFilterDisplay();
 				reloadTable();
-				yearFrom.setValue("" + STARTING_YEAR);
-				yearTo.setValue("" + STARTING_YEAR);
-				uncertaintyFrom.setValue("" + STARTING_MIN_UNCERTAINTY);
-				uncertaintyTo.setValue("" + STARTING_MAX_UNCERTAINTY);
+				yearFrom.setValue(STARTING_YEAR);
+				yearTo.setValue(STARTING_YEAR);
+				uncertaintyFrom.setText(""+STARTING_MIN_UNCERTAINTY);
+				uncertaintyTo.setText(""+STARTING_MAX_UNCERTAINTY);
 			}
 		});
 
@@ -524,7 +542,7 @@ public class ClimateApp implements EntryPoint {
 	 * does not work when there are some non-alphanumeric symbols in the textbox
 	 */
 	private void addUncertaintyFromFilter() {
-		if (Integer.parseInt(uncertaintyFrom.getText()) > Integer.parseInt(uncertaintyTo.getText())){
+		if (Double.parseDouble(uncertaintyFrom.getText()) > Double.parseDouble(uncertaintyTo.getText())){
 			Window.alert("\"Uncertainty from\" must be smaller or equal \"Uncertainty to\"");
 			return;
 		}
@@ -549,7 +567,7 @@ public class ClimateApp implements EntryPoint {
 	 * does not work when there are some non-alphanumeric symbols in the textbox
 	 */
 	private void addUncertaintyToFilter() {
-		if (Integer.parseInt(uncertaintyFrom.getText()) > Integer.parseInt(uncertaintyTo.getText())){
+		if (Double.parseDouble(uncertaintyFrom.getText()) > Double.parseDouble(uncertaintyTo.getText())){
 			Window.alert("\"Uncertainty to\" must be greater or equal \"Uncertainty from\"");
 			return;
 		}
@@ -703,7 +721,7 @@ public class ClimateApp implements EntryPoint {
 		currentFilterDisplay.removeAllRows();
 		currentFilterDisplay.setText(currentLine++, 0, "Current Filter:");
 		//deviation is always set
-		currentFilterDisplay.setText(currentLine, 0, "Deviation:");
+		currentFilterDisplay.setText(currentLine, 0, "Uncertainty:");
 		currentFilterDisplay.setText(currentLine, 1, filters.get(0).getMinDeviation()+" - "+filters.get(0).getMaxDeviation());
 		++currentLine;
 		//add year if some year filtering is in place

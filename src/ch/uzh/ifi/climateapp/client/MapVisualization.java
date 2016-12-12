@@ -15,7 +15,6 @@ public class MapVisualization implements IVisualization{
 	private DataTable dataTable;
 	private GeoMap.Options options;
 	private GeoMap geomap = null;
-	private Label selectedYear = new Label();
 
 	private AverageData[] averageData;
 
@@ -63,14 +62,8 @@ public class MapVisualization implements IVisualization{
 						options.setShowLegend(true);
 						geomap = new GeoMap(dataTable, options);
 					}
-					selectedYear.addStyleName("mapLabel");
-					verticalPanel.add(selectedYear);
 					verticalPanel.add(geomap);
 				}
-
-				int year = averageData[1].getYear();
-				String yearText = Integer.toString(year);
-				selectedYear.setText("Average temperatures for the year " + yearText);
 				geomap.draw(dataTable,options);
 
 			}
