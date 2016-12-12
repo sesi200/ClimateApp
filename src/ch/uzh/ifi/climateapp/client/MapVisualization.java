@@ -11,17 +11,17 @@ import com.google.gwt.visualization.client.visualizations.GeoMap;
 import ch.uzh.ifi.climateapp.shared.AverageData;
 
 public class MapVisualization implements IVisualization{
-	
+
 	private DataTable dataTable;
 	private GeoMap.Options options;
 	private GeoMap geomap = null;
 	private Label selectedYear = new Label();
-	
+
 	private AverageData[] averageData;
 
 
 	public MapVisualization(){}
-	
+
 	@Override
 	public Widget getVisualization(final VerticalPanel verticalPanel) {
 		Runnable onLoadCallback = new Runnable(){
@@ -35,16 +35,61 @@ public class MapVisualization implements IVisualization{
 			@Override
 			public void run() {
 
+
 				// Building 
 				dataTable = DataTable.create();
 				dataTable.addColumn(ColumnType.STRING, "Country");
 				dataTable.addColumn(ColumnType.NUMBER, "Temperature");
 
-				dataTable.addRows(averageData.length);
-				for (int i = 0; i < averageData.length; i++){
+				//				/** Default presentation of the map with the green gradients legend:
+				//				 * the colors in the legend are changing for each visualization depending  
+				//				 * on the temperature range in this visualization
+				//				 */
+				//
+				//				dataTable.addRows(averageData.length);
+				//				for (int i = 0; i < averageData.length; i++){
+				//					dataTable.setValue(i, 0, averageData[i].getCountry());
+				//					dataTable.setValue(i, 1, averageData[i].getAvgTemp());
+				//				}
+				//
+				//				if(verticalPanel.getWidgetCount()==0) {
+				//					if (geomap == null) {
+				//						options = GeoMap.Options.create();
+				//						options.setDataMode(GeoMap.DataMode.REGIONS);
+				//						options.setRegion("world");
+				//						options.setWidth(verticalPanel.getOffsetWidth());
+				//						options.setHeight(500);
+				//						options.setShowLegend(true);
+				//						geomap = new GeoMap(dataTable, options);
+				//					}
+				//
+				//					selectedYear.addStyleName("mapLabel");
+				//					verticalPanel.add(selectedYear);
+				//					verticalPanel.add(geomap);
+				//				}
+				//
+				//				int year = averageData[1].getYear();
+				//				String yearText = Integer.toString(year);
+				//				selectedYear.setText("Average temperatures for the year " + yearText);
+				//				geomap.draw(dataTable,options);
+				//
+				//			}
+				//		};
+
+				/** Alternative colorful presentation of the map with the fixed legend
+				 * for all the visualizations
+				 */
+				dataTable.addRows(averageData.length + 2);
+				dataTable.setValue(0, 0, "");
+				dataTable.setValue(0, 1, -7);
+				
+				for (int i = 1; i < averageData.length; i++){
 					dataTable.setValue(i, 0, averageData[i].getCountry());
 					dataTable.setValue(i, 1, averageData[i].getAvgTemp());
 				}
+				
+				dataTable.setValue(averageData.length + 1, 0, "");
+				dataTable.setValue(averageData.length + 1, 1, 32);
 
 				if(verticalPanel.getWidgetCount()==0) {
 					if (geomap == null) {
@@ -57,16 +102,16 @@ public class MapVisualization implements IVisualization{
 						options.setShowLegend(true);
 						geomap = new GeoMap(dataTable, options);
 					}
-					
 					selectedYear.addStyleName("mapLabel");
 					verticalPanel.add(selectedYear);
 					verticalPanel.add(geomap);
 				}
+
 				int year = averageData[1].getYear();
 				String yearText = Integer.toString(year);
 				selectedYear.setText("Average temperatures for the year " + yearText);
 				geomap.draw(dataTable,options);
-				
+
 			}
 		};
 
