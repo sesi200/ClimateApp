@@ -39,6 +39,17 @@ h1 {
 	background: #86aca7;
 }
 
+.mapYear {
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 5px 4px;
+  	border: 1px solid #ccc;
+	border-top: 1px solid #999;
+  	font-size: small;
+  	font-family: Arial Unicode MS, Arial, sans-serif;
+}
+
 .panelLabel {
 	background-color: #FFFFFF;
 	color: #969696;
@@ -69,7 +80,6 @@ h1 {
 
 /* label for presentation of the selected year under the map visualization*/
 .mapLabel {
-	margin-top:20px;
 	font-weight: bold;
 	text-align: left;
 	font-weight: bold;

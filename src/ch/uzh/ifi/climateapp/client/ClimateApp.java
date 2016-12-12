@@ -9,7 +9,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodeEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 
@@ -196,6 +195,7 @@ public class ClimateApp implements EntryPoint {
 		Label currentYearLabel = new Label("Average temperatures for the year");
 		currentYearLabel.addStyleName("mapLabel");
 		currentMapYearDisplay.add(currentYearLabel);
+		currentMapYearBox.setStyleName("mapYear");
 		currentMapYearBox.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -320,6 +320,7 @@ public class ClimateApp implements EntryPoint {
 
 		yearFrom = new YearBox();
 		yearFrom.setValue(STARTING_YEAR);
+		yearFrom.setStyleName("gwt-TextBox");
 		yearFrom.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -348,6 +349,7 @@ public class ClimateApp implements EntryPoint {
 
 		yearTo = new YearBox();
 		yearTo.setValue(STARTING_YEAR);
+		yearTo.setStyleName("gwt-TextBox");
 		yearTo.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -462,11 +464,6 @@ public class ClimateApp implements EntryPoint {
 		 * Create horizontal panel to place the CellTable with climate data into it
 		 * 
 		 * */
-
-		Label tableLabel = new Label("Climate Data Table");
-		tableLabel.setStyleName("titleLabel");
-
-
 		HorizontalPanel tableView = new HorizontalPanel();
 
 		tableView.add(verticalTablePanel);
@@ -491,8 +488,6 @@ public class ClimateApp implements EntryPoint {
 		tableViewLayout.add(filterLabel);
 		tableViewLayout.add(filterPanel);
 
-
-		tableViewLayout.add(tableLabel);
 		tableViewLayout.add(tableView);
 
 
