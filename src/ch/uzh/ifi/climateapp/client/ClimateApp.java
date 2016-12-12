@@ -44,7 +44,6 @@ public class ClimateApp implements EntryPoint {
 	private static final long STARTING_MAX_UNCERTAINTY = 4l;
 	private static final long STARTING_MIN_UNCERTAINTY = 0l;
 	private static final int STARTING_YEAR = 2013;
-
 	int firstDataYear = 1743;
 	int lastDataYear = 2013;
 
