@@ -696,6 +696,9 @@ public class ClimateApp implements EntryPoint {
 
 			@Override
 			public void onSuccess(ClimateData[] result) {
+				if(result.length == 0 && currentBatch==1){
+					Window.alert("No data found for current selection.");
+				}
 				if(result.length==5000) {
 					requestAndAddNextBatchForTable();
 				}
