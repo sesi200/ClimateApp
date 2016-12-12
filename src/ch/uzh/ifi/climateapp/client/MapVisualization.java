@@ -53,6 +53,7 @@ public class MapVisualization implements IVisualization{
 						options.setRegion("world");
 						options.setWidth(verticalPanel.getOffsetWidth());
 						options.setHeight(500);
+						options.setColors(0xCCFFFF,0xCCFFCC, 0xFFFF99, 0xFFCC99,0xFF9999,0xFF0000);
 						options.setShowLegend(true);
 						geomap = new GeoMap(dataTable, options);
 					}
